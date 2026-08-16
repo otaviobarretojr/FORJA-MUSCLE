@@ -1,0 +1,42 @@
+/* FORJA MUSCLE v3.3.4 — orientação limpa no topo do exercício */
+#treino .forja-v334-hidden{display:none!important}
+
+#exerciseCoachCard.exercise-coach-card{
+  margin:0 0 12px;padding:14px;border:1px solid rgba(184,255,79,.22);border-radius:18px;
+  background:linear-gradient(145deg,rgba(184,255,79,.055),rgba(108,229,255,.028));
+  box-shadow:0 10px 28px rgba(0,0,0,.12)
+}
+#exerciseCoachCard[hidden]{display:none!important}
+.exercise-coach-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.exercise-coach-head h2{margin:3px 0 0;font-size:18px;letter-spacing:-.02em}
+.exercise-coach-name{
+  max-width:48%;padding:5px 8px;border-radius:999px;border:1px solid rgba(108,229,255,.18);
+  background:rgba(108,229,255,.08);color:var(--accent2);font-size:10px;font-weight:900;
+  text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.exercise-coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.exercise-coach-panel{
+  padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(9,12,16,.42)
+}
+.exercise-coach-panel>b{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.01em}
+.exercise-coach-panel>b>span{
+  width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:950
+}
+.exercise-coach-panel ul{margin:8px 0 0;padding-left:17px;color:#d7dde6;font-size:11px;line-height:1.42}
+.exercise-coach-panel li+li{margin-top:5px}
+.coach-do{border-color:rgba(184,255,79,.22)}
+.coach-do>b{color:var(--accent)}
+.coach-do>b>span{background:rgba(184,255,79,.12);color:var(--accent)}
+.coach-avoid{border-color:rgba(255,123,123,.2)}
+.coach-avoid>b{color:#ff9a9a}
+.coach-avoid>b>span{background:rgba(255,123,123,.1);color:#ff9a9a}
+
+@media(max-width:560px){
+  #exerciseCoachCard.exercise-coach-card{padding:12px;margin-bottom:10px}
+  .exercise-coach-head{align-items:flex-start;margin-bottom:9px}
+  .exercise-coach-head h2{font-size:17px}
+  .exercise-coach-name{max-width:44%;font-size:9px}
+  .exercise-coach-grid{grid-template-columns:1fr;gap:7px}
+  .exercise-coach-panel{padding:10px 11px}
+  .exercise-coach-panel ul{font-size:10.5px;margin-top:7px}
+}
