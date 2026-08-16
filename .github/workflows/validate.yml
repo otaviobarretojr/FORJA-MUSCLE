@@ -27,6 +27,8 @@ jobs:
           test -f fragments/modals.html
           test -f css/v31.css
           test -f js/v31.js
+          test -f css/v32.css
+          test -f js/v32.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -43,7 +45,11 @@ jobs:
           grep -q "fragments/home-dashboard.html" service-worker.js
           grep -q "js/v30b2.js" service-worker.js
           grep -q "js/v31.js" service-worker.js
+          grep -q "js/v32.js" service-worker.js
+          grep -q "css/v32.css" service-worker.js
           grep -q "manifest.webmanifest" index.html
+          grep -q "v32.js" index.html
+          grep -q "v32.css" index.html
 
       - name: Validate v3.1 navigation bootstrap
         run: |
@@ -51,6 +57,13 @@ jobs:
           ! grep -Fq "root.insertAdjacentHTML" index.html
           grep -Fq "const main=document.querySelector('main')" js/v31.js
           grep -Fq "createBottomNav(document.body)" js/v31.js
-          grep -Fq "v3.1.2" js/v31.js
-          grep -Fq "forja-muscle-v3-1-2" service-worker.js
           grep -Fq "networkFirst" service-worker.js
+
+      - name: Validate v3.2 training blocks and compatibility
+        run: |
+          grep -Fq "const BUILD='3.2.0'" index.html
+          grep -Fq "forja-muscle-v3-2-0" service-worker.js
+          grep -Fq "selectTrainingDay" js/v32.js
+          grep -Fq "trainingDayStage" js/v32.js
+          grep -Fq "Planejamento e ferramentas" js/v32.js
+          grep -Fq "const NS='shape12.'" js/base.js
