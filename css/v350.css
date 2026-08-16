@@ -1,0 +1,147 @@
+/* VITAFIT v3.5.0 — identidade premium feminina, forte e funcional */
+:root{
+  --bg:#0b090d;
+  --panel:#151116;
+  --panel2:#1d171e;
+  --line:#352832;
+  --text:#fff9fc;
+  --muted:#aa9ba6;
+  --accent:#e19aaa;
+  --accent2:#a96c8b;
+  --warn:#ddb07c;
+  --danger:#f08c9d;
+  --good:#91c7a5;
+  --shadow:0 22px 60px rgba(0,0,0,.34);
+  --r:22px;
+  --vita-rose:#e19aaa;
+  --vita-rose-soft:#c77f99;
+  --vita-plum:#6e405d;
+  --vita-ink:#0b090d;
+}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(circle at 90% -5%,rgba(169,108,139,.14),transparent 28%),
+    radial-gradient(circle at 4% 18%,rgba(225,154,170,.09),transparent 25%),
+    linear-gradient(180deg,#0a090c 0%,#0d0a0f 58%,#0b090d 100%);
+  color:var(--text);
+  letter-spacing:-.005em;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(115deg,transparent 0 72%,rgba(225,154,170,.025) 100%)}
+::selection{background:rgba(225,154,170,.25);color:#fff}
+.app{max-width:940px;padding:14px 14px 20px}
+.card{border-color:var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(35,27,35,.96),rgba(18,14,19,.96));box-shadow:0 14px 34px rgba(0,0,0,.2)}
+.eyebrow{color:var(--accent);letter-spacing:.15em}
+.hero.vita-brand-header{display:flex;align-items:center;gap:12px;min-height:74px;margin:0 0 14px;padding:10px 6px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.hero.vita-brand-header:after{display:none}
+.vita-brand-lockup{display:flex;align-items:center;gap:10px;min-width:0}
+.vita-mark{width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(225,154,170,.34);border-radius:14px;background:linear-gradient(145deg,rgba(225,154,170,.13),rgba(110,64,93,.12));color:var(--accent);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+.vita-mark svg{width:25px;height:25px;display:block}
+.vita-brand-lockup strong{display:block;font-family:Georgia,"Times New Roman",serif;font-size:28px;line-height:.92;letter-spacing:.025em;font-weight:600;background:linear-gradient(120deg,#ffd7dd,#d7819e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.vita-brand-lockup small{display:block;margin-top:5px;color:#8e7f89;font-size:8px;text-transform:uppercase;letter-spacing:.18em;font-weight:800}
+.vita-header-phase{margin-left:auto;margin-right:46px;padding:7px 10px;border:1px solid rgba(225,154,170,.2);border-radius:999px;background:rgba(225,154,170,.06);color:#cdaebb;font-size:9px;font-weight:800;white-space:nowrap}
+.hero.vita-brand-header .version{top:50%;right:6px;transform:translateY(-50%);color:#796d75;font-size:9px}
+.screen-intro{margin:4px 2px 16px;padding:0}
+.screen-intro h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:29px;letter-spacing:-.035em;color:#fff8fb}
+.screen-intro p{margin-top:4px;font-size:11px;line-height:1.5;color:#988a94}
+#screen-hoje>.screen-intro{display:none!important}
+#homeToday,#homeCycleCard,#weeklySummary,#screen-hoje .today-wrap{display:none!important}
+.vita-home-dashboard{animation:fade .2s ease}
+.vita-greeting{padding:4px 6px 17px}
+.vita-greeting h2{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:31px;font-weight:500;letter-spacing:-.035em;color:#fff8fb}
+.vita-greeting p{margin:5px 0 0;color:#8f828c;font-size:13px}
+.vita-today-card{position:relative;overflow:hidden;padding:0 18px 18px;border:1px solid rgba(225,154,170,.32);border-radius:28px;background:linear-gradient(145deg,rgba(34,24,33,.98),rgba(13,11,15,.99) 62%);box-shadow:0 26px 65px rgba(0,0,0,.34),inset 0 0 0 1px rgba(255,255,255,.015)}
+.vita-today-card:before{content:"";position:absolute;width:340px;height:340px;right:-155px;top:95px;border-radius:50%;border:1px solid rgba(225,154,170,.08);box-shadow:0 0 0 36px rgba(225,154,170,.018),0 0 0 74px rgba(225,154,170,.012);pointer-events:none}
+.vita-today-card:after{content:"";position:absolute;right:-50px;bottom:-120px;width:280px;height:380px;background:radial-gradient(ellipse at center,rgba(169,108,139,.1),transparent 67%);transform:rotate(-12deg);pointer-events:none}
+.vita-card-ribbon{position:relative;z-index:1;width:max-content;min-width:230px;margin-left:-18px;padding:12px 34px 12px 18px;display:flex;align-items:center;gap:9px;border-right:1px solid rgba(225,154,170,.26);border-bottom:1px solid rgba(225,154,170,.22);border-radius:0 0 28px 0;background:linear-gradient(100deg,rgba(111,55,80,.72),rgba(70,38,58,.35));color:#efa9ba}
+.vita-card-ribbon b{font-size:10px;letter-spacing:.14em}
+.vita-ribbon-mark{width:21px;height:21px;display:grid;place-items:center}.vita-ribbon-mark svg{width:18px;height:18px}
+.vita-today-top{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 116px;gap:14px;align-items:center;padding:25px 0 18px}
+.vita-date{display:flex;align-items:center;gap:6px;color:#c9849d;font-size:10px;font-weight:900;letter-spacing:.09em}
+.vita-today-copy h1{margin:8px 0 4px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(34px,7vw,52px);font-weight:500;line-height:.98;letter-spacing:-.045em;color:#fff9fc}
+.vita-today-copy p{margin:0;color:#b4a4ae;font-size:13px}
+.vita-workout-emblem{width:104px;height:104px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(225,154,170,.54);background:radial-gradient(circle,rgba(225,154,170,.12),rgba(16,12,17,.82) 64%);color:var(--accent);box-shadow:0 0 0 8px rgba(225,154,170,.025),0 0 36px rgba(169,108,139,.09)}
+.vita-workout-emblem svg{width:51px;height:51px}
+.vita-stat-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.vita-stat{display:flex;align-items:center;gap:10px;min-height:82px;padding:13px;border:1px solid rgba(107,82,101,.45);border-radius:18px;background:linear-gradient(145deg,rgba(31,24,31,.88),rgba(19,15,20,.84))}
+.vita-stat>span{width:32px;height:32px;display:grid;place-items:center;color:var(--accent);flex:0 0 auto}.vita-stat>span svg{width:24px;height:24px}
+.vita-stat b{display:block;font-family:Georgia,"Times New Roman",serif;font-size:24px;line-height:1;color:#fff8fb;font-weight:500}
+.vita-stat small{display:block;margin-top:4px;color:#958891;font-size:9px}
+.vita-progress{position:relative;z-index:1;margin-top:18px}
+.vita-progress-copy{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.vita-progress-copy b{color:var(--accent);font-size:16px}.vita-progress-copy span{color:#9f929b;font-size:10px}
+.vita-progress-track{height:7px;border-radius:999px;background:#211b22;overflow:hidden}.vita-progress-track>div{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#d9809a,#f0a8b3);box-shadow:0 0 12px rgba(225,154,170,.22);transition:width .25s ease}
+.vita-guidance{position:relative;z-index:1;display:flex;align-items:center;gap:11px;margin-top:15px;padding:12px 13px;border:1px solid rgba(116,87,109,.42);border-radius:17px;background:rgba(24,18,25,.76)}
+.vita-guidance>span{width:29px;height:29px;display:grid;place-items:center;flex:0 0 auto;color:var(--accent)}.vita-guidance svg{width:23px;height:23px}.vita-guidance p{margin:0;color:#d9ced5;font-size:11px;line-height:1.45}
+.vita-primary-action{position:relative;z-index:1;width:100%;min-height:54px;margin-top:16px;border:1px solid rgba(255,220,226,.16);border-radius:17px;background:linear-gradient(100deg,#efb2ba,#c97d96 70%,#b56f8c);color:#1b1117;font-weight:950;font-size:12px;letter-spacing:.035em;box-shadow:0 12px 28px rgba(168,94,126,.16);transition:.16s ease}
+.vita-primary-action:active{transform:scale(.985)}
+.vita-primary-action.is-done{background:linear-gradient(100deg,#91c7a5,#6ca483);color:#0f1712}
+.vita-support-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
+.vita-support-card{min-height:118px;padding:15px;display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(28,22,28,.96),rgba(15,12,16,.96));color:var(--text)}
+button.vita-support-card{cursor:pointer}.vita-support-card>i{font-style:normal;color:#6f626c;font-size:23px}
+.vita-support-icon{width:40px;height:40px;display:grid;place-items:center;border:1px solid rgba(225,154,170,.18);border-radius:14px;background:rgba(225,154,170,.055);color:var(--accent)}.vita-support-icon svg{width:24px;height:24px}
+.vita-support-card small{display:block;color:#c67d98;font-size:8px;letter-spacing:.12em;font-weight:900}.vita-support-card b{display:block;margin-top:6px;font-family:Georgia,"Times New Roman",serif;font-size:17px;font-weight:500}.vita-support-card span:not(.vita-support-icon){display:block;margin-top:4px;color:#8f828b;font-size:9px;line-height:1.4}.vita-tip-card{grid-template-columns:42px 1fr}
+.app-bottom-nav{background:rgba(10,8,11,.94);border-top-color:#2b222a;box-shadow:0 -18px 42px rgba(0,0,0,.38);backdrop-filter:blur(20px)}
+.app-nav-btn{color:#786d76;border-radius:15px;font-weight:800;transition:.15s ease;position:relative}
+.app-nav-btn .nav-icon{width:23px;height:23px;display:grid;place-items:center;font-size:0}.app-nav-btn .nav-icon svg{width:22px;height:22px;display:block}.app-nav-btn .nav-label{font-size:9px}
+.app-nav-btn.active{color:var(--accent);background:linear-gradient(180deg,rgba(225,154,170,.1),rgba(225,154,170,.035))}
+.app-nav-btn.active:after{content:"";width:18px;height:2px;border-radius:999px;background:var(--accent);position:absolute;bottom:2px}
+.primary-btn{border-color:#d88d9f;background:linear-gradient(100deg,#e7a3ae,#c87e96);color:#1a1116;box-shadow:none}.primary-btn:hover{filter:brightness(1.04)}
+.soft-btn,.icon-btn{border-color:var(--line);background:#1a151b;color:#e8dfe4}.soft-btn:active,.icon-btn:active{background:#241c24}
+input,textarea,select,.field input,.load-input,#startDate,.set-input,.reps-input{border-color:#382b35!important;background:#100d11!important;color:#fff8fb!important;outline:none}
+input:focus,textarea:focus,select:focus,.set-input:focus{border-color:rgba(225,154,170,.65)!important;box-shadow:0 0 0 3px rgba(225,154,170,.08)}
+.progress{background:#171218;border-color:#30252e}.progress>div{background:linear-gradient(90deg,#bd728e,#edabb4)}
+.check.done,.ex-check.done,.set-done.done{background:linear-gradient(145deg,#e7a3ae,#bc728d)!important;border-color:#dc95a6!important;color:#1b1116!important}
+.tag{background:rgba(225,154,170,.08);color:#e3a2b2;border:1px solid rgba(225,154,170,.14)}
+#treino .screen-intro{margin-bottom:14px}
+#trainingDayStage{max-width:790px;margin:0 auto}
+.exercise-coach-card,.guided-today-hero{border-color:rgba(225,154,170,.2)!important;background:linear-gradient(145deg,rgba(50,31,45,.54),rgba(20,15,21,.84))!important;border-radius:22px!important}
+.exercise-coach-head h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.025em}
+.training-stage-prescription{border-color:rgba(225,154,170,.2)!important;background:rgba(225,154,170,.055)!important;color:#dfc6cf!important}
+.exercise-coach-panel{border-color:#392b35!important;background:rgba(17,13,18,.72)!important;border-radius:17px!important}.exercise-coach-panel b span{color:var(--accent)!important}
+#trainingDayStage .guided-active .ex-card-head{margin-top:10px;border-color:#3a2c36;background:linear-gradient(145deg,#211921,#171218);border-radius:21px 21px 0 0}
+#trainingDayStage .guided-active .ex-card-title b{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:500}
+#trainingDayStage .guided-active .ex-card-meta strong{color:#e49bac}
+#trainingDayStage .guided-active .set-table{border-color:#3a2c36;border-radius:0 0 21px 21px;background:#100d11}
+#trainingDayStage .guided-active .set-head{background:#171218;color:#8f828b}
+#trainingDayStage .guided-active .set-row{background:#121014;border-color:#2d232b}
+#trainingDayStage .guided-active .set-row.done{background:rgba(225,154,170,.045)}
+#trainingDayStage .guided-active .set-num{background:#201820;color:#f4e8ed;border-color:#352833}
+#trainingDayStage .guided-active .set-input{border-radius:14px!important;min-height:48px!important}
+#trainingDayStage .guided-active .set-done{border-radius:14px!important;border-color:#3a2d37!important;background:#181319!important;color:#7e7079}
+.guided-nav{bottom:78px;border-color:#382b35;border-radius:20px;background:rgba(14,11,15,.95);box-shadow:0 16px 36px rgba(0,0,0,.34)}
+.guided-nav .primary-btn{min-height:42px;border-radius:14px}.guided-nav-status b{color:#fff6fa}.guided-nav-status span{color:#887b84}
+#treino .rest-card.rest-mini-card{background:conic-gradient(var(--accent) var(--rest-progress),rgba(225,154,170,.11) 0)!important;box-shadow:0 12px 34px rgba(0,0,0,.4),0 0 0 1px rgba(225,154,170,.2)!important}
+#treino .rest-mini-ring{background:#120e13!important;border-color:#3b2c37!important}#treino .rest-mini-dismiss{background:#211820!important;border-color:#46343f!important;color:#c2aeb8!important}
+.guided-cardio-card,.guided-recovery-card{border-color:#3a2c36;background:linear-gradient(145deg,#211821,#141015);border-radius:20px}.guided-type-icon{border-color:rgba(225,154,170,.22);background:rgba(225,154,170,.065);color:var(--accent)}
+#trainingExtras{opacity:.9}.training-extras-panel>summary{color:#c9b8c1}
+#nutricao>.section-title:first-of-type{margin-top:4px}#nutricao .grid-4{gap:9px}
+#nutricao .macro-card{min-height:92px;padding:14px;background:linear-gradient(145deg,#211920,#141015);border-color:#372a34}
+#nutricao .macro-value{font-family:Georgia,"Times New Roman",serif;font-size:24px;font-weight:500;color:#f4b7c2!important}#nutricao .macro-card:nth-child(2) .macro-value{color:#e3a2b2!important}#nutricao .macro-card:nth-child(3) .macro-value{color:#cf91ad!important}#nutricao .macro-card:nth-child(4) .macro-value{color:#d7b18d!important}
+#nutricao #meals{padding:0;border:0;background:transparent;box-shadow:none;display:grid;gap:8px}
+#nutricao .meal{grid-template-columns:58px 1fr auto;gap:12px;padding:13px 14px;border:1px solid #342833!important;border-radius:18px;background:linear-gradient(145deg,rgba(31,24,31,.95),rgba(16,13,17,.96))}
+#nutricao .meal .time{color:#d889a1;font-size:12px}#nutricao .meal h3{font-size:14px;color:#fff7fb}#nutricao .meal p{color:#9f929a;line-height:1.5}#nutricao .meal .mini{color:#b7a6b0}
+#nutricao .water-amount{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#f7c0ca}.water-actions .primary-btn{border-radius:13px}
+.day-target-card,.smart-nutrition,.custom-food-card{border-color:#392b35;background:linear-gradient(145deg,#1d171e,#110e12)}
+.day-target-grid>div,.remaining-macros>div,.smart-macro-grid>div{border-color:#352832!important;background:#151116!important;border-radius:15px!important}
+.day-type-switch button{border-color:#3a2c36!important;background:#151116!important;color:#a999a3!important}.day-type-switch button.active{background:rgba(225,154,170,.12)!important;color:#efabb8!important;border-color:rgba(225,154,170,.38)!important}
+#evolucao .program-intro{margin-bottom:14px}.program-roadmap{gap:11px}
+.program-roadmap-head{position:relative;overflow:hidden;padding:18px;border-color:rgba(225,154,170,.24);background:linear-gradient(145deg,rgba(51,31,46,.65),rgba(18,14,19,.96))}
+.program-roadmap-head:after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;right:-65px;top:-65px;border:1px solid rgba(225,154,170,.1);box-shadow:0 0 0 25px rgba(225,154,170,.018)}
+.program-roadmap-head h2{font-family:Georgia,"Times New Roman",serif;font-size:24px;font-weight:500}.program-current-pill,.home-cycle-badge{border-color:rgba(225,154,170,.24);background:rgba(225,154,170,.08);color:#e7a4b4}
+.program-stage{border-color:#382b35;background:linear-gradient(145deg,#1a141b,#100d11);border-radius:21px}.program-stage.current{border-color:rgba(225,154,170,.42);box-shadow:inset 3px 0 0 #c97896,0 16px 38px rgba(0,0,0,.17)}
+.program-stage>summary h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:22px}.program-stage-side span{color:#d88ca3}.program-stage-body{border-top-color:#30252e}.program-prescription{border-color:rgba(225,154,170,.18);background:rgba(225,154,170,.05)}.program-prescription b{color:#e19aaa}
+.program-day{border-color:#332730;background:#100d11;border-radius:14px}.program-day.strength{border-color:rgba(225,154,170,.22);background:rgba(225,154,170,.035)}.program-day.strength>b{color:#f0c5cf}.program-day.cardio{border-color:rgba(169,108,139,.22);background:rgba(169,108,139,.035)}.program-day.cardio>b{color:#d4b1c2}
+.program-info-grid>div,.program-workout{border-color:#352832;background:#100d11;border-radius:16px}.program-workout-head{border-color:#30252e}.program-workout-head span,.program-ex strong{color:#e19aaa}.program-workout-head>b{color:#c286a1}.program-ex{border-bottom-color:#2d232b}.program-ex-num{background:#211820;color:#eadde4}
+.vita-more-brand{display:flex;align-items:center;gap:14px;margin-bottom:11px;padding:17px;border-color:rgba(225,154,170,.24);background:linear-gradient(135deg,rgba(65,38,56,.55),rgba(19,15,20,.96))}
+.vita-more-brand .vita-mark{width:52px;height:52px;border-radius:17px}.vita-more-brand .vita-mark svg{width:31px;height:31px}.vita-more-brand strong{display:block;font-family:Georgia,"Times New Roman",serif;font-size:24px;font-weight:500;color:#f4b4c0;letter-spacing:.04em}.vita-more-brand p{margin:3px 0;color:#a5969f;font-size:10px}.vita-more-brand small{color:#71646d;font-size:8px}
+.more-profile{border-color:#372a34;background:linear-gradient(145deg,#1e171e,#110e12)}.more-profile .metric{border-color:#342833;background:#141015}.more-profile .metric b{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#f6e8ef}.more-link-card{border-color:#362934;border-radius:18px;background:linear-gradient(145deg,#1c161d,#110e12)}
+.settings-actions{gap:7px}.settings-actions button{border-radius:13px}.footer-note{border-color:rgba(221,176,124,.2);background:rgba(221,176,124,.04);color:#bda895}.modal{background:rgba(8,6,9,.95)}.toast{background:#f0d4db;color:#21151b;box-shadow:0 16px 35px rgba(0,0,0,.35)}
+@media(min-width:781px){.app-bottom-nav{border-color:#382b35;background:rgba(15,11,16,.95)}}
+@media(max-width:640px){
+  .app{padding:10px 10px 18px}.hero.vita-brand-header{min-height:64px;margin-bottom:8px;padding:7px 3px}.vita-mark{width:38px;height:38px;border-radius:13px}.vita-brand-lockup strong{font-size:25px}.vita-brand-lockup small{font-size:7px}.vita-header-phase{display:none}.hero.vita-brand-header .version{right:4px}
+  .vita-greeting{padding:3px 4px 13px}.vita-greeting h2{font-size:27px}.vita-greeting p{font-size:12px}.vita-today-card{padding:0 13px 14px;border-radius:23px}.vita-card-ribbon{margin-left:-13px;padding:10px 24px 10px 13px;min-width:198px}.vita-card-ribbon b{font-size:9px}
+  .vita-today-top{grid-template-columns:minmax(0,1fr) 76px;padding:20px 0 14px}.vita-today-copy h1{font-size:35px}.vita-today-copy p{font-size:11px}.vita-date{font-size:9px}.vita-workout-emblem{width:70px;height:70px}.vita-workout-emblem svg{width:36px;height:36px}
+  .vita-stat-grid{gap:6px}.vita-stat{min-height:72px;padding:10px 8px;gap:7px;border-radius:15px}.vita-stat>span{width:24px;height:24px}.vita-stat>span svg{width:20px;height:20px}.vita-stat b{font-size:20px}.vita-stat small{font-size:8px}.vita-guidance{padding:10px}.vita-guidance p{font-size:10px}.vita-primary-action{min-height:50px;margin-top:13px}
+  .vita-support-grid{grid-template-columns:1fr;gap:8px}.vita-support-card{min-height:94px;padding:12px 13px}.vita-support-card b{font-size:16px}#nutricao .grid-4{grid-template-columns:1fr 1fr}.screen-intro h2{font-size:26px}.program-roadmap-head h2{font-size:21px}
+}
+@media(max-width:420px){.vita-stat{display:block;text-align:center}.vita-stat>span{margin:0 auto 5px}.vita-stat b{font-size:19px}.vita-today-copy h1{font-size:32px}#trainingDayStage .guided-active .ex-card-title b{font-size:20px}}

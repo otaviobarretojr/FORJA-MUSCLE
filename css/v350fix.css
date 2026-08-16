@@ -1,0 +1,3 @@
+/* VITAFIT v3.5.0 — evita flash do cabeçalho legado durante o bootstrap */
+.hero:not(.vita-brand-header){visibility:hidden}
+.hero.vita-brand-header{visibility:visible}
