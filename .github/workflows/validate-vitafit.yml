@@ -1,0 +1,50 @@
+name: Validate VITAFIT v3.5.0
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  vitafit-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate build synchronization
+        run: |
+          grep -Fq "const BUILD='3.5.0'" index.html
+          grep -Fq "const BUILD='3.5.0'" service-worker.js
+          grep -Fq "const BUILD='3.5.0'" js/v350.js
+          grep -Fq 'content="3.5.0"' index.html
+      - name: Validate redesigned areas
+        run: |
+          grep -Fq "Treino de hoje" js/v350.js
+          grep -Fq "Refeições, macros e hidratação" js/v350.js
+          grep -Fq "Fases, evolução dos treinos" js/v350.js
+          grep -Fq "Perfil, compras, relatórios" js/v350.js
+          grep -Fq "vita-more-brand" css/v350.css
+          grep -Fq "program-stage.current" css/v350.css
+          grep -Fq "#nutricao #meals" css/v350.css
+          grep -Fq "#trainingDayStage .guided-active" css/v350.css
+      - name: Validate Home actions without data migration
+        run: |
+          grep -Fq "toggleWorkoutSession" js/v350.js
+          grep -Fq "syncGuidedTraining(true)" js/v350.js
+          grep -Fq "guided.completed" js/v350.js
+          grep -Fq "session.running" js/v350.js
+          grep -Fq "cardioDone" js/v350.js
+          ! grep -Fq "store.set(" js/v350.js
+          ! grep -Fq "store.del(" js/v350.js
+          grep -Fq "const NS='shape12.'" js/base.js
+      - name: Validate PWA brand assets
+        run: |
+          python -m json.tool manifest.webmanifest > /dev/null
+          grep -Fq '"short_name": "VITAFIT"' manifest.webmanifest
+          grep -Fq "icons/vitafit.svg" manifest.webmanifest
+          grep -Fq "icons/vitafit.svg" index.html
+          grep -Fq "icons/vitafit.svg" service-worker.js
+      - name: Syntax check
+        run: |
+          node --check js/v350.js
+          node --check service-worker.js
