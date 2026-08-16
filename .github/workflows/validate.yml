@@ -40,6 +40,8 @@ jobs:
           test -f js/v340.js
           test -f css/v341.css
           test -f js/v341.js
+          test -f css/v342.css
+          test -f js/v342.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -69,6 +71,8 @@ jobs:
           grep -q "css/v340.css" service-worker.js
           grep -q "js/v341.js" service-worker.js
           grep -q "css/v341.css" service-worker.js
+          grep -q "js/v342.js" service-worker.js
+          grep -q "css/v342.css" service-worker.js
           grep -q "manifest.webmanifest" index.html
           grep -q "v32.js" index.html
           grep -q "v32.css" index.html
@@ -83,6 +87,8 @@ jobs:
           grep -q "v340.css" index.html
           grep -q "v341.js" index.html
           grep -q "v341.css" index.html
+          grep -q "v342.js" index.html
+          grep -q "v342.css" index.html
 
       - name: Validate v3.1 navigation bootstrap
         run: |
@@ -159,8 +165,6 @@ jobs:
 
       - name: Validate v3.4.1 Home, Program and active recovery
         run: |
-          grep -Fq "const BUILD='3.4.1'" index.html
-          grep -Fq "forja-muscle-v3-4-1" service-worker.js
           grep -Fq "homeCycleCard" js/v341.js
           grep -Fq "Programação" js/v341.js
           grep -Fq "legacyEvolutionArchive" js/v341.js
@@ -170,4 +174,16 @@ jobs:
           grep -Fq "RECUPERAÇÃO ATIVA" js/v341.js
           grep -Fq "program-stage" css/v341.css
           grep -Fq "home-cycle-card" css/v341.css
+          grep -Fq "const NS='shape12.'" js/base.js
+
+      - name: Validate v3.4.2 clean Home
+        run: |
+          grep -Fq "const BUILD='3.4.2'" index.html
+          grep -Fq "forja-muscle-v3-4-2" service-worker.js
+          grep -Fq "homeLegacyArchive" js/v342.js
+          grep -Fq "weeklySummary" js/v342.js
+          grep -Fq "today-wrap" js/v342.js
+          grep -Fq "O essencial de hoje e o ciclo atual." js/v342.js
+          grep -Fq "#homeLegacyArchive[hidden]" css/v342.css
+          grep -Fq "shape12.*" js/v342.js
           grep -Fq "const NS='shape12.'" js/base.js
