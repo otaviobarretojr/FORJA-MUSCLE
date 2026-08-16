@@ -112,12 +112,12 @@ jobs:
           grep -Fq "forja-muscle-v3-5-0-vitafit" service-worker.js
           grep -Fq "cache.addAll(CORE)" service-worker.js
           grep -Fq "navigationPreload.enable" service-worker.js
-          grep -Fq "VITAFIT_READY" service-worker.js
           grep -Fq "css/v350.css" service-worker.js
           grep -Fq "js/v350.js" service-worker.js
           grep -Fq "js/v350header.js" service-worker.js
           grep -Fq "icons/vitafit.svg" service-worker.js
           ! grep -Fq "client.navigate(" service-worker.js
+          ! grep -Fq "clients.claim" service-worker.js
 
       - name: Validate bootstrap references
         run: |
@@ -125,5 +125,6 @@ jobs:
           grep -Fq "Promise.all(loads)" index.html
           grep -Fq "serviceWorker.register('service-worker.js?v='+BUILD" index.html
           grep -Fq "updateViaCache:'none'" index.html
+          grep -Fq "document.documentElement.dataset.vitafitReady='true'" index.html
           grep -Fq "getRegistrations" refresh.html
           grep -Fq "startsWith('forja-muscle-')" refresh.html
