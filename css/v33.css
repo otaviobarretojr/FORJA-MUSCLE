@@ -1,0 +1,84 @@
+/* FORJA MUSCLE v3.3.0 — treino do dia em player guiado */
+#treino #schedule{display:none!important}
+#treino .training-day-head{display:none!important}
+#treino #todayWorkoutCard{display:none!important}
+#trainingDayStage{border:0;background:transparent;padding:0;box-shadow:none}
+#trainingDayStage>details[id^="workout-"]{border:0;background:transparent;margin:0;overflow:visible}
+#trainingDayStage>details[id^="workout-"]>summary{display:none!important}
+#trainingDayStage>details[id^="workout-"]>.detail-body{padding:0}
+#trainingDayStage .exercise{display:none!important;border:0;padding:0;background:transparent}
+#trainingDayStage .exercise.guided-active{display:block!important}
+#trainingDayStage .exercise.guided-active>.name,
+#trainingDayStage .exercise.guided-active>.data,
+#trainingDayStage .exercise.guided-active>.load-input,
+#trainingDayStage .exercise.guided-active>.reps-input,
+#trainingDayStage .exercise.guided-active>.ex-check,
+#trainingDayStage .exercise.guided-active>.exercise-sub,
+#trainingDayStage .exercise.guided-active>.history-box{display:none!important}
+#trainingDayStage .exercise.guided-active .v13-shell{display:block;padding:0;border:0;background:transparent}
+
+.guided-today-hero{margin:0 0 12px;padding:16px;border:1px solid rgba(184,255,79,.25);border-radius:20px;background:linear-gradient(145deg,rgba(184,255,79,.065),rgba(108,229,255,.025));box-shadow:0 12px 28px rgba(0,0,0,.13)}
+.guided-today-hero h2{font-size:22px;letter-spacing:-.03em;margin:4px 0 12px}
+.guided-workout-summary{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+.guided-workout-summary>div:first-child b{display:block;font-size:18px}.guided-workout-summary>div:first-child span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.guided-summary-progress{min-width:70px;text-align:center;padding:8px 10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.guided-summary-progress strong{display:block;font-size:18px}.guided-summary-progress span{font-size:9px;color:var(--muted)}
+.guided-complete-banner{margin-top:10px;padding:10px 12px;border-radius:13px;background:rgba(133,236,148,.09);border:1px solid rgba(133,236,148,.24);color:var(--good);font-size:11px;font-weight:850}
+
+#trainingDayStage .rest-card{margin:0 0 12px;padding:10px 12px;border-radius:16px}
+#trainingDayStage .rest-row{grid-template-columns:auto 1fr auto;gap:8px}
+#trainingDayStage .rest-clock{font-size:23px}
+#trainingDayStage .rest-presets{display:flex;gap:5px;overflow:auto}
+#trainingDayStage .rest-presets button{white-space:nowrap}
+
+.guided-visual{margin-bottom:10px}
+.guided-progress-line{display:flex;justify-content:space-between;align-items:center;margin:0 2px 8px;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.08em}
+.guided-progress-line b{color:var(--accent)}
+.guided-image-box{overflow:hidden;border:1px solid var(--line);border-radius:20px;background:#0d1218}
+.guided-image-box svg{display:block;width:100%;height:auto;max-height:310px;background:radial-gradient(circle at 75% 20%,rgba(184,255,79,.06),transparent 35%),#0d1218}
+.guided-image-caption{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border-top:1px solid var(--line)}
+.guided-image-caption b{font-size:12px}.guided-image-caption span{font-size:9px;color:var(--muted);text-align:right}
+.guided-tips{margin-top:9px;padding:12px;border:1px solid rgba(108,229,255,.18);border-radius:16px;background:rgba(108,229,255,.035)}
+.guided-tips p{margin:5px 0 0;color:#d7dee8;font-size:11px}
+
+#trainingDayStage .guided-active .ex-card-head{margin-top:10px;padding:12px 13px;border:1px solid var(--line);border-radius:16px 16px 0 0;background:rgba(255,255,255,.025)}
+#trainingDayStage .guided-active .ex-card-title b{font-size:18px}
+#trainingDayStage .guided-active .ex-card-title small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+#trainingDayStage .guided-active .ex-card-meta strong{font-size:12px}
+#trainingDayStage .guided-active .set-table{border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;overflow:hidden}
+#trainingDayStage .guided-active .set-head{padding:7px 9px}
+#trainingDayStage .guided-active .set-row{padding:9px;background:rgba(255,255,255,.015)}
+#trainingDayStage .guided-active .set-row.done{background:rgba(184,255,79,.045)}
+#trainingDayStage .guided-active .set-input{min-height:42px;font-size:15px}
+#trainingDayStage .guided-active .set-done{width:40px;height:40px;border-radius:12px}
+#trainingDayStage .guided-active .ex-footer{margin-top:8px;padding:10px 2px}
+#trainingDayStage .guided-active .v13-history{margin-bottom:8px}
+
+.guided-nav{position:sticky;bottom:72px;z-index:25;margin-top:12px;display:grid;grid-template-columns:auto 1fr minmax(145px,auto);gap:8px;align-items:center;padding:9px;border:1px solid var(--line);border-radius:17px;background:rgba(13,17,23,.94);backdrop-filter:blur(16px);box-shadow:0 12px 32px rgba(0,0,0,.28)}
+.guided-nav button:disabled{opacity:.38;cursor:not-allowed}
+.guided-nav-status{text-align:center;min-width:70px}.guided-nav-status b{display:block;font-size:15px}.guided-nav-status span{display:block;font-size:8px;color:var(--muted)}
+
+.guided-cardio-card,.guided-recovery-card{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.025)}
+.guided-cardio-card b,.guided-recovery-card b{display:block;font-size:16px}.guided-cardio-card p,.guided-recovery-card p{margin:3px 0 0;color:var(--muted);font-size:11px}
+.guided-type-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(108,229,255,.22);background:rgba(108,229,255,.065);font-size:20px;color:var(--accent2)}
+
+#trainingExtras{margin-top:14px;opacity:.82}
+#trainingExtras>summary{padding:12px 13px;font-size:11px}
+
+@media(max-width:640px){
+  .guided-today-hero{padding:13px;border-radius:17px}.guided-today-hero h2{font-size:19px}
+  .guided-workout-summary{grid-template-columns:1fr auto}.guided-workout-summary #guidedSessionBtn{grid-column:1/-1;width:100%}
+  .guided-summary-progress{min-width:62px}
+  .guided-image-box svg{max-height:250px}
+  .guided-image-caption{align-items:flex-start;flex-direction:column}.guided-image-caption span{text-align:left}
+  .guided-nav{grid-template-columns:72px 1fr minmax(126px,1.4fr);bottom:70px;padding:7px;gap:6px}
+  .guided-nav .soft-btn,.guided-nav .primary-btn{padding:9px 7px;font-size:10px}
+  .guided-cardio-card,.guided-recovery-card{grid-template-columns:auto 1fr}.guided-cardio-card .primary-btn{grid-column:1/-1;width:100%}
+}
+
+@media(max-width:460px){
+  #trainingDayStage .guided-active .set-head{grid-template-columns:32px 1fr 1fr 46px}
+  #trainingDayStage .guided-active .set-row{grid-template-columns:32px 1fr 1fr 46px}
+  #trainingDayStage .guided-active .previous-set,#trainingDayStage .guided-active .prev-head{display:none!important}
+  .guided-tips p{font-size:10.5px}
+}
