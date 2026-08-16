@@ -1,4 +1,4 @@
-// FORJA MUSCLE v3.1 — navegação em 5 áreas sem alterar as chaves de dados
+// FORJA MUSCLE v3.1.2 — navegação em 5 áreas sem alterar as chaves de dados
 (function(){
   const screenMeta={
     hoje:{label:'Hoje',icon:'⌂'},
@@ -42,13 +42,13 @@
     return wrap;
   }
 
-  function createBottomNav(app){
+  function createBottomNav(host){
     const nav=document.createElement('nav');
     nav.id='appBottomNav';
     nav.className='app-bottom-nav';
     nav.setAttribute('aria-label','Navegação principal');
     nav.innerHTML=Object.entries(screenMeta).map(([id,m])=>`<button class="app-nav-btn" data-screen="${id}" onclick="setAppScreen('${id}')" aria-label="${m.label}"><span class="nav-icon">${m.icon}</span><span class="nav-label">${m.label}</span></button>`).join('');
-    app.appendChild(nav);
+    host.appendChild(nav);
   }
 
   window.setAppScreen=function(id,opts={}){
@@ -62,20 +62,24 @@
   };
 
   function renderV31Header(){
+    document.documentElement.dataset.forjaBuild=window.__FORJA_BUILD__||'3.1.2';
     const v=document.querySelector('.hero .version');
-    if(v)v.textContent='v3.1';
+    if(v)v.textContent='v3.1.2';
     const eyebrow=document.querySelector('.hero>.eyebrow');
-    if(eyebrow){const p=phaseInfo();eyebrow.textContent=`SEMANA ${p.w} • ${p.name.toUpperCase()}`;}
+    if(eyebrow&&typeof phaseInfo==='function'){
+      const p=phaseInfo();
+      eyebrow.textContent=`SEMANA ${p.w} • ${p.name.toUpperCase()}`;
+    }
   }
 
   function organize(){
     const app=document.querySelector('.app');
-    const main=app?.querySelector('main');
+    const main=document.querySelector('main');
     const nutrition=document.getElementById('nutricao');
     const training=document.getElementById('treino');
     if(!app||!main||!nutrition||!training||document.getElementById('appBottomNav'))return;
 
-    const legacyTabs=app.querySelector('.tabs');
+    const legacyTabs=document.querySelector('.tabs');
     if(legacyTabs)legacyTabs.classList.add('legacy-tabs');
 
     const home=document.createElement('section');
@@ -105,7 +109,7 @@
     if(today)home.appendChild(today);
     if(daily)home.appendChild(daily);
 
-    // Evolução: tudo que é acompanhamento e comparação sai das telas operacionais.
+    // Evolução: acompanhamento, comparação e check-in.
     const weekly=document.getElementById('weeklySummary');
     const progress=document.getElementById('progressDashboard');
     const target=document.getElementById('targetCard');
@@ -132,17 +136,16 @@
       const rest=training.querySelector('.rest-card');if(rest)frag.appendChild(rest);
       ['workout-seg','workout-qua','workout-sex','workout-dom'].forEach(id=>{const n=document.getElementById(id);if(n)frag.appendChild(n)});
       const screenIntro=training.querySelector('.screen-intro');
-      screenIntro.after(frag);
+      if(screenIntro)screenIntro.after(frag);
     }
 
-    createBottomNav(app);
+    createBottomNav(document.body);
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('.app-screen').forEach(s=>s.classList.remove('active'));
     setAppScreen('hoje',{instant:true});
     renderV31Header();
   }
 
-  // A CTA da Home passa a usar a nova navegação.
   window.openTodayRoutine=function(){
     const type=dowPlans[selectedDate.getDay()].type;
     if(type==='Musculação'||type==='Cardio'){
