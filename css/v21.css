@@ -1,0 +1,62 @@
+/* ===== FORJA MUSCLE v2.1 ===== */
+.weekly-summary{margin-top:10px}
+.ws-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.ws-head h2{margin:4px 0 2px;font-size:19px}.ws-head p{margin:0;color:var(--muted);font-size:10px}
+.streak-badge{padding:9px 11px;border:1px solid rgba(255,209,102,.28);border-radius:13px;background:rgba(255,209,102,.055);text-align:right}
+.streak-badge span{display:block;font-size:7px;color:var(--muted);font-weight:900;letter-spacing:.09em}.streak-badge b{display:block;color:var(--warn);font-size:15px;margin-top:2px}
+.ws-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px}
+.ws-kpi{padding:10px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.12)}
+.ws-kpi span{display:block;color:var(--muted);font-size:8px}.ws-kpi b{display:block;font-size:16px;margin:2px 0}.ws-kpi small{display:block;color:var(--muted);font-size:8px}
+.ws-reading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:9px;padding:10px;border:1px solid rgba(108,229,255,.2);border-radius:12px;background:rgba(108,229,255,.035)}
+.ws-reading b{display:block;font-size:12px;margin:3px 0}.ws-reading p{margin:0;color:var(--muted);font-size:9px;max-width:650px}
+
+.focus-mode .hero,
+.focus-mode .home-today,
+.focus-mode .weekly-summary,
+.focus-mode .today-wrap,
+.focus-mode .target-card,
+.focus-mode .progress-dashboard,
+.focus-mode .tabs,
+.focus-mode #nutricao,
+.focus-mode #treino > .section-title:first-of-type,
+.focus-mode #treino > #schedule,
+.focus-mode #treino > .section-title:nth-of-type(2),
+.focus-mode #treino > .card:nth-of-type(1),
+.focus-mode #treino > .week-grid{
+  display:none!important
+}
+.focus-mode #treino{display:block!important}
+.focus-mode .app{max-width:760px}
+.focus-mode .today-workout-card{margin-top:0}
+.focus-mode .rest-card{top:7px}
+.focus-mode #focusModeBtn{background:var(--accent);color:#10130b;border-color:var(--accent)}
+.focus-exit{
+  display:none;position:fixed;right:12px;bottom:12px;z-index:90;
+  border:0;border-radius:999px;padding:11px 14px;background:var(--accent);color:#10130b;font-weight:950;box-shadow:var(--shadow)
+}
+.focus-mode .focus-exit{display:block}
+
+.weekly-report-modal{
+  display:none;position:fixed;inset:0;z-index:130;background:rgba(0,0,0,.94);align-items:center;justify-content:center;padding:14px
+}
+.weekly-report-modal.open{display:flex}
+.weekly-report-shell{
+  width:min(850px,100%);max-height:94vh;overflow:auto;border:1px solid var(--line);border-radius:20px;background:#0e1218;padding:15px
+}
+.weekly-report-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.weekly-report-head h3{margin:3px 0 0;font-size:18px}
+.report-hero{margin-top:10px;padding:13px;border:1px solid rgba(184,255,79,.25);border-radius:14px;background:rgba(184,255,79,.045)}
+.report-hero b{display:block;font-size:20px}.report-hero span{font-size:9px;color:var(--muted)}
+.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}
+.report-grid>div{padding:10px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.02)}
+.report-grid span{display:block;color:var(--muted);font-size:8px}.report-grid b{display:block;font-size:14px;margin-top:2px}
+.report-section{margin-top:9px;padding:11px;border:1px solid var(--line);border-radius:12px}
+.report-section h4{margin:0 0 6px;font-size:12px}.report-section p{margin:0;color:var(--muted);font-size:10px}
+.weekly-report-actions{display:flex;gap:8px;margin-top:11px}
+@media(max-width:700px){
+  .ws-grid,.report-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:460px){
+  .ws-head,.ws-reading{align-items:flex-start;flex-direction:column}
+  .weekly-report-actions{flex-direction:column}
+}
