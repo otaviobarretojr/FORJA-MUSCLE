@@ -60,18 +60,17 @@ jobs:
               console.log('[1/7] Abrindo VITAFIT');
               await page.goto('http://127.0.0.1:4173/?e2e=vitafit350',{waitUntil:'domcontentloaded'});
               await page.waitForSelector('#vitaHomeDashboard',{state:'visible'});
+              await page.waitForSelector('#vitaStableHeader',{state:'visible'});
               const homeIds=await page.locator('#vitaHomeDashboard').evaluate(el=>[...el.querySelectorAll('[id]')].map(n=>n.id));
-              console.log('[DOM HOME IDS]',JSON.stringify(homeIds));
-              console.log('[ERROS ATÉ HOME]',JSON.stringify(pageErrors));
               assert.match(await page.title(),/VITAFIT/);
-              assert.equal(await page.locator('.hero').isVisible(),true);
-              assert.match(await page.locator('.hero').innerText(),/VITAFIT/);
-              assert.doesNotMatch(await page.locator('.hero').innerText(),/FORJA MUSCLE/);
+              assert.match(await page.locator('#vitaStableHeader').innerText(),/VITAFIT/);
+              assert.doesNotMatch(await page.locator('#vitaStableHeader').innerText(),/FORJA MUSCLE/);
               assert.equal(await page.locator('.app-nav-btn').count(),5);
               assert.equal(await page.locator('#vitaTodayCard').isVisible(),true);
               assert.match(await page.locator('#vitaWorkoutTitle').innerText(),/.+/);
               assert.equal(homeIds.includes('vitaPrimaryAction'),true,'CTA principal não foi criado no Home');
               assert.match(await page.locator('#vitaPrimaryAction').innerText(),/(INICIAR|CONTINUAR|CONCLUÍDO|CARDIO)/);
+              assert.equal(await page.locator('.vita-legacy-hero').count()<=1,true);
 
               console.log('[2/7] Testando navegação');
               for(const id of ['treino','nutricao','evolucao','mais','hoje']){
@@ -114,8 +113,10 @@ jobs:
               console.log('[7/7] Testando persistência após reload');
               await page.reload({waitUntil:'domcontentloaded'});
               await page.waitForSelector('#vitaHomeDashboard',{state:'visible'});
+              await page.waitForSelector('#vitaStableHeader',{state:'visible'});
               const persisted=await page.evaluate(()=>JSON.parse(localStorage.getItem('shape12.e2e.persist')));
               assert.equal(persisted,'ok');
+              assert.match(await page.locator('#vitaStableHeader').innerText(),/VITAFIT/);
               assert.deepEqual(pageErrors,[],`Erros JS no navegador: ${pageErrors.join(' | ')}`);
               assert.deepEqual(badResponses,[],`Recursos HTTP com erro: ${badResponses.join(' | ')}`);
               console.log('VITAFIT Chromium audit: OK');
