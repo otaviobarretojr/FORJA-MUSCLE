@@ -32,6 +32,8 @@ jobs:
           test -f css/v33.css
           test -f js/v33.js
           test -f js/v332.js
+          test -f css/v333.css
+          test -f js/v333.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -53,12 +55,16 @@ jobs:
           grep -q "js/v33.js" service-worker.js
           grep -q "css/v33.css" service-worker.js
           grep -q "js/v332.js" service-worker.js
+          grep -q "js/v333.js" service-worker.js
+          grep -q "css/v333.css" service-worker.js
           grep -q "manifest.webmanifest" index.html
           grep -q "v32.js" index.html
           grep -q "v32.css" index.html
           grep -q "v33.js" index.html
           grep -q "v33.css" index.html
           grep -q "v332.js" index.html
+          grep -q "v333.js" index.html
+          grep -q "v333.css" index.html
 
       - name: Validate v3.1 navigation bootstrap
         run: |
@@ -95,9 +101,18 @@ jobs:
 
       - name: Validate v3.3.2 clean training focus
         run: |
-          grep -Fq "const BUILD='3.3.2'" index.html
-          grep -Fq "forja-muscle-v3-3-2" service-worker.js
           grep -Fq "hero.hidden=true" js/v332.js
           grep -Fq "active.querySelector('.guided-visual')?.remove()" js/v332.js
           grep -Fq "guided-clean-focus" js/v332.js
           grep -Fq "shape12.*" js/v332.js
+
+      - name: Validate v3.3.3 compact rest timer
+        run: |
+          grep -Fq "const BUILD='3.3.3'" index.html
+          grep -Fq "forja-muscle-v3-3-3" service-worker.js
+          grep -Fq "rest-mini-active" js/v333.js
+          grep -Fq "Dispensar descanso" js/v333.js
+          grep -Fq "previousStartRest" js/v333.js
+          grep -Fq "rest-mini-card" css/v333.css
+          grep -Fq "conic-gradient" css/v333.css
+          grep -Fq "shape12.*" js/v333.js
