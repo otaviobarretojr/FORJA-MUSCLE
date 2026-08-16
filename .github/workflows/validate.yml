@@ -31,6 +31,7 @@ jobs:
           test -f js/v32.js
           test -f css/v33.css
           test -f js/v33.js
+          test -f js/v332.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -51,11 +52,13 @@ jobs:
           grep -q "css/v32.css" service-worker.js
           grep -q "js/v33.js" service-worker.js
           grep -q "css/v33.css" service-worker.js
+          grep -q "js/v332.js" service-worker.js
           grep -q "manifest.webmanifest" index.html
           grep -q "v32.js" index.html
           grep -q "v32.css" index.html
           grep -q "v33.js" index.html
           grep -q "v33.css" index.html
+          grep -q "v332.js" index.html
 
       - name: Validate v3.1 navigation bootstrap
         run: |
@@ -83,11 +86,18 @@ jobs:
 
       - name: Validate v3.3.1 fast startup
         run: |
-          grep -Fq "const BUILD='3.3.1'" index.html
-          grep -Fq "forja-muscle-v3-3-1" service-worker.js
           grep -Fq "preload.rel='preload'" index.html
           grep -Fq "preload.as='script'" index.html
           grep -Fq "Carregando seu treino" index.html
           grep -Fq "event.respondWith(cacheFirst(req)" service-worker.js
           ! grep -Fq "fetch('fragments/'+p+'?v='+BUILD,{cache:'no-store'})" index.html
           grep -Fq "const NS='shape12.'" js/base.js
+
+      - name: Validate v3.3.2 clean training focus
+        run: |
+          grep -Fq "const BUILD='3.3.2'" index.html
+          grep -Fq "forja-muscle-v3-3-2" service-worker.js
+          grep -Fq "hero.hidden=true" js/v332.js
+          grep -Fq "active.querySelector('.guided-visual')?.remove()" js/v332.js
+          grep -Fq "guided-clean-focus" js/v332.js
+          grep -Fq "shape12.*" js/v332.js
