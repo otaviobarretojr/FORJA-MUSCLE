@@ -13,12 +13,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('forja-muscle-')&&k!==CACHE).map(k=>caches.delete(k)));
     if(self.registration.navigationPreload)await self.registration.navigationPreload.enable();
-    await self.clients.claim();
-    const clients=await self.clients.matchAll({type:'window'});
-    clients.forEach(client=>{
-      client.postMessage({type:'FORJA_READY',build:BUILD,brand:'VITAFIT'});
-      client.postMessage({type:'VITAFIT_READY',build:BUILD});
-    });
+    // Não assumir à força uma página já aberta. O novo worker controla a próxima navegação.
   })());
 });
 
