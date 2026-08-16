@@ -35,7 +35,7 @@ jobs:
           exit 1
 
       - name: Run browser functional audit
-        run: timeout 150s node tests/e2e-vitafit.js
+        run: timeout 150s node tests/e2e-vitafit-state.js
 
       - name: Stop local server
         if: always()
