@@ -92,7 +92,7 @@ jobs:
           grep -Fq "CONTINUAR TREINO" js/v350.js
           grep -Fq "TREINO CONCLUÍDO" js/v350.js
           grep -Fq "vita-today-card" css/v350.css
-          grep -Fq "--accent:#e19aaa" css/v350.css
+          grep -Fq -- "--accent:#e19aaa" css/v350.css
           grep -Fq '"name": "VITAFIT"' manifest.webmanifest
           grep -Fq "icons/vitafit.svg" manifest.webmanifest
 
