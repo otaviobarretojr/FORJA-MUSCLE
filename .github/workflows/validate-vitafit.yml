@@ -16,6 +16,7 @@ jobs:
           grep -Fq "const BUILD='3.5.0'" index.html
           grep -Fq "const BUILD='3.5.0'" service-worker.js
           grep -Fq "const BUILD='3.5.0'" js/v350.js
+          grep -Fq "const BUILD='3.5.0'" js/v350header.js
           grep -Fq 'content="3.5.0"' index.html
       - name: Validate redesigned areas
         run: |
@@ -34,9 +35,18 @@ jobs:
           grep -Fq "guided.completed" js/v350.js
           grep -Fq "session.running" js/v350.js
           grep -Fq "cardioDone" js/v350.js
+          grep -Fq "guided.completed" js/v350fix.js
           ! grep -Fq "store.set(" js/v350.js
           ! grep -Fq "store.del(" js/v350.js
+          ! grep -Fq "store.set(" js/v350fix.js
+          ! grep -Fq "store.set(" js/v350header.js
           grep -Fq "const NS='shape12.'" js/base.js
+      - name: Validate stable VITAFIT header
+        run: |
+          grep -Fq "vitaStableHeader" js/v350header.js
+          grep -Fq "vita-legacy-hero" js/v350header.js
+          grep -Fq "v350header.js" index.html
+          grep -Fq "v350header.js" service-worker.js
       - name: Validate PWA brand assets
         run: |
           python -m json.tool manifest.webmanifest > /dev/null
@@ -47,4 +57,6 @@ jobs:
       - name: Syntax check
         run: |
           node --check js/v350.js
+          node --check js/v350fix.js
+          node --check js/v350header.js
           node --check service-worker.js
