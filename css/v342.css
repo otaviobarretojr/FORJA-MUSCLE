@@ -1,5 +1,6 @@
 /* FORJA MUSCLE v3.4.2 — Home essencial */
 #homeLegacyArchive[hidden]{display:none!important}
 #screen-hoje #weeklySummary,
-#screen-hoje .today-wrap{display:none!important}
+#screen-hoje .today-wrap,
+#screen-hoje #homeCycleCard{display:none!important}
 #screen-hoje .screen-intro{margin-bottom:10px}
