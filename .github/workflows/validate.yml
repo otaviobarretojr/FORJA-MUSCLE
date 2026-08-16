@@ -25,6 +25,8 @@ jobs:
           test -f fragments/nutrition.html
           test -f fragments/training.html
           test -f fragments/modals.html
+          test -f css/v31.css
+          test -f js/v31.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -40,4 +42,15 @@ jobs:
         run: |
           grep -q "fragments/home-dashboard.html" service-worker.js
           grep -q "js/v30b2.js" service-worker.js
+          grep -q "js/v31.js" service-worker.js
           grep -q "manifest.webmanifest" index.html
+
+      - name: Validate v3.1 navigation bootstrap
+        run: |
+          grep -Fq "root.innerHTML=fragments.join('')" index.html
+          ! grep -Fq "root.insertAdjacentHTML" index.html
+          grep -Fq "const main=document.querySelector('main')" js/v31.js
+          grep -Fq "createBottomNav(document.body)" js/v31.js
+          grep -Fq "v3.1.2" js/v31.js
+          grep -Fq "forja-muscle-v3-1-2" service-worker.js
+          grep -Fq "networkFirst" service-worker.js
