@@ -1,8 +1,7 @@
-const BUILD='3.4.5';
-const CACHE='forja-muscle-v3-4-5';
-// v3.4.4 compatibility markers: forja-muscle-v3-4-4 • forja-updated • oldForjaCaches.length
-const CORE=['./','./index.html','./refresh.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
-const RUNTIME=['./fragments/home-dashboard.html','./fragments/nutrition.html','./fragments/training.html','./fragments/modals.html','./css/base.css','./css/v13.css','./css/v14.css','./css/v20.css','./css/v21.css','./css/v30.css','./css/v31.css','./css/v32.css','./css/v33.css','./css/v333.css','./css/v334.css','./css/v340.css','./css/v341.css','./css/v342.css','./js/base.js','./js/plan.js','./js/v13.js','./js/enhancements-a.js','./js/v21.js','./js/v30a.js','./js/v30b1.js','./js/v30c.js','./js/dom-fixes.js','./js/v30b2.js','./js/v31.js','./js/v32.js','./js/v33.js','./js/v332.js','./js/v333.js','./js/v334.js','./js/v340.js','./js/v341.js','./js/v342.js'];
+const BUILD='3.5.0';
+const CACHE='forja-muscle-v3-5-0-vitafit';
+const CORE=['./','./index.html','./refresh.html','./manifest.webmanifest','./icons/vitafit.svg','./icons/icon-192.png','./icons/icon-512.png'];
+const RUNTIME=['./fragments/home-dashboard.html','./fragments/nutrition.html','./fragments/training.html','./fragments/modals.html','./css/base.css','./css/v13.css','./css/v14.css','./css/v20.css','./css/v21.css','./css/v30.css','./css/v31.css','./css/v32.css','./css/v33.css','./css/v333.css','./css/v334.css','./css/v340.css','./css/v341.css','./css/v342.css','./css/v350.css','./js/base.js','./js/plan.js','./js/v13.js','./js/enhancements-a.js','./js/v21.js','./js/v30a.js','./js/v30b1.js','./js/v30c.js','./js/dom-fixes.js','./js/v30b2.js','./js/v31.js','./js/v32.js','./js/v33.js','./js/v332.js','./js/v333.js','./js/v334.js','./js/v340.js','./js/v341.js','./js/v342.js','./js/v350.js'];
 
 self.addEventListener('install',event=>{
   self.skipWaiting();
@@ -16,7 +15,10 @@ self.addEventListener('activate',event=>{
     if(self.registration.navigationPreload)await self.registration.navigationPreload.enable();
     await self.clients.claim();
     const clients=await self.clients.matchAll({type:'window'});
-    clients.forEach(client=>client.postMessage({type:'FORJA_READY',build:BUILD}));
+    clients.forEach(client=>{
+      client.postMessage({type:'FORJA_READY',build:BUILD,brand:'VITAFIT'});
+      client.postMessage({type:'VITAFIT_READY',build:BUILD});
+    });
   })());
 });
 
@@ -62,6 +64,6 @@ self.addEventListener('fetch',event=>{
     return;
   }
 
-  const isAppCode=url.pathname.includes('/fragments/') || /\.(?:js|css)$/.test(url.pathname) || url.pathname.endsWith('/manifest.webmanifest');
+  const isAppCode=url.pathname.includes('/fragments/') || /\.(?:js|css|svg)$/.test(url.pathname) || url.pathname.endsWith('/manifest.webmanifest');
   event.respondWith(isAppCode?cacheFirst(req):cacheFirst(req));
 });
