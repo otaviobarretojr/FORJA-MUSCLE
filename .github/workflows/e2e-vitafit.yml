@@ -49,7 +49,7 @@ jobs:
               page.setDefaultNavigationTimeout(12000);
               const pageErrors=[];
               const badResponses=[];
-              page.on('pageerror',err=>pageErrors.push(String(err)));
+              page.on('pageerror',err=>{pageErrors.push(String(err));console.log('[PAGEERROR]',String(err))});
               page.on('response',res=>{if(res.status()>=400)badResponses.push(`${res.status()} ${res.url()}`)});
 
               await page.addInitScript(()=>{
@@ -60,6 +60,9 @@ jobs:
               console.log('[1/7] Abrindo VITAFIT');
               await page.goto('http://127.0.0.1:4173/?e2e=vitafit350',{waitUntil:'domcontentloaded'});
               await page.waitForSelector('#vitaHomeDashboard',{state:'visible'});
+              const homeIds=await page.locator('#vitaHomeDashboard').evaluate(el=>[...el.querySelectorAll('[id]')].map(n=>n.id));
+              console.log('[DOM HOME IDS]',JSON.stringify(homeIds));
+              console.log('[ERROS ATÉ HOME]',JSON.stringify(pageErrors));
               assert.match(await page.title(),/VITAFIT/);
               assert.equal(await page.locator('.hero').isVisible(),true);
               assert.match(await page.locator('.hero').innerText(),/VITAFIT/);
@@ -67,6 +70,7 @@ jobs:
               assert.equal(await page.locator('.app-nav-btn').count(),5);
               assert.equal(await page.locator('#vitaTodayCard').isVisible(),true);
               assert.match(await page.locator('#vitaWorkoutTitle').innerText(),/.+/);
+              assert.equal(homeIds.includes('vitaPrimaryAction'),true,'CTA principal não foi criado no Home');
               assert.match(await page.locator('#vitaPrimaryAction').innerText(),/(INICIAR|CONTINUAR|CONCLUÍDO|CARDIO)/);
 
               console.log('[2/7] Testando navegação');
