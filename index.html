@@ -49,39 +49,43 @@
     window.__VITAFIT_BUILD__=BUILD;
     document.documentElement.dataset.forjaBuild=BUILD;
     document.documentElement.dataset.brand='vitafit';
-    const url=new URL(location.href);
-    if(url.searchParams.get('forja-build')===BUILD){
-      url.searchParams.delete('forja-build');
-      history.replaceState(null,'',url.pathname+(url.search||'')+url.hash);
-    }
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.addEventListener('message',e=>{
-        const type=e.data&&e.data.type;
-        const b=(type==='FORJA_READY'||type==='VITAFIT_READY')?String(e.data.build||''):'';
-        if(b&&b!==BUILD){
-          const u=new URL(location.href);
-          u.searchParams.set('forja-build',b);
-          location.replace(u.href);
-        }
-      });
-      navigator.serviceWorker.register('service-worker.js?v='+BUILD,{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
-    }
+
     const root=document.getElementById('forja-root');
     const parts=['home-dashboard.html','nutrition.html','training.html','modals.html'];
     const scripts=['base.js','plan.js','v13.js','enhancements-a.js','v21.js','v30a.js','v30b1.js','v30c.js','dom-fixes.js','v30b2.js','v31.js','v32.js','v33.js','v332.js','v333.js','v334.js','v340.js','v341.js','v342.js','v350.js','v350fix.js','v350header.js'];
+
     const fragments=await Promise.all(parts.map(async p=>{
       const r=await fetch('fragments/'+p+'?v='+BUILD);
       if(!r.ok)throw new Error('Falha ao carregar '+p);
       return r.text();
     }));
     root.innerHTML=fragments.join('');
+
     const scriptUrls=scripts.map(s=>'js/'+s+'?v='+BUILD);
     const loads=scriptUrls.map(src=>new Promise((ok,fail)=>{
-      const el=document.createElement('script');el.src=src;el.async=false;el.onload=ok;el.onerror=fail;document.body.appendChild(el);
+      const el=document.createElement('script');
+      el.src=src;
+      el.async=false;
+      el.onload=ok;
+      el.onerror=fail;
+      document.body.appendChild(el);
     }));
     await Promise.all(loads);
-    const version=document.querySelector('.hero .version');if(version)version.textContent='v'+BUILD;
+
+    const version=document.querySelector('.hero .version');
+    if(version)version.textContent='v'+BUILD;
     document.documentElement.dataset.forjaBuild=BUILD;
+    document.documentElement.dataset.vitafitReady='true';
+
+    // O aplicativo fica utilizável primeiro. O PWA é sincronizado em segundo plano.
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.addEventListener('message',e=>{
+        if(e.data?.type==='VITAFIT_READY'&&e.data.build&&String(e.data.build)!==BUILD){
+          window.__VITAFIT_UPDATE_AVAILABLE__=String(e.data.build);
+        }
+      });
+      navigator.serviceWorker.register('service-worker.js?v='+BUILD,{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
+    }
   })().catch(err=>{
     document.getElementById('forja-root').innerHTML='<div style="padding:24px;font-family:sans-serif;color:#fff;background:#0b090d;min-height:100vh"><h1>VITAFIT</h1><p>Não foi possível carregar o aplicativo.</p><pre>'+err.message+'</pre></div>';
   });
