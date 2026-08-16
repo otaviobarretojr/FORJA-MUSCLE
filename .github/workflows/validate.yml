@@ -34,6 +34,7 @@ jobs:
           test -f css/v341.css
           test -f css/v342.css
           test -f css/v350.css
+          test -f css/v350fix.css
           test -f js/v31.js
           test -f js/v33.js
           test -f js/v332.js
@@ -43,6 +44,8 @@ jobs:
           test -f js/v341.js
           test -f js/v342.js
           test -f js/v350.js
+          test -f js/v350fix.js
+          test -f js/v350header.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -64,7 +67,10 @@ jobs:
         run: |
           grep -Fq "const NS='shape12.'" js/base.js
           grep -Fq "shape12.*" js/v350.js
+          grep -Fq "shape12.*" js/v350header.js
           ! grep -Fq "localStorage.clear" js/v350.js
+          ! grep -Fq "localStorage.clear" js/v350fix.js
+          ! grep -Fq "localStorage.clear" js/v350header.js
           ! grep -Fq "localStorage.clear" refresh.html
 
       - name: Validate guided training regressions
@@ -87,10 +93,14 @@ jobs:
           grep -Fq "VITAFIT • Força, saúde & evolução" index.html
           grep -Fq "css/v350.css?v=3.5.0" index.html
           grep -Fq "'v350.js'" index.html
+          grep -Fq "'v350fix.js'" index.html
+          grep -Fq "'v350header.js'" index.html
           grep -Fq "HOJE NA VITAFIT" js/v350.js
           grep -Fq "vitaHomeDashboard" js/v350.js
           grep -Fq "CONTINUAR TREINO" js/v350.js
           grep -Fq "TREINO CONCLUÍDO" js/v350.js
+          grep -Fq "vitaStableHeader" js/v350header.js
+          grep -Fq "vita-legacy-hero" js/v350header.js
           grep -Fq "vita-today-card" css/v350.css
           grep -Fq -- "--accent:#e19aaa" css/v350.css
           grep -Fq '"name": "VITAFIT"' manifest.webmanifest
@@ -105,6 +115,7 @@ jobs:
           grep -Fq "VITAFIT_READY" service-worker.js
           grep -Fq "css/v350.css" service-worker.js
           grep -Fq "js/v350.js" service-worker.js
+          grep -Fq "js/v350header.js" service-worker.js
           grep -Fq "icons/vitafit.svg" service-worker.js
           ! grep -Fq "client.navigate(" service-worker.js
 
