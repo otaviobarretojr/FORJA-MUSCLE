@@ -74,11 +74,20 @@ jobs:
 
       - name: Validate v3.3 guided workout
         run: |
-          grep -Fq "const BUILD='3.3.0'" index.html
-          grep -Fq "forja-muscle-v3-3-0" service-worker.js
           grep -Fq "guided.exerciseIndex" js/v33.js
           grep -Fq "Concluir exercício" js/v33.js
           grep -Fq "TREINO DE HOJE" js/v33.js
           grep -Fq "visual técnico vetorial" js/v33.js
           grep -Fq "#treino #schedule{display:none!important}" css/v33.css
           grep -Fq "shape12.*" js/v33.js
+
+      - name: Validate v3.3.1 fast startup
+        run: |
+          grep -Fq "const BUILD='3.3.1'" index.html
+          grep -Fq "forja-muscle-v3-3-1" service-worker.js
+          grep -Fq "preload.rel='preload'" index.html
+          grep -Fq "preload.as='script'" index.html
+          grep -Fq "Carregando seu treino" index.html
+          grep -Fq "event.respondWith(cacheFirst(req)" service-worker.js
+          ! grep -Fq "fetch('fragments/'+p+'?v='+BUILD,{cache:'no-store'})" index.html
+          grep -Fq "const NS='shape12.'" js/base.js
