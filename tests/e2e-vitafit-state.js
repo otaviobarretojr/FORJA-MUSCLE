@@ -31,15 +31,39 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
     await page.goto('http://127.0.0.1:4173/?e2e=state',{waitUntil:'domcontentloaded'});
     const home=await eventually(page,'bootstrap',()=>({
       ready:document.documentElement.dataset.vitafitReady,
+      build:document.documentElement.dataset.vitafitBuild||document.documentElement.dataset.forjaBuild,
       title:document.title,
       header:document.getElementById('vitaStableHeader')?.innerText||'',
       home:!!document.getElementById('vitaHomeDashboard'),
       cta:document.getElementById('vitaPrimaryAction')?.innerText||'',
       workout:document.getElementById('vitaWorkoutTitle')?.innerText||'',
       nav:document.querySelectorAll('.app-nav-btn').length
-    }),s=>s.ready==='true'&&s.home&&s.nav===5);
+    }),s=>s.ready==='true'&&s.home&&s.nav===5&&s.build==='3.5.1');
     console.log(home);
-    assert.match(home.title,/VITAFIT/);assert.match(home.header,/VITAFIT/);assert.match(home.workout,/(Superior|Inferior|Full Body)/);
+    assert.match(home.title,/VITAFIT/);assert.match(home.header,/VITAFIT/);assert.match(home.header,/v3\.5\.1/);assert.match(home.workout,/(Superior|Inferior|Full Body)/);
+
+    console.log('[1b] Instalação pelo Home');
+    await page.evaluate(()=>{
+      window.__installPromptCalled=false;
+      window.__VITAFIT_INSTALL__.deferred={
+        prompt:async()=>{window.__installPromptCalled=true},
+        userChoice:Promise.resolve({outcome:'accepted'})
+      };
+      window.dispatchEvent(new CustomEvent('vitafit-install-ready'));
+    });
+    const installCard=await eventually(page,'card de instalação',()=>({
+      visible:!!document.getElementById('vitaInstallCard')&&!document.getElementById('vitaInstallCard').hidden,
+      text:document.getElementById('vitaInstallCard')?.innerText||'',
+      action:document.getElementById('vitaInstallAction')?.innerText||''
+    }),s=>s.visible&&/Instale a VITAFIT/.test(s.text)&&/INSTALAR/.test(s.action));
+    console.log(installCard);
+    await page.evaluate(()=>document.getElementById('vitaInstallAction')?.click());
+    const installedState=await eventually(page,'instalação aceita',()=>({
+      prompted:window.__installPromptCalled===true,
+      installed:localStorage.getItem('shape12.ui.appInstalled'),
+      hidden:document.getElementById('vitaInstallCard')?.hidden===true
+    }),s=>s.prompted&&s.installed==='true'&&s.hidden);
+    console.log(installedState);
 
     console.log('[2] Navegação');
     for(const id of ['treino','nutricao','evolucao','mais','hoje']){
@@ -97,12 +121,20 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
 
     console.log('[6] Mais');
     const more=await page.evaluate(()=>{window.setAppScreen('mais',{instant:true});return {active:document.getElementById('mais')?.classList.contains('active')||false,brand:document.getElementById('vitaMoreBrand')?.innerText||'',settings:document.querySelectorAll('.settings-actions').length,exportFn:typeof window.exportData==='function'}});
-    assert.equal(more.active,true);assert.match(more.brand,/VITAFIT/);assert.equal(more.settings>0,true);assert.equal(more.exportFn,true);
+    assert.equal(more.active,true);assert.match(more.brand,/VITAFIT/);assert.match(more.brand,/3\.5\.1/);assert.equal(more.settings>0,true);assert.equal(more.exportFn,true);
 
     console.log('[7] Reload / persistência');
     await page.reload({waitUntil:'domcontentloaded'});
-    const reload=await eventually(page,'reload',()=>({ready:document.documentElement.dataset.vitafitReady,persist:localStorage.getItem('shape12.e2e.persist'),brand:document.getElementById('vitaStableHeader')?.innerText||'',home:!!document.getElementById('vitaHomeDashboard'),nav:document.querySelectorAll('.app-nav-btn').length}),s=>s.ready==='true'&&s.home&&s.nav===5);
-    assert.equal(JSON.parse(reload.persist),'ok');assert.match(reload.brand,/VITAFIT/);
+    const reload=await eventually(page,'reload',()=>({
+      ready:document.documentElement.dataset.vitafitReady,
+      persist:localStorage.getItem('shape12.e2e.persist'),
+      installed:localStorage.getItem('shape12.ui.appInstalled'),
+      brand:document.getElementById('vitaStableHeader')?.innerText||'',
+      home:!!document.getElementById('vitaHomeDashboard'),
+      installHidden:document.getElementById('vitaInstallCard')?.hidden===true,
+      nav:document.querySelectorAll('.app-nav-btn').length
+    }),s=>s.ready==='true'&&s.home&&s.nav===5);
+    assert.equal(JSON.parse(reload.persist),'ok');assert.equal(reload.installed,'true');assert.equal(reload.installHidden,true);assert.match(reload.brand,/VITAFIT/);assert.match(reload.brand,/v3\.5\.1/);
     assert.deepEqual(errors,[],`Erros JS: ${errors.join(' | ')}`);assert.deepEqual(bad,[],`HTTP inválido: ${bad.join(' | ')}`);
     console.log('VITAFIT Chromium state audit: OK');
   } finally {if(browser)await browser.close()}
