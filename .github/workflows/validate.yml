@@ -34,6 +34,8 @@ jobs:
           test -f js/v332.js
           test -f css/v333.css
           test -f js/v333.js
+          test -f css/v334.css
+          test -f js/v334.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -57,6 +59,8 @@ jobs:
           grep -q "js/v332.js" service-worker.js
           grep -q "js/v333.js" service-worker.js
           grep -q "css/v333.css" service-worker.js
+          grep -q "js/v334.js" service-worker.js
+          grep -q "css/v334.css" service-worker.js
           grep -q "manifest.webmanifest" index.html
           grep -q "v32.js" index.html
           grep -q "v32.css" index.html
@@ -65,6 +69,8 @@ jobs:
           grep -q "v332.js" index.html
           grep -q "v333.js" index.html
           grep -q "v333.css" index.html
+          grep -q "v334.js" index.html
+          grep -q "v334.css" index.html
 
       - name: Validate v3.1 navigation bootstrap
         run: |
@@ -108,11 +114,21 @@ jobs:
 
       - name: Validate v3.3.3 compact rest timer
         run: |
-          grep -Fq "const BUILD='3.3.3'" index.html
-          grep -Fq "forja-muscle-v3-3-3" service-worker.js
           grep -Fq "rest-mini-active" js/v333.js
           grep -Fq "Dispensar descanso" js/v333.js
           grep -Fq "previousStartRest" js/v333.js
           grep -Fq "rest-mini-card" css/v333.css
           grep -Fq "conic-gradient" css/v333.css
           grep -Fq "shape12.*" js/v333.js
+
+      - name: Validate v3.3.4 exercise coaching
+        run: |
+          grep -Fq "const BUILD='3.3.4'" index.html
+          grep -Fq "forja-muscle-v3-3-4" service-worker.js
+          grep -Fq "Dicas do movimento" js/v334.js
+          grep -Fq "Evite isso" js/v334.js
+          grep -Fq "Semana de treino" js/v334.js
+          grep -Fq "exerciseCoachCard" js/v334.js
+          grep -Fq "forja-v334-hidden" css/v334.css
+          grep -Fq "exercise-coach-grid" css/v334.css
+          grep -Fq "shape12.*" js/v334.js
