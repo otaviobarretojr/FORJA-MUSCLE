@@ -1,0 +1,52 @@
+/* FORJA MUSCLE v3.3.3 — descanso circular compacto */
+#treino .rest-card.rest-mini-card{
+  --rest-progress:0%;
+  position:fixed!important;
+  top:auto!important;
+  right:max(14px,env(safe-area-inset-right))!important;
+  bottom:calc(86px + env(safe-area-inset-bottom))!important;
+  left:auto!important;
+  width:86px!important;
+  height:86px!important;
+  min-width:86px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  z-index:95!important;
+  display:none!important;
+  place-items:center;
+  background:conic-gradient(var(--accent2) var(--rest-progress),rgba(108,229,255,.13) 0)!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.38),0 0 0 1px rgba(108,229,255,.16)!important;
+  backdrop-filter:none!important;
+}
+#treino .rest-card.rest-mini-card.rest-mini-active{
+  display:grid!important;
+  animation:restMiniIn .16s ease-out;
+}
+#treino .rest-mini-ring{
+  width:70px;height:70px;border-radius:50%;display:grid;place-items:center;
+  background:#10151c;border:1px solid rgba(255,255,255,.06);
+  box-shadow:inset 0 0 20px rgba(0,0,0,.32)
+}
+#treino .rest-card.rest-mini-card .rest-clock{
+  min-width:0!important;margin:0!important;font-size:19px!important;line-height:1!important;
+  letter-spacing:-.04em!important;color:var(--accent2)!important;font-weight:950!important
+}
+#treino .rest-mini-close{
+  position:absolute;top:-6px;right:-4px;width:26px;height:26px;padding:0;
+  border-radius:50%;border:1px solid rgba(255,255,255,.18);background:#1a2028;color:#fff;
+  display:grid;place-items:center;font-size:17px;font-weight:800;line-height:1;
+  box-shadow:0 4px 12px rgba(0,0,0,.28)
+}
+#treino .rest-card.rest-mini-card #pauseRestBtn[hidden]{display:none!important}
+@keyframes restMiniIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@media(max-width:460px){
+  #treino .rest-card.rest-mini-card{
+    width:80px!important;height:80px!important;min-width:80px!important;
+    right:max(12px,env(safe-area-inset-right))!important;
+    bottom:calc(82px + env(safe-area-inset-bottom))!important
+  }
+  #treino .rest-mini-ring{width:64px;height:64px}
+  #treino .rest-card.rest-mini-card .rest-clock{font-size:18px!important}
+}
