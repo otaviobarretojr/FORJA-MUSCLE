@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.5.0
+name: Validate VITAFIT v3.5.1
 
 on:
   push:
@@ -13,11 +13,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.5.0'" index.html
-          grep -Fq "const BUILD='3.5.0'" service-worker.js
-          grep -Fq "const BUILD='3.5.0'" js/v350.js
-          grep -Fq "const BUILD='3.5.0'" js/v350header.js
-          grep -Fq 'content="3.5.0"' index.html
+          grep -Fq "const BUILD='3.5.1'" index.html
+          grep -Fq "const BUILD='3.5.1'" service-worker.js
+          grep -Fq "const BUILD='3.5.1'" js/v351.js
+          grep -Fq 'content="3.5.1"' index.html
+          grep -Fq "css/v351.css?v=3.5.1" index.html
+          grep -Fq "'v351.js'" index.html
       - name: Validate redesigned areas
         run: |
           grep -Fq "Treino de hoje" js/v350.js
@@ -28,29 +29,34 @@ jobs:
           grep -Fq "program-stage.current" css/v350.css
           grep -Fq "#nutricao #meals" css/v350.css
           grep -Fq "#trainingDayStage .guided-active" css/v350.css
-      - name: Validate Home actions without data migration
+      - name: Validate Home actions and install entry
         run: |
           grep -Fq "toggleWorkoutSession" js/v350.js
           grep -Fq "syncGuidedTraining(true)" js/v350.js
           grep -Fq "guided.completed" js/v350.js
           grep -Fq "session.running" js/v350.js
           grep -Fq "cardioDone" js/v350.js
-          grep -Fq "guided.completed" js/v350fix.js
-          ! grep -Fq "store.set(" js/v350.js
-          ! grep -Fq "store.del(" js/v350.js
-          ! grep -Fq "store.set(" js/v350fix.js
-          ! grep -Fq "store.set(" js/v350header.js
+          grep -Fq "vitaInstallCard" js/v351.js
+          grep -Fq "beforeinstallprompt" index.html
+          grep -Fq "appinstalled" index.html
+          grep -Fq "promptEvent.prompt" js/v351.js
+          grep -Fq "Adicionar à Tela de Início" js/v351.js
+          grep -Fq "vita-install-dismiss" css/v351.css
           grep -Fq "const NS='shape12.'" js/base.js
+          ! grep -Fq "localStorage.clear" js/v351.js
+          ! grep -Fq "store.del(" js/v351.js
       - name: Validate stable VITAFIT header
         run: |
           grep -Fq "vitaStableHeader" js/v350header.js
           grep -Fq "vita-legacy-hero" js/v350header.js
           grep -Fq "v350header.js" index.html
           grep -Fq "v350header.js" service-worker.js
+          grep -Fq "syncVersion" js/v351.js
       - name: Validate PWA brand assets
         run: |
           python -m json.tool manifest.webmanifest > /dev/null
           grep -Fq '"short_name": "VITAFIT"' manifest.webmanifest
+          grep -Fq '"display": "standalone"' manifest.webmanifest
           grep -Fq "icons/vitafit.svg" manifest.webmanifest
           grep -Fq "icons/vitafit.svg" index.html
           grep -Fq "icons/vitafit.svg" service-worker.js
@@ -59,4 +65,5 @@ jobs:
           node --check js/v350.js
           node --check js/v350fix.js
           node --check js/v350header.js
+          node --check js/v351.js
           node --check service-worker.js
