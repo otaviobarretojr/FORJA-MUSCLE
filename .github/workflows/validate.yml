@@ -16,6 +16,7 @@ jobs:
       - name: Check required files
         run: |
           test -f index.html
+          test -f refresh.html
           test -f manifest.webmanifest
           test -f service-worker.js
           test -f assets/projecao-12-semanas.jpg
@@ -56,6 +57,7 @@ jobs:
       - name: Check shell references
         run: |
           grep -q "fragments/home-dashboard.html" service-worker.js
+          grep -q "refresh.html" service-worker.js
           grep -q "js/v30b2.js" service-worker.js
           grep -q "js/v31.js" service-worker.js
           grep -q "js/v32.js" service-worker.js
@@ -185,12 +187,23 @@ jobs:
 
       - name: Validate v3.4.3 fast link opening
         run: |
-          grep -Fq "const BUILD='3.4.3'" index.html
-          grep -Fq "forja-muscle-v3-4-3" service-worker.js
           grep -Fq "el.async=false" index.html
           grep -Fq "Promise.all(loads)" index.html
           ! grep -Fq "preload.rel='preload'" index.html
           grep -Fq "navigationPreload.enable" service-worker.js
           grep -Fq "return networkFirst(req)" service-worker.js
-          ! grep -Fq "client.navigate(" service-worker.js
+          grep -Fq "const NS='shape12.'" js/base.js
+
+      - name: Validate v3.4.4 version refresh
+        run: |
+          grep -Fq "const BUILD='3.4.4'" index.html
+          grep -Fq "forja-muscle-v3-4-4" service-worker.js
+          grep -Fq "serviceWorker.register" index.html
+          grep -Fq "updateViaCache:'none'" index.html
+          grep -Fq "forja-updated" service-worker.js
+          grep -Fq "oldForjaCaches.length" service-worker.js
+          grep -Fq "v${build}" js/v31.js
+          grep -Fq "getRegistrations" refresh.html
+          grep -Fq "startsWith('forja-muscle-')" refresh.html
+          ! grep -Fq "localStorage.clear" refresh.html
           grep -Fq "const NS='shape12.'" js/base.js

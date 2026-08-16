@@ -62,9 +62,10 @@
   };
 
   function renderV31Header(){
-    document.documentElement.dataset.forjaBuild=window.__FORJA_BUILD__||'3.1.2';
+    const build=window.__FORJA_BUILD__||'3.1.2';
+    document.documentElement.dataset.forjaBuild=build;
     const v=document.querySelector('.hero .version');
-    if(v)v.textContent='v3.1.2';
+    if(v)v.textContent=`v${build}`;
     const eyebrow=document.querySelector('.hero>.eyebrow');
     if(eyebrow&&typeof phaseInfo==='function'){
       const p=phaseInfo();
@@ -103,13 +104,11 @@
     main.appendChild(evolution);
     main.appendChild(more);
 
-    // Hoje: somente execução do dia.
     const today=document.getElementById('homeToday');
     const daily=document.querySelector('.today-wrap');
     if(today)home.appendChild(today);
     if(daily)home.appendChild(daily);
 
-    // Evolução: acompanhamento, comparação e check-in.
     const weekly=document.getElementById('weeklySummary');
     const progress=document.getElementById('progressDashboard');
     const target=document.getElementById('targetCard');
@@ -119,7 +118,6 @@
     moveBlock(training,'Check-in semanal',evolution);
     if(target)evolution.appendChild(target);
 
-    // Mais: configurações e funções usadas com menor frequência.
     const profile=createProfileCard();
     if(profile)more.appendChild(profile);
     moveBlock(nutrition,'Alimentos próprios',more);
@@ -127,7 +125,6 @@
     moveBlock(training,'Dados e backup',more);
     document.querySelectorAll('.footer-note').forEach(n=>more.appendChild(n));
 
-    // Treino do dia aparece antes do planejamento semanal.
     const workoutTitle=findBlock(training,'Musculação completa');
     if(workoutTitle){
       const frag=document.createDocumentFragment();
