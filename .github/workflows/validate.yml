@@ -36,6 +36,8 @@ jobs:
           test -f js/v333.js
           test -f css/v334.css
           test -f js/v334.js
+          test -f css/v340.css
+          test -f js/v340.js
 
       - name: Validate JavaScript syntax
         run: |
@@ -61,6 +63,8 @@ jobs:
           grep -q "css/v333.css" service-worker.js
           grep -q "js/v334.js" service-worker.js
           grep -q "css/v334.css" service-worker.js
+          grep -q "js/v340.js" service-worker.js
+          grep -q "css/v340.css" service-worker.js
           grep -q "manifest.webmanifest" index.html
           grep -q "v32.js" index.html
           grep -q "v32.css" index.html
@@ -71,6 +75,8 @@ jobs:
           grep -q "v333.css" index.html
           grep -q "v334.js" index.html
           grep -q "v334.css" index.html
+          grep -q "v340.js" index.html
+          grep -q "v340.css" index.html
 
       - name: Validate v3.1 navigation bootstrap
         run: |
@@ -123,8 +129,6 @@ jobs:
 
       - name: Validate v3.3.4 exercise coaching
         run: |
-          grep -Fq "const BUILD='3.3.4'" index.html
-          grep -Fq "forja-muscle-v3-3-4" service-worker.js
           grep -Fq "Dicas do movimento" js/v334.js
           grep -Fq "Evite isso" js/v334.js
           grep -Fq "Semana de treino" js/v334.js
@@ -132,3 +136,19 @@ jobs:
           grep -Fq "forja-v334-hidden" css/v334.css
           grep -Fq "exercise-coach-grid" css/v334.css
           grep -Fq "shape12.*" js/v334.js
+
+      - name: Validate v3.4 progressive training cycles
+        run: |
+          grep -Fq "const BUILD='3.4.0'" index.html
+          grep -Fq "forja-muscle-v3-4-0" service-worker.js
+          grep -Fq "training.cycleStart" js/v340.js
+          grep -Fq "Aguardando o primeiro treino concluído" js/v340.js
+          grep -Fq "Adaptação" js/v340.js
+          grep -Fq "Iniciante" js/v340.js
+          grep -Fq "Intermediário" js/v340.js
+          grep -Fq "2×12–15" js/v340.js
+          grep -Fq "strengthDays:[1,3,5]" js/v340.js
+          grep -Fq "strengthDays:[1,3,5,0]" js/v340.js
+          grep -Fq "training-stage-prescription" css/v340.css
+          grep -Fq "shape12.*" js/v340.js
+          grep -Fq "const NS='shape12.'" js/base.js
