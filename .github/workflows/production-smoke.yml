@@ -1,0 +1,63 @@
+name: Production Smoke VITAFIT
+
+on:
+  workflow_run:
+    workflows: ["Deploy FORJA MUSCLE Pages"]
+    types: [completed]
+
+jobs:
+  production-smoke:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify public VITAFIT deployment
+        env:
+          BASE_URL: https://otaviobarretojr.github.io/FORJA-MUSCLE
+        run: |
+          set -euo pipefail
+          audit="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          fetch_until_match() {
+            local url="$1"
+            local pattern="$2"
+            local out="$3"
+            for attempt in $(seq 1 18); do
+              echo "Audit attempt ${attempt}: ${url}"
+              if curl -fLsS --connect-timeout 10 --max-time 20 \
+                -H 'Cache-Control: no-cache' \
+                -H 'Pragma: no-cache' \
+                "${url}?audit=${audit}-${attempt}" -o "$out"; then
+                if grep -Fq "$pattern" "$out"; then
+                  return 0
+                fi
+              fi
+              sleep 5
+            done
+            echo "Expected pattern not found: $pattern"
+            echo "--- response ---"
+            cat "$out" || true
+            return 1
+          }
+
+          fetch_until_match "${BASE_URL}/" "VITAFIT • Força, saúde & evolução" /tmp/index.html
+          grep -Fq 'content="3.5.0"' /tmp/index.html
+          grep -Fq 'css/v350.css?v=3.5.0' /tmp/index.html
+          grep -Fq "'v350.js'" /tmp/index.html
+          grep -Fq "'v350header.js'" /tmp/index.html
+
+          fetch_until_match "${BASE_URL}/manifest.webmanifest" '"name": "VITAFIT"' /tmp/manifest.webmanifest
+          grep -Fq '"short_name": "VITAFIT"' /tmp/manifest.webmanifest
+          grep -Fq 'icons/vitafit.svg' /tmp/manifest.webmanifest
+
+          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.5.0'" /tmp/service-worker.js
+          grep -Fq "forja-muscle-v3-5-0-vitafit" /tmp/service-worker.js
+          grep -Fq "navigationPreload.enable" /tmp/service-worker.js
+          ! grep -Fq "clients.claim" /tmp/service-worker.js
+          ! grep -Fq "client.navigate(" /tmp/service-worker.js
+
+          fetch_until_match "${BASE_URL}/css/v350.css" "--accent:#e19aaa" /tmp/v350.css
+          fetch_until_match "${BASE_URL}/js/v350.js" "HOJE NA VITAFIT" /tmp/v350.js
+          fetch_until_match "${BASE_URL}/icons/vitafit.svg" "linearGradient id=\"rose\"" /tmp/vitafit.svg
+
+          echo "Production VITAFIT smoke: OK"
