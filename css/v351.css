@@ -1,0 +1,48 @@
+/* VITAFIT v3.5.1 — convite de instalação compacto no primeiro acesso */
+.vita-install-card{
+  position:relative;
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  margin:0 0 11px;
+  padding:13px 42px 13px 13px;
+  border:1px solid rgba(225,154,170,.24);
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(56,34,49,.78),rgba(20,15,21,.96));
+  box-shadow:0 14px 34px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.012);
+}
+.vita-install-card[hidden]{display:none!important}
+.vita-install-icon{
+  width:46px;height:46px;display:grid;place-items:center;
+  border:1px solid rgba(225,154,170,.26);border-radius:15px;
+  background:rgba(225,154,170,.075);color:var(--accent);flex:0 0 auto;
+}
+.vita-install-icon svg{width:26px;height:26px;display:block}
+.vita-install-copy{min-width:0}
+.vita-install-copy small{display:block;color:#ca819b;font-size:8px;font-weight:900;letter-spacing:.13em}
+.vita-install-copy b{display:block;margin-top:4px;color:#fff7fb;font-family:Georgia,"Times New Roman",serif;font-size:17px;font-weight:500;line-height:1.15}
+.vita-install-copy p{margin:4px 0 0;color:#9d8f98;font-size:9.5px;line-height:1.45}
+.vita-install-action{
+  min-height:38px;padding:0 13px;border:1px solid rgba(255,218,225,.16);border-radius:12px;
+  background:linear-gradient(100deg,#efb2ba,#c97d96);color:#1b1117;font-size:9px;font-weight:950;letter-spacing:.055em;
+  white-space:nowrap;box-shadow:none;
+}
+.vita-install-action:disabled{opacity:.55}
+.vita-install-dismiss{
+  position:absolute;right:9px;top:8px;width:25px;height:25px;padding:0;border:0;border-radius:50%;
+  background:transparent;color:#8b7d86;font-size:18px;line-height:23px;font-weight:500;
+}
+.vita-install-help{
+  margin-top:8px;padding:8px 9px;border:1px solid rgba(225,154,170,.14);border-radius:11px;
+  background:rgba(10,8,11,.34);color:#b9aab3;font-size:9px;line-height:1.5;
+}
+.vita-install-help b,.vita-install-help strong{color:#e5c7d0}
+.vita-install-card.is-help{align-items:start}
+
+@media(max-width:520px){
+  .vita-install-card{grid-template-columns:40px minmax(0,1fr);padding:12px 38px 12px 12px;gap:10px}
+  .vita-install-icon{width:40px;height:40px;border-radius:13px}.vita-install-icon svg{width:23px;height:23px}
+  .vita-install-copy b{font-size:16px}.vita-install-copy p{font-size:9px}
+  .vita-install-action{grid-column:1/-1;width:100%;min-height:40px;margin-top:1px}
+}
