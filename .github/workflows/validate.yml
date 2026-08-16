@@ -114,12 +114,9 @@ jobs:
           grep -Fq "#treino #schedule{display:none!important}" css/v33.css
           grep -Fq "shape12.*" js/v33.js
 
-      - name: Validate v3.3.1 fast startup
+      - name: Validate v3.3.1 startup compatibility
         run: |
-          grep -Fq "preload.rel='preload'" index.html
-          grep -Fq "preload.as='script'" index.html
           grep -Fq "Carregando seu treino" index.html
-          grep -Fq "event.respondWith(cacheFirst(req)" service-worker.js
           ! grep -Fq "fetch('fragments/'+p+'?v='+BUILD,{cache:'no-store'})" index.html
           grep -Fq "const NS='shape12.'" js/base.js
 
@@ -178,12 +175,22 @@ jobs:
 
       - name: Validate v3.4.2 clean Home
         run: |
-          grep -Fq "const BUILD='3.4.2'" index.html
-          grep -Fq "forja-muscle-v3-4-2" service-worker.js
           grep -Fq "homeLegacyArchive" js/v342.js
           grep -Fq "weeklySummary" js/v342.js
           grep -Fq "today-wrap" js/v342.js
           grep -Fq "O essencial de hoje e o ciclo atual." js/v342.js
           grep -Fq "#homeLegacyArchive[hidden]" css/v342.css
           grep -Fq "shape12.*" js/v342.js
+          grep -Fq "const NS='shape12.'" js/base.js
+
+      - name: Validate v3.4.3 fast link opening
+        run: |
+          grep -Fq "const BUILD='3.4.3'" index.html
+          grep -Fq "forja-muscle-v3-4-3" service-worker.js
+          grep -Fq "el.async=false" index.html
+          grep -Fq "Promise.all(loads)" index.html
+          ! grep -Fq "preload.rel='preload'" index.html
+          grep -Fq "navigationPreload.enable" service-worker.js
+          grep -Fq "return networkFirst(req)" service-worker.js
+          ! grep -Fq "client.navigate(" service-worker.js
           grep -Fq "const NS='shape12.'" js/base.js
