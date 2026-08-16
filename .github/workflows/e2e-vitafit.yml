@@ -1,0 +1,124 @@
+name: E2E VITAFIT Chromium
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright Chromium
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local VITAFIT
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/vitafit-http.log 2>&1 &
+          echo $! >/tmp/vitafit-http.pid
+          for i in {1..20}; do
+            curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0
+            sleep 0.5
+          done
+          cat /tmp/vitafit-http.log
+          exit 1
+
+      - name: Run browser functional audit
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          const assert = require('node:assert/strict');
+
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:412,height:915}});
+            const pageErrors=[];
+            const badResponses=[];
+            page.on('pageerror',err=>pageErrors.push(String(err)));
+            page.on('response',res=>{if(res.status()>=400)badResponses.push(`${res.status()} ${res.url()}`)});
+
+            await page.addInitScript(()=>{
+              localStorage.setItem('shape12.training.cycleStart',JSON.stringify('2026-06-01'));
+              localStorage.setItem('shape12.e2e.persist',JSON.stringify('ok'));
+            });
+
+            await page.goto('http://127.0.0.1:4173/?e2e=vitafit350',{waitUntil:'networkidle'});
+            await page.waitForSelector('#vitaHomeDashboard',{state:'visible',timeout:10000});
+
+            assert.match(await page.title(),/VITAFIT/);
+            assert.equal(await page.locator('.hero').isVisible(),true);
+            assert.match(await page.locator('.hero').innerText(),/VITAFIT/);
+            assert.doesNotMatch(await page.locator('.hero').innerText(),/FORJA MUSCLE/);
+            assert.equal(await page.locator('.app-nav-btn').count(),5);
+            assert.equal(await page.locator('#vitaTodayCard').isVisible(),true);
+            assert.match(await page.locator('#vitaWorkoutTitle').innerText(),/.+/);
+            assert.match(await page.locator('#vitaPrimaryAction').innerText(),/(INICIAR|CONTINUAR|CONCLUÍDO|CARDIO)/);
+
+            // Navegação das cinco áreas.
+            for(const id of ['treino','nutricao','evolucao','mais','hoje']){
+              await page.locator(`.app-nav-btn[data-screen="${id}"]`).click();
+              const selector=id==='hoje'?'#screen-hoje':`#${id}`;
+              await page.waitForFunction(sel=>document.querySelector(sel)?.classList.contains('active'),selector);
+            }
+
+            // O ciclo intermediário inclui domingo e permite testar musculação no dia corrente da auditoria.
+            assert.match(await page.locator('#vitaWorkoutTitle').innerText(),/(Superior|Inferior|Full Body)/);
+            const action=page.locator('#vitaPrimaryAction');
+            if(!/CONCLUÍDO/.test(await action.innerText())){
+              await action.click();
+              await page.waitForFunction(()=>document.getElementById('treino')?.classList.contains('active'));
+              await page.waitForSelector('#trainingDayStage .exercise.guided-active',{state:'visible',timeout:10000});
+              const active=page.locator('#trainingDayStage .exercise.guided-active');
+              await active.locator('.set-load').first().fill('10');
+              await active.locator('.set-reps').first().fill('10');
+              await active.locator('.set-done').first().click();
+              await page.waitForSelector('#treino .rest-mini-card.rest-mini-active',{state:'visible',timeout:5000});
+              const saved=await page.evaluate(()=>Object.keys(localStorage).some(k=>k.startsWith('shape12.day.')&&k.includes('.set.')&&k.endsWith('.done')&&localStorage.getItem(k)==='true'));
+              assert.equal(saved,true,'Conclusão da série não foi persistida');
+            }
+
+            // Programa continua somente para consulta e precisa renderizar as três fases.
+            await page.locator('.app-nav-btn[data-screen="evolucao"]').click();
+            await page.waitForSelector('#programRoadmap',{state:'visible'});
+            assert.equal(await page.locator('.program-stage').count(),3);
+
+            // Nutrição preserva refeições e hidratação.
+            await page.locator('.app-nav-btn[data-screen="nutricao"]').click();
+            assert.equal(await page.locator('#meals').isVisible(),true);
+            assert.equal(await page.locator('#waterNow').count(),1);
+
+            // Mais preserva backup/configurações e recebe a identidade VITAFIT.
+            await page.locator('.app-nav-btn[data-screen="mais"]').click();
+            assert.equal(await page.locator('#vitaMoreBrand').isVisible(),true);
+            assert.equal(await page.locator('.settings-actions').count()>0,true);
+
+            // Dados shape12.* precisam sobreviver a reload real.
+            await page.reload({waitUntil:'networkidle'});
+            await page.waitForSelector('#vitaHomeDashboard',{state:'visible'});
+            const persisted=await page.evaluate(()=>JSON.parse(localStorage.getItem('shape12.e2e.persist')));
+            assert.equal(persisted,'ok');
+
+            assert.deepEqual(pageErrors,[],`Erros JS no navegador: ${pageErrors.join(' | ')}`);
+            assert.deepEqual(badResponses,[],`Recursos HTTP com erro: ${badResponses.join(' | ')}`);
+
+            await browser.close();
+            console.log('VITAFIT Chromium audit: OK');
+          })().catch(err=>{console.error(err);process.exit(1)});
+          NODE
+
+      - name: Stop local server
+        if: always()
+        run: |
+          if [ -f /tmp/vitafit-http.pid ]; then kill $(cat /tmp/vitafit-http.pid) || true; fi
+          cat /tmp/vitafit-http.log || true
