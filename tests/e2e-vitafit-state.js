@@ -42,7 +42,7 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
     console.log(home);
     assert.match(home.title,/VITAFIT/);assert.match(home.header,/VITAFIT/);assert.match(home.header,/v3\.5\.1/);assert.match(home.workout,/(Superior|Inferior|Full Body)/);
 
-    console.log('[1b] Instalação pelo Home');
+    console.log('[2] Instalação pelo Home');
     await page.evaluate(()=>{
       window.__installPromptCalled=false;
       window.__VITAFIT_INSTALL__.deferred={
@@ -65,19 +65,32 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
     }),s=>s.prompted&&s.installed==='true'&&s.hidden);
     console.log(installedState);
 
-    console.log('[2] Navegação');
-    for(const id of ['treino','nutricao','evolucao','mais','hoje']){
-      const state=await page.evaluate(screen=>{
-        window.setAppScreen(screen,{instant:true});
-        const target=screen==='hoje'?'screen-hoje':screen;
-        return {active:document.getElementById(target)?.classList.contains('active')||false,nav:[...document.querySelectorAll('.app-nav-btn.active')].map(x=>x.dataset.screen)};
-      },id);
-      console.log(id,state);assert.equal(state.active,true);assert.deepEqual(state.nav,[id]);
-    }
+    console.log('[3] Programa');
+    const program=await page.evaluate(()=>{
+      window.setAppScreen('evolucao',{instant:true});
+      return {active:document.getElementById('evolucao')?.classList.contains('active')||false,nav:[...document.querySelectorAll('.app-nav-btn.active')].map(x=>x.dataset.screen),roadmap:!!document.getElementById('programRoadmap'),stages:document.querySelectorAll('.program-stage').length,label:[...document.querySelectorAll('.app-nav-btn')].find(x=>x.dataset.screen==='evolucao')?.innerText||''}
+    });
+    assert.equal(program.active,true);assert.deepEqual(program.nav,['evolucao']);assert.equal(program.roadmap,true);assert.equal(program.stages,3);assert.match(program.label,/Programa/);
 
-    console.log('[3] CTA / player guiado');
-    const before=await page.evaluate(()=>({cta:document.getElementById('vitaPrimaryAction')?.innerText||''}));
-    if(!/CONCLUÍDO/.test(before.cta)){
+    console.log('[4] Nutrição');
+    const nutrition=await page.evaluate(()=>{
+      window.setAppScreen('nutricao',{instant:true});
+      return {active:document.getElementById('nutricao')?.classList.contains('active')||false,nav:[...document.querySelectorAll('.app-nav-btn.active')].map(x=>x.dataset.screen),meals:!!document.getElementById('meals'),checks:document.querySelectorAll('.meal-check').length,water:!!document.getElementById('waterNow')}
+    });
+    assert.equal(nutrition.active,true);assert.deepEqual(nutrition.nav,['nutricao']);assert.equal(nutrition.meals,true);assert.equal(nutrition.checks>0,true);assert.equal(nutrition.water,true);
+
+    console.log('[5] Mais');
+    const more=await page.evaluate(()=>{
+      window.setAppScreen('mais',{instant:true});
+      return {active:document.getElementById('mais')?.classList.contains('active')||false,nav:[...document.querySelectorAll('.app-nav-btn.active')].map(x=>x.dataset.screen),brand:document.getElementById('vitaMoreBrand')?.innerText||'',settings:document.querySelectorAll('.settings-actions').length,exportFn:typeof window.exportData==='function'}
+    });
+    assert.equal(more.active,true);assert.deepEqual(more.nav,['mais']);assert.match(more.brand,/VITAFIT/);assert.match(more.brand,/3\.5\.1/);assert.equal(more.settings>0,true);assert.equal(more.exportFn,true);
+
+    console.log('[6] Home → CTA / player guiado');
+    await page.evaluate(()=>window.setAppScreen('hoje',{instant:true}));
+    const homeAgain=await eventually(page,'retorno ao Home',()=>({active:document.getElementById('screen-hoje')?.classList.contains('active')||false,nav:[...document.querySelectorAll('.app-nav-btn.active')].map(x=>x.dataset.screen),installHidden:document.getElementById('vitaInstallCard')?.hidden===true,cta:document.getElementById('vitaPrimaryAction')?.innerText||''}),s=>s.active&&s.nav.length===1&&s.nav[0]==='hoje'&&s.installHidden);
+    console.log(homeAgain);
+    if(!/CONCLUÍDO/.test(homeAgain.cta)){
       await page.evaluate(()=>document.getElementById('vitaPrimaryAction')?.click());
       const player=await eventually(page,'player guiado',()=>{
         const w=typeof currentWorkoutDetails==='function'?currentWorkoutDetails():null;
@@ -89,8 +102,7 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
           activeKey:active?.dataset.ex||'',
           load:!!active?.querySelector('.set-load'),
           reps:!!active?.querySelector('.set-reps'),
-          done:!!active?.querySelector('.set-done'),
-          session:typeof dk==='function'?store.get(dk('session.running'),false):false
+          done:!!active?.querySelector('.set-done')
         };
       },s=>s.trainingActive&&s.exerciseRows>0&&s.activeKey&&s.load&&s.reps&&s.done,50,100);
       console.log(player);
@@ -109,19 +121,8 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
         reps:Object.keys(localStorage).some(k=>k.startsWith('shape12.day.')&&k.includes('.set.')&&k.endsWith('.reps')&&localStorage.getItem(k)==='"10"')
       }),s=>s.rest&&s.done&&s.load&&s.reps,30,100);
       console.log(setState);
+      await page.evaluate(()=>{if(typeof window.resetRest==='function')window.resetRest()});
     }
-
-    console.log('[4] Programa');
-    const program=await page.evaluate(()=>{window.setAppScreen('evolucao',{instant:true});return {active:document.getElementById('evolucao')?.classList.contains('active')||false,roadmap:!!document.getElementById('programRoadmap'),stages:document.querySelectorAll('.program-stage').length,label:[...document.querySelectorAll('.app-nav-btn')].find(x=>x.dataset.screen==='evolucao')?.innerText||''}});
-    assert.equal(program.active,true);assert.equal(program.roadmap,true);assert.equal(program.stages,3);assert.match(program.label,/Programa/);
-
-    console.log('[5] Nutrição');
-    const nutrition=await page.evaluate(()=>{window.setAppScreen('nutricao',{instant:true});return {active:document.getElementById('nutricao')?.classList.contains('active')||false,meals:!!document.getElementById('meals'),checks:document.querySelectorAll('.meal-check').length,water:!!document.getElementById('waterNow')}});
-    assert.equal(nutrition.active,true);assert.equal(nutrition.meals,true);assert.equal(nutrition.checks>0,true);assert.equal(nutrition.water,true);
-
-    console.log('[6] Mais');
-    const more=await page.evaluate(()=>{window.setAppScreen('mais',{instant:true});return {active:document.getElementById('mais')?.classList.contains('active')||false,brand:document.getElementById('vitaMoreBrand')?.innerText||'',settings:document.querySelectorAll('.settings-actions').length,exportFn:typeof window.exportData==='function'}});
-    assert.equal(more.active,true);assert.match(more.brand,/VITAFIT/);assert.match(more.brand,/3\.5\.1/);assert.equal(more.settings>0,true);assert.equal(more.exportFn,true);
 
     console.log('[7] Reload / persistência');
     await page.reload({waitUntil:'domcontentloaded'});
