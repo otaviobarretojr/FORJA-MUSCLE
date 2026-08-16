@@ -20,8 +20,11 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
     const page=await context.newPage();
     const errors=[];
     const bad=[];
-    page.on('pageerror',e=>errors.push(String(e)));
-    page.on('response',r=>{if(r.status()>=400)bad.push(`${r.status()} ${r.url()}`)});
+    const watchPage=p=>{
+      p.on('pageerror',e=>errors.push(String(e)));
+      p.on('response',r=>{if(r.status()>=400)bad.push(`${r.status()} ${r.url()}`)});
+    };
+    watchPage(page);
     await page.addInitScript(()=>{
       localStorage.setItem('shape12.training.cycleStart',JSON.stringify('2026-06-01'));
       localStorage.setItem('shape12.e2e.persist',JSON.stringify('ok'));
@@ -121,12 +124,14 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
         reps:Object.keys(localStorage).some(k=>k.startsWith('shape12.day.')&&k.includes('.set.')&&k.endsWith('.reps')&&localStorage.getItem(k)==='"10"')
       }),s=>s.rest&&s.done&&s.load&&s.reps,30,100);
       console.log(setState);
-      await page.evaluate(()=>{if(typeof window.resetRest==='function')window.resetRest()});
     }
 
-    console.log('[7] Reload / persistência');
-    await page.reload({waitUntil:'domcontentloaded'});
-    const reload=await eventually(page,'reload',()=>({
+    console.log('[7] Reabertura / persistência');
+    await page.close({runBeforeUnload:false});
+    const reopen=await context.newPage();
+    watchPage(reopen);
+    await reopen.goto('http://127.0.0.1:4173/?e2e=reopen',{waitUntil:'domcontentloaded'});
+    const reopened=await eventually(reopen,'reabertura',()=>({
       ready:document.documentElement.dataset.vitafitReady,
       persist:localStorage.getItem('shape12.e2e.persist'),
       installed:localStorage.getItem('shape12.ui.appInstalled'),
@@ -135,7 +140,7 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
       installHidden:document.getElementById('vitaInstallCard')?.hidden===true,
       nav:document.querySelectorAll('.app-nav-btn').length
     }),s=>s.ready==='true'&&s.home&&s.nav===5);
-    assert.equal(JSON.parse(reload.persist),'ok');assert.equal(reload.installed,'true');assert.equal(reload.installHidden,true);assert.match(reload.brand,/VITAFIT/);assert.match(reload.brand,/v3\.5\.1/);
+    assert.equal(JSON.parse(reopened.persist),'ok');assert.equal(reopened.installed,'true');assert.equal(reopened.installHidden,true);assert.match(reopened.brand,/VITAFIT/);assert.match(reopened.brand,/v3\.5\.1/);
     assert.deepEqual(errors,[],`Erros JS: ${errors.join(' | ')}`);assert.deepEqual(bad,[],`HTTP inválido: ${bad.join(' | ')}`);
     console.log('VITAFIT Chromium state audit: OK');
   } finally {if(browser)await browser.close()}
