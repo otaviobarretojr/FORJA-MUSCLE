@@ -1,0 +1,102 @@
+/* ===== v1.3 • registro por série ===== */
+.session-kpis{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px
+}
+.session-kpis>div{
+  padding:10px;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.13)
+}
+.session-kpis b{display:block;font-size:15px}.session-kpis span{font-size:9px;color:var(--muted)}
+
+.exercise.v13{
+  display:block;padding:14px;margin:9px 0;border:1px solid var(--line);border-radius:16px;
+  background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015))
+}
+.exercise.v13.completed{border-color:rgba(184,255,79,.4);background:linear-gradient(145deg,rgba(184,255,79,.055),rgba(255,255,255,.012))}
+.ex-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.ex-card-title{min-width:0}
+.ex-card-title b{display:block;font-size:14px}
+.ex-card-title small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+.ex-card-meta{text-align:right;flex-shrink:0}
+.ex-card-meta strong{display:block;color:var(--accent);font-size:11px}
+.ex-card-meta span{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+
+.set-table{margin-top:11px;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.set-head,.set-row{
+  display:grid;grid-template-columns:38px minmax(72px,.8fr) minmax(72px,.8fr) 1.2fr 34px;
+  gap:7px;align-items:center;padding:8px 9px
+}
+.set-head{
+  background:rgba(255,255,255,.035);font-size:8px;color:var(--muted);font-weight:900;
+  text-transform:uppercase;letter-spacing:.07em
+}
+.set-row{border-top:1px solid var(--line)}
+.set-row:first-of-type{border-top:0}
+.set-num{
+  width:27px;height:27px;border-radius:8px;display:grid;place-items:center;
+  background:var(--panel2);font-size:10px;font-weight:950
+}
+.set-row.done .set-num{background:var(--accent);color:#10130b}
+.set-input{
+  width:100%;min-width:0;border:1px solid var(--line);border-radius:9px;background:#0f1319;
+  color:var(--text);padding:8px 7px;text-align:center;font-size:11px
+}
+.set-input:focus{outline:1px solid rgba(108,229,255,.55);border-color:rgba(108,229,255,.55)}
+.previous-set{font-size:9px;color:var(--muted);line-height:1.25}
+.previous-set b{color:#dce3ec}
+.set-done{
+  width:29px;height:29px;border:1px solid var(--line);border-radius:9px;background:#10151c;
+  color:transparent;font-weight:950
+}
+.set-done.done{background:var(--accent);border-color:var(--accent);color:#0c1108}
+
+.ex-footer{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px
+}
+.ex-hint{font-size:10px;color:var(--muted)}
+.ex-hint.up{color:var(--accent);font-weight:900}
+.ex-hint.pr{color:var(--warn);font-weight:900}
+.ex-actions{display:flex;gap:8px;align-items:center}
+.ex-history-btn{
+  border:0;background:transparent;color:var(--accent2);padding:3px;font-size:10px;font-weight:900
+}
+.pr-badge{
+  display:none;padding:4px 7px;border-radius:999px;background:rgba(255,209,102,.11);
+  color:var(--warn);font-size:9px;font-weight:950
+}
+.pr-badge.show{display:inline-block}
+
+.v13-history{
+  display:none;margin-top:9px;padding:8px;border:1px solid var(--line);border-radius:11px;
+  background:rgba(0,0,0,.12);font-size:9px
+}
+.v13-history.open{display:block}
+.v13-h-row{
+  display:grid;grid-template-columns:78px 1fr 1fr;gap:7px;padding:5px 3px;border-bottom:1px solid rgba(255,255,255,.05)
+}
+.v13-h-row:last-child{border-bottom:0}
+.v13-h-row span{color:var(--muted)}
+.v13-h-row b{font-size:9px}
+
+.exercise.v13 > .name,
+.exercise.v13 > .data,
+.exercise.v13 > .load-input,
+.exercise.v13 > .reps-input,
+.exercise.v13 > .ex-check,
+.exercise.v13 > .exercise-sub,
+.exercise.v13 > .history-box{display:none!important}
+
+@media(max-width:600px){
+  .session-kpis{grid-template-columns:1fr 1fr 1fr}
+  .session-kpis b{font-size:13px}.session-kpis span{font-size:8px}
+  .set-head,.set-row{
+    grid-template-columns:34px minmax(62px,.8fr) minmax(62px,.8fr) 1fr 31px;
+    gap:5px;padding:7px 6px
+  }
+  .set-input{padding:8px 4px}
+  .previous-set{font-size:8px}
+}
+@media(max-width:390px){
+  .set-head .prev-head{font-size:0}.set-head .prev-head:after{content:"ANT.";font-size:8px}
+  .previous-set{line-height:1.1}
+}
+

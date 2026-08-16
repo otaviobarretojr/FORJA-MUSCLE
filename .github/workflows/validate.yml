@@ -1,0 +1,43 @@
+name: Validate FORJA MUSCLE
+
+on:
+  push:
+    branches: [main, release-v3]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          test -f index.html
+          test -f manifest.webmanifest
+          test -f service-worker.js
+          test -f assets/projecao-12-semanas.jpg
+          test -f icons/icon-192.png
+          test -f icons/icon-512.png
+          test -f fragments/home-dashboard.html
+          test -f fragments/nutrition.html
+          test -f fragments/training.html
+          test -f fragments/modals.html
+
+      - name: Validate JavaScript syntax
+        run: |
+          for file in js/*.js service-worker.js; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+
+      - name: Validate manifest JSON
+        run: python -m json.tool manifest.webmanifest > /dev/null
+
+      - name: Check shell references
+        run: |
+          grep -q "fragments/home-dashboard.html" service-worker.js
+          grep -q "js/v30b2.js" service-worker.js
+          grep -q "manifest.webmanifest" index.html
