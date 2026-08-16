@@ -1,0 +1,48 @@
+/* FORJA MUSCLE v3.2.0 — treino por blocos semanais */
+#treino .v32-week-title{margin-top:8px}
+#treino .v32-week-title p{max-width:720px}
+#treino .schedule{margin-bottom:14px}
+#treino .schedule .day{position:relative;min-height:92px;cursor:pointer;transition:border-color .16s ease,background .16s ease,transform .16s ease;outline:none}
+#treino .schedule .day:hover{transform:translateY(-1px);background:rgba(255,255,255,.04)}
+#treino .schedule .day:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+#treino .schedule .day.selected{border-color:var(--accent);background:rgba(184,255,79,.085);box-shadow:0 0 0 1px rgba(184,255,79,.18) inset}
+#treino .schedule .day.selected:after{content:"Selecionado";position:absolute;right:8px;bottom:7px;font-size:8px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+#treino .schedule .day.today{outline:none}
+
+.training-day-stage{display:grid;gap:10px;margin-top:8px}
+.training-day-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:4px 2px 1px}
+.training-day-head h3{margin:3px 0 2px;font-size:20px;letter-spacing:-.025em}
+.training-day-head p{margin:0;color:var(--muted);font-size:11px}
+.training-day-stage .today-workout-card{margin:0}
+.training-day-stage details[hidden],.training-day-stage .rest-card[hidden]{display:none!important}
+.training-day-stage details{margin-bottom:0}
+.training-day-stage details>summary{background:rgba(255,255,255,.02)}
+#treino[data-selected-type="cardio"] .today-workout-card{border-color:rgba(108,229,255,.38);background:linear-gradient(135deg,rgba(108,229,255,.075),rgba(255,255,255,.018))}
+#treino[data-selected-type="recuperacao"] .today-workout-card{border-color:var(--line);background:rgba(255,255,255,.025)}
+
+.training-extras{margin-top:16px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.018);overflow:hidden}
+.training-extras>summary{padding:14px 15px}
+.training-extras[open]>summary{border-bottom:1px solid var(--line)}
+.training-extras-body{padding:0 14px 14px}
+.training-extras-body>.section-title:first-child{margin-top:15px}
+.training-extras-body .section-title{margin-top:21px}
+.training-extras-body .week-grid{margin-top:9px}
+.training-extras-body>.card{box-shadow:none}
+
+@media(max-width:780px){
+ #treino .schedule{grid-template-columns:repeat(4,1fr);gap:6px}
+ #treino .schedule .day{min-height:82px;padding:9px}
+ #treino .schedule .day:last-child{grid-column:auto}
+ #treino .schedule .day strong{font-size:11px}
+ #treino .schedule .day small{font-size:9px}
+}
+@media(max-width:520px){
+ #treino .schedule{grid-template-columns:repeat(2,1fr)}
+ #treino .schedule .day{min-height:76px}
+ #treino .schedule .day:last-child{grid-column:1/-1}
+ .training-day-head{align-items:center}
+ .training-day-head h3{font-size:18px}
+ .training-day-head p{font-size:10px}
+ .training-day-stage .today-workout-card .tw-actions{gap:6px}
+ .training-day-stage .today-workout-card .tw-actions button{flex:1 1 140px}
+}
