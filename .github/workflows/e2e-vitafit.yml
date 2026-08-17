@@ -37,6 +37,9 @@ jobs:
       - name: Run browser functional audit
         run: timeout 150s node tests/e2e-vitafit-state.js
 
+      - name: Run mobile readability audit
+        run: timeout 90s node tests/e2e-accessible-text.js
+
       - name: Stop local server
         if: always()
         run: |
