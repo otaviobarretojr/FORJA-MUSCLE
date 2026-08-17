@@ -3,6 +3,29 @@ const assert = require('node:assert/strict');
 
 const px=v=>Number.parseFloat(String(v||'0'))||0;
 
+const rules=[
+  ['.vita-greeting p',14,'Saudação do Home',false],
+  ['.vita-today-copy p',14,'Descrição do treino do dia',false],
+  ['.vita-stat small',11,'Rótulos dos indicadores',false],
+  ['.vita-guidance p',13,'Orientação do Home',false],
+  ['.vita-primary-action',15,'Ação principal',false],
+  ['.app-nav-btn .nav-label',10,'Menu inferior',false],
+  ['.vita-install-copy p',13,'Texto de instalação',true],
+  ['.vita-install-action',13,'Botão instalar',true],
+  ['#nutricao .meal h3',17,'Título da refeição',false],
+  ['#nutricao .meal p',15,'Descrição da refeição',false],
+  ['#nutricao .meal .mini',13,'Detalhe nutricional',false],
+  ['.program-stage>summary p',14,'Resumo da fase',false],
+  ['.program-prescription span',13,'Prescrição da fase',false],
+  ['.program-ex b',14,'Nome do exercício no Programa',false],
+  ['.program-ex small',12,'Detalhe do exercício no Programa',false],
+  ['.more-link-card b',15,'Título das opções',false],
+  ['.more-link-card span',12,'Descrição das opções',false],
+  ['.metric span',13,'Rótulos do perfil',false],
+  ['#treino .screen-intro p',14,'Descrição da tela de treino',false],
+  ['.set-input',15,'Carga e repetições',true]
+];
+
 (async()=>{
   const browser=await chromium.launch({headless:true});
   try{
@@ -12,53 +35,31 @@ const px=v=>Number.parseFloat(String(v||'0'))||0;
     await page.goto('http://127.0.0.1:4173/?e2e=accessibility',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true');
 
-    async function font(selector,min,label,optional=false){
-      const value=await page.evaluate(({selector})=>{
+    const audit=await page.evaluate(rules=>{
+      const fonts=rules.map(([selector,min,label,optional])=>{
         const el=document.querySelector(selector);
-        return el?getComputedStyle(el).fontSize:null;
-      },{selector});
-      if(optional&&!value)return;
-      assert.ok(value,`${label}: elemento não encontrado (${selector})`);
-      assert.ok(px(value)>=min,`${label}: ${value}, esperado >= ${min}px`);
+        return {selector,min,label,optional,value:el?getComputedStyle(el).fontSize:null};
+      });
+      return {
+        fonts,
+        viewport:document.documentElement.clientWidth,
+        scrollWidth:document.documentElement.scrollWidth,
+        ready:document.documentElement.dataset.vitafitReady,
+        build:document.documentElement.dataset.vitafitBuild||document.documentElement.dataset.forjaBuild
+      };
+    },rules);
+
+    assert.equal(audit.ready,'true');
+    assert.equal(audit.build,'3.5.1');
+    assert.ok(audit.scrollWidth<=audit.viewport+2,`Home: overflow horizontal ${audit.scrollWidth}px > ${audit.viewport}px`);
+
+    for(const item of audit.fonts){
+      if(item.optional&&!item.value)continue;
+      assert.ok(item.value,`${item.label}: elemento não encontrado (${item.selector})`);
+      assert.ok(px(item.value)>=item.min,`${item.label}: ${item.value}, esperado >= ${item.min}px`);
     }
-    async function noOverflow(label){
-      const state=await page.evaluate(()=>({w:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));
-      assert.ok(state.sw<=state.w+2,`${label}: overflow horizontal ${state.sw}px > ${state.w}px`);
-    }
 
-    console.log('[A11Y] Home');
-    await font('.vita-greeting p',14,'Saudação do Home');
-    await font('.vita-today-copy p',14,'Descrição do treino do dia');
-    await font('.vita-stat small',11,'Rótulos dos indicadores');
-    await font('.vita-guidance p',13,'Orientação do Home');
-    await font('.vita-primary-action',15,'Ação principal');
-    await font('.app-nav-btn .nav-label',10,'Menu inferior');
-    await font('.vita-install-copy p',13,'Texto de instalação',true);
-    await font('.vita-install-action',13,'Botão instalar',true);
-    await noOverflow('Home');
-
-    // Os fragments de todas as áreas já existem no DOM. Para auditar tipografia,
-    // não precisamos disparar setAppScreen/renderAll e pagar o custo das renderizações do app.
-    console.log('[A11Y] Nutrição');
-    await font('#nutricao .meal h3',17,'Título da refeição');
-    await font('#nutricao .meal p',15,'Descrição da refeição');
-    await font('#nutricao .meal .mini',13,'Detalhe nutricional');
-
-    console.log('[A11Y] Programa');
-    await font('.program-stage>summary p',14,'Resumo da fase');
-    await font('.program-prescription span',13,'Prescrição da fase');
-    await font('.program-ex b',14,'Nome do exercício no Programa');
-    await font('.program-ex small',12,'Detalhe do exercício no Programa');
-
-    console.log('[A11Y] Mais');
-    await font('.more-link-card b',15,'Título das opções');
-    await font('.more-link-card span',12,'Descrição das opções');
-    await font('.metric span',13,'Rótulos do perfil');
-
-    console.log('[A11Y] Treino');
-    await font('#treino .screen-intro p',14,'Descrição da tela de treino');
-    await font('.set-input',15,'Carga e repetições',true);
-
+    console.log({viewport:audit.viewport,scrollWidth:audit.scrollWidth,fonts:audit.fonts.map(x=>`${x.label}: ${x.value||'n/a'}`)});
     console.log('VITAFIT mobile readability audit: OK');
   } finally {
     await browser.close();
