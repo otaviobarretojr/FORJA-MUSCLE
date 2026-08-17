@@ -20,7 +20,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     await page.goto(`${BASE}?e2e=offline-first`,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
     await page.evaluate(()=>navigator.serviceWorker.ready);
-    await page.waitForFunction(()=>!!navigator.serviceWorker.controller,null,{timeout:15000});
+    await page.waitForFunction(()=>navigator.serviceWorker.controller?.state==='activated',null,{timeout:15000});
 
     const prepared=await page.evaluate(async cacheName=>{
       const reg=await navigator.serviceWorker.ready;
@@ -30,6 +30,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
         active:!!reg.active,
         activeState:reg.active?.state||'',
         controller:!!navigator.serviceWorker.controller,
+        controllerState:navigator.serviceWorker.controller?.state||'',
         cacheNames:await caches.keys(),
         urls:requests.map(r=>r.url),
         build:document.documentElement.dataset.vitafitBuild||document.documentElement.dataset.forjaBuild
@@ -39,6 +40,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     assert.equal(prepared.active,true,'service worker não ficou ativo após o primeiro carregamento');
     assert.equal(prepared.activeState,'activated');
     assert.equal(prepared.controller,true,'primeira página não foi assumida pelo service worker após o cache');
+    assert.equal(prepared.controllerState,'activated');
     assert.equal(prepared.build,'3.5.2');
     assert.ok(prepared.cacheNames.includes(CACHE),`cache ${CACHE} não foi criado`);
     for(const suffix of [
@@ -53,7 +55,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     ]){
       assert.ok(prepared.urls.some(url=>new URL(url).pathname.endsWith(suffix)),`arquivo não pré-cacheado: ${suffix}`);
     }
-    console.log({active:prepared.active,activeState:prepared.activeState,controller:prepared.controller,cached:prepared.urls.length});
+    console.log({active:prepared.active,activeState:prepared.activeState,controller:prepared.controller,controllerState:prepared.controllerState,cached:prepared.urls.length});
 
     console.log('[OFFLINE 2] Corta a internet e faz uma recarga completa');
     await context.setOffline(true);
