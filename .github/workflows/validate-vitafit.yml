@@ -29,6 +29,17 @@ jobs:
           grep -Fq "program-stage.current" css/v350.css
           grep -Fq "#nutricao #meals" css/v350.css
           grep -Fq "#trainingDayStage .guided-active" css/v350.css
+      - name: Validate readable typography layer
+        run: |
+          test -f css/v351-accessibility.css
+          test -f tests/e2e-accessible-text.js
+          grep -Fq "css/v351-accessibility.css?v=3.5.1" index.html
+          grep -Fq "css/v351-accessibility.css" service-worker.js
+          grep -Fq ".vita-primary-action{min-height:58px;font-size:15px}" css/v351-accessibility.css
+          grep -Fq ".set-input{min-height:42px;font-size:15px}" css/v351-accessibility.css
+          grep -Fq "#nutricao .meal p{font-size:15px" css/v351-accessibility.css
+          grep -Fq ".program-ex b{font-size:14px" css/v351-accessibility.css
+          grep -Fq ".app-nav-btn .nav-label{font-size:11px" css/v351-accessibility.css
       - name: Validate Home actions and install entry
         run: |
           grep -Fq "toggleWorkoutSession" js/v350.js
@@ -66,4 +77,5 @@ jobs:
           node --check js/v350fix.js
           node --check js/v350header.js
           node --check js/v351.js
+          node --check tests/e2e-accessible-text.js
           node --check service-worker.js
