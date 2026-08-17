@@ -8,21 +8,21 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
   const browser=await chromium.launch({headless:true});
   try{
     const context=await browser.newContext({viewport:{width:412,height:915}});
-    const online=await context.newPage();
+    const page=await context.newPage();
     const errors=[];
-    online.on('pageerror',e=>errors.push(`online: ${String(e)}`));
-    await online.addInitScript(()=>{
+    page.on('pageerror',e=>errors.push(String(e)));
+    await page.addInitScript(()=>{
       localStorage.setItem('shape12.training.cycleStart',JSON.stringify('2026-06-01'));
       localStorage.setItem('shape12.e2e.offlinePersist',JSON.stringify('preservado'));
     });
 
     console.log('[OFFLINE 1] Uma única abertura com internet');
-    await online.goto(`${BASE}?e2e=offline-first`,{waitUntil:'domcontentloaded'});
-    await online.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
-    await online.evaluate(()=>navigator.serviceWorker.ready);
-    await online.waitForFunction(()=>!!navigator.serviceWorker.controller,null,{timeout:15000});
+    await page.goto(`${BASE}?e2e=offline-first`,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
+    await page.evaluate(()=>navigator.serviceWorker.ready);
+    await page.waitForFunction(()=>!!navigator.serviceWorker.controller,null,{timeout:15000});
 
-    const prepared=await online.evaluate(async cacheName=>{
+    const prepared=await page.evaluate(async cacheName=>{
       const reg=await navigator.serviceWorker.ready;
       const cache=await caches.open(cacheName);
       const requests=await cache.keys();
@@ -53,17 +53,14 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     ]){
       assert.ok(prepared.urls.some(url=>new URL(url).pathname.endsWith(suffix)),`arquivo não pré-cacheado: ${suffix}`);
     }
-    console.log({active:prepared.active,activeState:prepared.activeState,controllerOnFirstPage:prepared.controller,cached:prepared.urls.length});
+    console.log({active:prepared.active,activeState:prepared.activeState,controller:prepared.controller,cached:prepared.urls.length});
 
-    console.log('[OFFLINE 2] Corta a internet e reabre');
-    await online.close({runBeforeUnload:false});
+    console.log('[OFFLINE 2] Corta a internet e faz uma recarga completa');
     await context.setOffline(true);
-    const offline=await context.newPage();
-    offline.on('pageerror',e=>errors.push(`offline: ${String(e)}`));
-    await offline.goto(`${BASE}?e2e=offline-reopen`,{waitUntil:'domcontentloaded',timeout:20000});
-    await offline.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
+    await page.reload({waitUntil:'domcontentloaded',timeout:20000});
+    await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
 
-    const home=await offline.evaluate(()=>({
+    const home=await page.evaluate(()=>({
       online:navigator.onLine,
       controller:!!navigator.serviceWorker.controller,
       ready:document.documentElement.dataset.vitafitReady,
@@ -74,7 +71,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
       persisted:localStorage.getItem('shape12.e2e.offlinePersist')
     }));
     assert.equal(home.online,false);
-    assert.equal(home.controller,true,'a reabertura offline não ficou sob controle do service worker');
+    assert.equal(home.controller,true,'recarga offline não ficou sob controle do service worker');
     assert.equal(home.ready,'true');
     assert.equal(home.build,'3.5.2');
     assert.equal(home.home,true);
@@ -82,8 +79,24 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     assert.equal(JSON.parse(home.persisted),'preservado');
     assert.match(home.title,/VITAFIT/);
 
-    console.log('[OFFLINE 3] Navegação interna sem rede');
-    const screens=await offline.evaluate(()=>{
+    console.log('[OFFLINE 3] Nova navegação do app ainda sem rede');
+    await page.goto(`${BASE}index.html?e2e=offline-navigation`,{waitUntil:'domcontentloaded',timeout:20000});
+    await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
+    const navigated=await page.evaluate(()=>({
+      online:navigator.onLine,
+      controller:!!navigator.serviceWorker.controller,
+      ready:document.documentElement.dataset.vitafitReady,
+      home:!!document.getElementById('vitaHomeDashboard'),
+      persisted:localStorage.getItem('shape12.e2e.offlinePersist')
+    }));
+    assert.equal(navigated.online,false);
+    assert.equal(navigated.controller,true);
+    assert.equal(navigated.ready,'true');
+    assert.equal(navigated.home,true);
+    assert.equal(JSON.parse(navigated.persisted),'preservado');
+
+    console.log('[OFFLINE 4] Navegação interna sem rede');
+    const screens=await page.evaluate(()=>{
       const result={};
       for(const id of ['evolucao','nutricao','mais','treino','hoje']){
         window.setAppScreen(id,{instant:true});
@@ -97,10 +110,13 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     assert.equal(screens.treino,true);
     assert.equal(screens.hoje,true);
 
-    console.log('[OFFLINE 4] Recursos locais também disponíveis');
-    const resources=await offline.evaluate(async()=>{
+    console.log('[OFFLINE 5] Recursos locais disponíveis pelo cache');
+    const resources=await page.evaluate(async()=>{
       const urls=[
         'fragments/home-dashboard.html?v=3.5.2',
+        'fragments/nutrition.html?v=3.5.2',
+        'fragments/training.html?v=3.5.2',
+        'fragments/modals.html?v=3.5.2',
         'css/v351-accessibility.css?v=3.5.2',
         'js/v351.js?v=3.5.2',
         'assets/projecao-12-semanas.jpg'
@@ -117,8 +133,8 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     for(const resource of resources)assert.equal(resource.ok,true,`recurso offline indisponível: ${JSON.stringify(resource)}`);
 
     assert.deepEqual(errors,[],`Erros JS durante auditoria offline: ${errors.join(' | ')}`);
-    console.log({home,screens,resources});
-    console.log('VITAFIT first-load offline audit: OK');
+    console.log({home,navigated,screens,resources});
+    console.log('VITAFIT offline reload audit: OK');
   } finally {
     await browser.close();
   }
