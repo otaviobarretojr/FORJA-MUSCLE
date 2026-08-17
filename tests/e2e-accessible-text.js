@@ -13,7 +13,11 @@ const px=v=>Number.parseFloat(String(v||'0'))||0;
     await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true');
 
     async function font(selector,min,label){
-      const value=await page.locator(selector).first().evaluate(el=>getComputedStyle(el).fontSize);
+      const value=await page.evaluate(selector=>{
+        const el=document.querySelector(selector);
+        return el?getComputedStyle(el).fontSize:null;
+      },selector);
+      assert.ok(value,`${label}: elemento não encontrado (${selector})`);
       assert.ok(px(value)>=min,`${label}: ${value}, esperado >= ${min}px`);
     }
     async function noOverflow(label){
@@ -33,7 +37,10 @@ const px=v=>Number.parseFloat(String(v||'0'))||0;
     await font('.vita-guidance p',13,'Orientação do Home');
     await font('.vita-primary-action',15,'Ação principal');
     await font('.app-nav-btn .nav-label',10,'Menu inferior');
-    const installVisible=await page.locator('#vitaInstallCard').isVisible().catch(()=>false);
+    const installVisible=await page.evaluate(()=>{
+      const el=document.getElementById('vitaInstallCard');
+      return !!el&&!el.hidden&&getComputedStyle(el).display!=='none';
+    });
     if(installVisible){
       await font('.vita-install-copy p',13,'Texto de instalação');
       await font('.vita-install-action',13,'Botão instalar');
@@ -62,8 +69,8 @@ const px=v=>Number.parseFloat(String(v||'0'))||0;
     console.log('[A11Y] Treino');
     await screen('treino','Treino');
     await font('.screen-intro p',14,'Descrição da tela de treino');
-    const setInput=page.locator('.set-input').first();
-    if(await setInput.count())await font('.set-input',15,'Carga e repetições');
+    const hasSetInput=await page.evaluate(()=>!!document.querySelector('.set-input'));
+    if(hasSetInput)await font('.set-input',15,'Carga e repetições');
 
     console.log('VITAFIT mobile readability audit: OK');
   } finally {
