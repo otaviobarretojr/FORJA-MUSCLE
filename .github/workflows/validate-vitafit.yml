@@ -40,6 +40,8 @@ jobs:
           grep -Fq "#nutricao .meal p{font-size:15px" css/v351-accessibility.css
           grep -Fq ".program-ex b{font-size:14px" css/v351-accessibility.css
           grep -Fq ".app-nav-btn .nav-label{font-size:11px" css/v351-accessibility.css
+          grep -Fq ".more-link-card b{font-size:15px}" css/v351-accessibility.css
+          grep -Fq ".more-link-card span{font-size:12px" css/v351-accessibility.css
       - name: Validate Home actions and install entry
         run: |
           grep -Fq "toggleWorkoutSession" js/v350.js
