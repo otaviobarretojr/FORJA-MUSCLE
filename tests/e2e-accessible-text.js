@@ -19,8 +19,8 @@ const rules=[
   ['.program-prescription span',13,'Prescrição da fase',false],
   ['.program-ex b',14,'Nome do exercício no Programa',false],
   ['.program-ex small',12,'Detalhe do exercício no Programa',false],
-  ['.more-link-card b',15,'Título das opções',false],
-  ['.more-link-card span',12,'Descrição das opções',false],
+  ['.more-link-card b',15,'Título das opções',true],
+  ['.more-link-card span',12,'Descrição das opções',true],
   ['.metric span',13,'Rótulos do perfil',false],
   ['#treino .screen-intro p',14,'Descrição da tela de treino',false],
   ['.set-input',15,'Carga e repetições',true]
