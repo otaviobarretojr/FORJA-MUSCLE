@@ -148,10 +148,11 @@ jobs:
           grep -Fq "js/v350header.js" service-worker.js
           grep -Fq "js/v351.js" service-worker.js
           grep -Fq "navigationPreload.enable" service-worker.js
+          grep -Fq "self.clients.claim()" service-worker.js
           grep -Fq "context.setOffline(true)" tests/e2e-offline.js
+          grep -Fq "navigator.serviceWorker.controller" tests/e2e-offline.js
           grep -Fq "VITAFIT first-load offline audit: OK" tests/e2e-offline.js
           ! grep -Fq "client.navigate(" service-worker.js
-          ! grep -Fq "clients.claim" service-worker.js
 
       - name: Validate bootstrap references
         run: |
