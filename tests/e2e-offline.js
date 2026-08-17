@@ -19,6 +19,8 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     console.log('[OFFLINE 1] Uma única abertura com internet');
     await online.goto(`${BASE}?e2e=offline-first`,{waitUntil:'domcontentloaded'});
     await online.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
+    await online.evaluate(()=>navigator.serviceWorker.ready);
+    await online.waitForFunction(()=>!!navigator.serviceWorker.controller,null,{timeout:15000});
 
     const prepared=await online.evaluate(async cacheName=>{
       const reg=await navigator.serviceWorker.ready;
@@ -26,6 +28,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
       const requests=await cache.keys();
       return {
         active:!!reg.active,
+        activeState:reg.active?.state||'',
         controller:!!navigator.serviceWorker.controller,
         cacheNames:await caches.keys(),
         urls:requests.map(r=>r.url),
@@ -34,6 +37,8 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     },CACHE);
 
     assert.equal(prepared.active,true,'service worker não ficou ativo após o primeiro carregamento');
+    assert.equal(prepared.activeState,'activated');
+    assert.equal(prepared.controller,true,'primeira página não foi assumida pelo service worker após o cache');
     assert.equal(prepared.build,'3.5.2');
     assert.ok(prepared.cacheNames.includes(CACHE),`cache ${CACHE} não foi criado`);
     for(const suffix of [
@@ -48,7 +53,7 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     ]){
       assert.ok(prepared.urls.some(url=>new URL(url).pathname.endsWith(suffix)),`arquivo não pré-cacheado: ${suffix}`);
     }
-    console.log({active:prepared.active,controllerOnFirstPage:prepared.controller,cached:prepared.urls.length});
+    console.log({active:prepared.active,activeState:prepared.activeState,controllerOnFirstPage:prepared.controller,cached:prepared.urls.length});
 
     console.log('[OFFLINE 2] Corta a internet e reabre');
     await online.close({runBeforeUnload:false});
