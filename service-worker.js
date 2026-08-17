@@ -15,7 +15,8 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('forja-muscle-')&&k!==CACHE).map(k=>caches.delete(k)));
     if(self.registration.navigationPreload)await self.registration.navigationPreload.enable();
-    // Não assumir à força uma página já aberta. O novo worker controla a próxima navegação.
+    // Assume as páginas abertas sem navegar nem recarregar. O cache já está completo neste ponto.
+    await self.clients.claim();
   })());
 });
 
