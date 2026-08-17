@@ -63,7 +63,7 @@ jobs:
           grep -Fq -- "css/v351-accessibility.css" /tmp/service-worker.js
           grep -Fq -- "js/v351.js" /tmp/service-worker.js
           grep -Fq -- "navigationPreload.enable" /tmp/service-worker.js
-          ! grep -Fq -- "clients.claim" /tmp/service-worker.js
+          grep -Fq -- "self.clients.claim()" /tmp/service-worker.js
           ! grep -Fq -- "client.navigate(" /tmp/service-worker.js
 
           fetch_until_match "${BASE_URL}/css/v351.css" "vita-install-card" /tmp/v351.css
@@ -76,6 +76,7 @@ jobs:
           grep -Fq -- "ui.installPromptDismissed" /tmp/v351.js
           grep -Fq -- "Adicionar à Tela de Início" /tmp/v351.js
           fetch_until_match "${BASE_URL}/icons/vitafit.svg" "linearGradient id=\"rose\"" /tmp/vitafit.svg
-          fetch_until_match "${BASE_URL}/assets/projecao-12-semanas.jpg" "" /tmp/projecao.jpg
+          curl -fLsS --connect-timeout 10 --max-time 20 "${BASE_URL}/assets/projecao-12-semanas.jpg?audit=${audit}" -o /tmp/projecao.jpg
+          test -s /tmp/projecao.jpg
 
           echo "Production VITAFIT offline-first smoke: OK"
