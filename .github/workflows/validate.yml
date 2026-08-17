@@ -151,7 +151,7 @@ jobs:
           grep -Fq "self.clients.claim()" service-worker.js
           grep -Fq "context.setOffline(true)" tests/e2e-offline.js
           grep -Fq "navigator.serviceWorker.controller" tests/e2e-offline.js
-          grep -Fq "VITAFIT first-load offline audit: OK" tests/e2e-offline.js
+          grep -Fq "VITAFIT offline reload audit: OK" tests/e2e-offline.js
           ! grep -Fq "client.navigate(" service-worker.js
 
       - name: Validate bootstrap references
