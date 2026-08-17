@@ -22,19 +22,27 @@ const BASE='http://127.0.0.1:4173/';
           const start=performance.now();
           btn.click();
           const afterHandler=performance.now();
-          await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-          const afterPaint=performance.now();
+          const height=target.offsetHeight;
+          const display=getComputedStyle(target).display;
+          const afterLayout=performance.now();
+          await new Promise(resolve=>setTimeout(resolve,20));
+          const after20=performance.now();
           return {
             id,
             handlerMs:afterHandler-start,
-            paintMs:afterPaint-start,
+            layoutMs:afterLayout-start,
+            after20Ms:after20-start,
+            height,
+            display,
             active:target.classList.contains('active'),
             navActive:btn.classList.contains('active')
           };
         },id);
         results.push(result);
+        console.log(JSON.stringify(result));
         assert.equal(result.active,true,`${id} não ativou a tela`);
         assert.equal(result.navActive,true,`${id} não ativou o botão`);
+        assert.notEqual(result.display,'none',`${id} continuou invisível`);
       }
     }
 
@@ -44,12 +52,12 @@ const BASE='http://127.0.0.1:4173/';
       summary[id]={
         handlerMax:+Math.max(...rows.map(r=>r.handlerMs)).toFixed(2),
         handlerAvg:+(rows.reduce((s,r)=>s+r.handlerMs,0)/rows.length).toFixed(2),
-        paintMax:+Math.max(...rows.map(r=>r.paintMs)).toFixed(2),
-        paintAvg:+(rows.reduce((s,r)=>s+r.paintMs,0)/rows.length).toFixed(2)
+        layoutMax:+Math.max(...rows.map(r=>r.layoutMs)).toFixed(2),
+        layoutAvg:+(rows.reduce((s,r)=>s+r.layoutMs,0)/rows.length).toFixed(2)
       };
     }
-    console.log(JSON.stringify(summary,null,2));
-    console.log('VITAFIT navigation latency baseline: OK');
+    console.log('NAVIGATION_SUMMARY '+JSON.stringify(summary));
+    console.log('VITAFIT navigation latency audit: OK');
   } finally {
     await browser.close();
   }
