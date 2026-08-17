@@ -50,7 +50,12 @@ self.addEventListener('fetch',event=>{
 
   if(req.mode==='navigate'){
     event.respondWith((async()=>{
-      const preload=await event.preloadResponse;
+      let preload=null;
+      try{
+        preload=await event.preloadResponse;
+      }catch(err){
+        // Sem conexão, o preload pode rejeitar. Nesse caso seguimos normalmente para o cache.
+      }
       if(preload&&preload.ok){
         const cache=await caches.open(CACHE);
         await cache.put(req,preload.clone());
