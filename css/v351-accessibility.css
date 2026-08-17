@@ -1,0 +1,121 @@
+/* VITAFIT v3.5.1 accessibility hotfix — tipografia confortável para baixa visão */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{line-height:1.55}
+button,input,textarea,select{line-height:1.35}
+
+/* Cabeçalho e textos de apoio */
+.eyebrow{font-size:12px}
+.vita-brand-lockup small{font-size:10px;line-height:1.25}
+.vita-header-phase,.hero.vita-brand-header .version{font-size:10px}
+.screen-intro p,.section-title p{font-size:14px;line-height:1.55}
+
+/* Home */
+.vita-greeting p{font-size:15px;line-height:1.5}
+.vita-card-ribbon b{font-size:11px}
+.vita-date{font-size:12px}
+.vita-today-copy p{font-size:14px;line-height:1.5}
+.vita-stat small{font-size:11px;line-height:1.35}
+.vita-progress-copy span{font-size:12px}
+.vita-guidance p{font-size:13px;line-height:1.55}
+.vita-primary-action{min-height:58px;font-size:15px}
+.vita-support-card small{font-size:11px}
+.vita-support-card b{font-size:19px;line-height:1.2}
+.vita-support-card span:not(.vita-support-icon){font-size:12px;line-height:1.5}
+
+/* Instalação do app */
+.vita-install-copy small{font-size:10px}
+.vita-install-copy b{font-size:19px;line-height:1.2}
+.vita-install-copy p{font-size:13px;line-height:1.55}
+.vita-install-action{min-height:44px;font-size:13px}
+.vita-install-help{font-size:12px;line-height:1.6}
+.vita-install-dismiss{width:32px;height:32px;font-size:21px;line-height:30px}
+
+/* Navegação e botões */
+.app-nav-btn{min-height:60px}
+.app-nav-btn .nav-label{font-size:11px;line-height:1.15}
+.soft-btn,.primary-btn{min-height:42px;font-size:14px}
+.more-link-card b{font-size:15px}
+.more-link-card span{font-size:12px;line-height:1.45}
+
+/* Treino — exercício, séries, carga e repetições */
+.session-kpis b{font-size:17px}
+.session-kpis span{font-size:11px}
+.ex-card-title b{font-size:16px}
+.ex-card-title small{font-size:13px;line-height:1.4}
+.ex-card-meta strong{font-size:13px}
+.ex-card-meta span{font-size:11px}
+.set-head{font-size:11px;letter-spacing:.045em}
+.set-num{font-size:12px}
+.set-input{min-height:42px;font-size:15px}
+.previous-set{font-size:12px;line-height:1.35}
+.set-done{width:36px;height:36px}
+.ex-hint,.ex-history-btn{font-size:12px}
+.pr-badge{font-size:11px}
+.v13-history{font-size:11px;line-height:1.45}
+.v13-h-row b{font-size:11px}
+.training-stage-prescription,.exercise-coach-panel,.tip{font-size:13px;line-height:1.55}
+.cardio-table{font-size:14px}
+.cardio-table th{font-size:11px}
+.tag{font-size:12px}
+
+/* Nutrição */
+#nutricao .meal .time{font-size:14px}
+#nutricao .meal h3{font-size:17px;line-height:1.25}
+#nutricao .meal p{font-size:15px;line-height:1.55}
+#nutricao .meal .mini{font-size:13px;line-height:1.45}
+.macro-label{font-size:13px}
+.field label{font-size:13px;line-height:1.35}
+.delta span{font-size:12px}
+
+/* Programa — leitura das fases e exercícios */
+.program-roadmap-head p{font-size:14px;line-height:1.55}
+.home-cycle-head p{font-size:13px;line-height:1.5}
+.home-cycle-badge,.program-current-pill{font-size:12px}
+.home-cycle-kpis span{font-size:11px;letter-spacing:.055em}
+.home-cycle-kpis b{font-size:14px;line-height:1.35}
+.program-stage>summary p{font-size:14px;line-height:1.55}
+.program-stage-side span{font-size:11px}
+.program-stage-side b{font-size:12px}
+.program-prescription b{font-size:12px}
+.program-prescription span{font-size:13px;line-height:1.5}
+.program-day{min-width:116px;min-height:92px}
+.program-day>span{font-size:11px}
+.program-day>b{font-size:12px;line-height:1.3}
+.program-day>small{font-size:11px;line-height:1.35}
+.program-info-grid h4{font-size:14px}
+.program-info-grid ul{font-size:13px;line-height:1.55}
+.program-workout-head span{font-size:11px}
+.program-workout-head h4{font-size:15px}
+.program-workout-head small{font-size:12px}
+.program-workout-head>b{font-size:12px}
+.program-ex-num{font-size:11px}
+.program-ex b{font-size:14px;line-height:1.3}
+.program-ex small{font-size:12px;line-height:1.45}
+.program-ex strong{font-size:13px}
+.v341-cardio small{font-size:12px;line-height:1.45}
+
+/* Mais / perfil */
+.metric span{font-size:13px;line-height:1.35}
+.vita-more-brand p{font-size:12px;line-height:1.45}
+.vita-more-brand small{font-size:10px}
+.footer-note{font-size:13px;line-height:1.55}
+.toast{font-size:14px}
+
+@media(max-width:640px){
+  .vita-brand-lockup small{font-size:9px}
+  .vita-greeting p{font-size:14px}
+  .vita-card-ribbon b{font-size:11px}
+  .vita-today-copy p{font-size:14px}
+  .vita-stat small{font-size:11px}
+  .vita-guidance p{font-size:13px}
+  .vita-support-card b{font-size:18px}
+  .screen-intro p{font-size:14px}
+  .program-roadmap-head h2{font-size:23px}
+}
+
+@media(max-width:420px){
+  .app-nav-btn .nav-label{font-size:10.5px}
+  .set-head,.set-row{grid-template-columns:32px minmax(64px,.8fr) minmax(64px,.8fr) 1fr 36px}
+  .set-head{font-size:10px}
+  .previous-set{font-size:11px}
+}
