@@ -50,7 +50,7 @@ const rules=[
     },rules);
 
     assert.equal(audit.ready,'true');
-    assert.equal(audit.build,'3.5.1');
+    assert.equal(audit.build,'3.5.2');
     assert.ok(audit.scrollWidth<=audit.viewport+2,`Home: overflow horizontal ${audit.scrollWidth}px > ${audit.viewport}px`);
 
     for(const item of audit.fonts){

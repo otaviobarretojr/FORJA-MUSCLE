@@ -1,6 +1,6 @@
-// VITAFIT v3.5.1 — instalação orientada no primeiro acesso, preservando shape12.*
+// VITAFIT v3.5.2 — instalação orientada no primeiro acesso, preservando shape12.*
 (function(){
-  const BUILD='3.5.1';
+  const BUILD='3.5.2';
   const DISMISS_KEY='ui.installPromptDismissed';
   const INSTALLED_KEY='ui.appInstalled';
   const SESSION_HIDE='vitafit.installHidden';
