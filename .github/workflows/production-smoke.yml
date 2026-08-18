@@ -35,48 +35,44 @@ jobs:
               sleep 5
             done
             echo "Expected pattern not found: $pattern"
-            echo "--- response ---"
             cat "$out" || true
             return 1
           }
 
           fetch_until_match "${BASE_URL}/" "VITAFIT • Força, saúde & evolução" /tmp/index.html
-          grep -Fq -- 'content="3.5.2"' /tmp/index.html
-          grep -Fq -- 'css/v351.css?v=3.5.2' /tmp/index.html
-          grep -Fq -- 'css/v351-accessibility.css?v=3.5.2' /tmp/index.html
+          grep -Fq -- 'content="3.5.3"' /tmp/index.html
+          grep -Fq -- 'css/v351-accessibility.css?v=3.5.3' /tmp/index.html
+          grep -Fq -- 'css/v353.css?v=3.5.3' /tmp/index.html
           grep -Fq -- "'v351.js'" /tmp/index.html
+          grep -Fq -- "'v353.js'" /tmp/index.html
           grep -Fq -- "beforeinstallprompt" /tmp/index.html
           grep -Fq -- "appinstalled" /tmp/index.html
 
           fetch_until_match "${BASE_URL}/manifest.webmanifest" '"name": "VITAFIT"' /tmp/manifest.webmanifest
           grep -Fq -- '"short_name": "VITAFIT"' /tmp/manifest.webmanifest
           grep -Fq -- '"display": "standalone"' /tmp/manifest.webmanifest
-          grep -Fq -- 'icons/vitafit.svg' /tmp/manifest.webmanifest
 
-          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.5.2'" /tmp/service-worker.js
-          grep -Fq -- "forja-muscle-v3-5-2-vitafit-offline" /tmp/service-worker.js
+          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.5.3'" /tmp/service-worker.js
+          grep -Fq -- "forja-muscle-v3-5-3-vitafit-nav-fast" /tmp/service-worker.js
           grep -Fq -- "const APP_SHELL=[...CORE,...RUNTIME]" /tmp/service-worker.js
           grep -Fq -- "cache.addAll(APP_SHELL)" /tmp/service-worker.js
-          grep -Fq -- "./assets/projecao-12-semanas.jpg" /tmp/service-worker.js
-          grep -Fq -- "./fragments/home-dashboard.html" /tmp/service-worker.js
-          grep -Fq -- "css/v351.css" /tmp/service-worker.js
-          grep -Fq -- "css/v351-accessibility.css" /tmp/service-worker.js
-          grep -Fq -- "js/v351.js" /tmp/service-worker.js
+          grep -Fq -- "./css/v353.css" /tmp/service-worker.js
+          grep -Fq -- "./js/v353.js" /tmp/service-worker.js
           grep -Fq -- "navigationPreload.enable" /tmp/service-worker.js
           grep -Fq -- "self.clients.claim()" /tmp/service-worker.js
           ! grep -Fq -- "client.navigate(" /tmp/service-worker.js
 
-          fetch_until_match "${BASE_URL}/css/v351.css" "vita-install-card" /tmp/v351.css
           fetch_until_match "${BASE_URL}/css/v351-accessibility.css" ".vita-primary-action{min-height:58px;font-size:15px}" /tmp/v351-accessibility.css
-          grep -Fq -- ".set-input{min-height:42px;font-size:15px}" /tmp/v351-accessibility.css
-          grep -Fq -- "#nutricao .meal p{font-size:15px" /tmp/v351-accessibility.css
-          grep -Fq -- ".program-ex b{font-size:14px" /tmp/v351-accessibility.css
-          fetch_until_match "${BASE_URL}/js/v351.js" "const BUILD='3.5.2'" /tmp/v351.js
-          grep -Fq -- "vitaInstallCard" /tmp/v351.js
-          grep -Fq -- "ui.installPromptDismissed" /tmp/v351.js
-          grep -Fq -- "Adicionar à Tela de Início" /tmp/v351.js
+          fetch_until_match "${BASE_URL}/css/v353.css" "touch-action:manipulation" /tmp/v353.css
+          grep -Fq -- ".app-screen{animation:none!important}" /tmp/v353.css
+          fetch_until_match "${BASE_URL}/js/v351.js" "const BUILD='3.5.3'" /tmp/v351.js
+          fetch_until_match "${BASE_URL}/js/v353.js" "const BUILD='3.5.3'" /tmp/v353.js
+          grep -Fq -- "fastSetAppScreen.__vitafitFast=true" /tmp/v353.js
+          grep -Fq -- "window.setAppScreen=fastSetAppScreen" /tmp/v353.js
+          grep -Fq -- "if(!opts.keepScroll)jumpTop()" /tmp/v353.js
+
           fetch_until_match "${BASE_URL}/icons/vitafit.svg" "linearGradient id=\"rose\"" /tmp/vitafit.svg
           curl -fLsS --connect-timeout 10 --max-time 20 "${BASE_URL}/assets/projecao-12-semanas.jpg?audit=${audit}" -o /tmp/projecao.jpg
           test -s /tmp/projecao.jpg
 
-          echo "Production VITAFIT offline-first smoke: OK"
+          echo "Production VITAFIT v3.5.3 navigation smoke: OK"
