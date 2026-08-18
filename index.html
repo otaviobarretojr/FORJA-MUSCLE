@@ -8,15 +8,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="VITAFIT">
-  <meta name="forja-build" content="3.5.2">
-  <meta name="vitafit-build" content="3.5.2">
-  <link rel="manifest" href="manifest.webmanifest?v=3.5.2">
-  <link rel="icon" type="image/svg+xml" href="icons/vitafit.svg?v=3.5.2">
+  <meta name="forja-build" content="3.5.3">
+  <meta name="vitafit-build" content="3.5.3">
+  <link rel="manifest" href="manifest.webmanifest?v=3.5.3">
+  <link rel="icon" type="image/svg+xml" href="icons/vitafit.svg?v=3.5.3">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>VITAFIT • Força, saúde & evolução</title>
   <script>
-    // Captura o evento nativo cedo para o botão "Instalar" poder usá-lo depois que o Home terminar de montar.
     window.__VITAFIT_INSTALL__=window.__VITAFIT_INSTALL__||{deferred:null,installed:false};
     window.addEventListener('beforeinstallprompt',event=>{
       event.preventDefault();
@@ -29,24 +28,25 @@
       window.dispatchEvent(new CustomEvent('vitafit-app-installed'));
     });
   </script>
-  <link rel="stylesheet" href="css/base.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v13.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v14.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v20.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v21.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v30.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v31.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v32.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v33.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v333.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v334.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v340.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v341.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v342.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v350.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v350fix.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v351.css?v=3.5.2">
-  <link rel="stylesheet" href="css/v351-accessibility.css?v=3.5.2">
+  <link rel="stylesheet" href="css/base.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v13.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v14.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v20.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v21.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v30.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v31.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v32.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v33.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v333.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v334.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v340.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v341.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v342.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v350.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v350fix.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v351.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v351-accessibility.css?v=3.5.3">
+  <link rel="stylesheet" href="css/v353.css?v=3.5.3">
 </head>
 <body>
   <div id="forja-root">
@@ -60,7 +60,7 @@
   </div>
   <script>
   (async()=>{
-    const BUILD='3.5.2';
+    const BUILD='3.5.3';
     window.__FORJA_BUILD__=BUILD;
     window.__VITAFIT_BUILD__=BUILD;
     document.documentElement.dataset.forjaBuild=BUILD;
@@ -68,7 +68,7 @@
 
     const root=document.getElementById('forja-root');
     const parts=['home-dashboard.html','nutrition.html','training.html','modals.html'];
-    const scripts=['base.js','plan.js','v13.js','enhancements-a.js','v21.js','v30a.js','v30b1.js','v30c.js','dom-fixes.js','v30b2.js','v31.js','v32.js','v33.js','v332.js','v333.js','v334.js','v340.js','v341.js','v342.js','v350.js','v350fix.js','v350header.js','v351.js'];
+    const scripts=['base.js','plan.js','v13.js','enhancements-a.js','v21.js','v30a.js','v30b1.js','v30c.js','dom-fixes.js','v30b2.js','v31.js','v32.js','v33.js','v332.js','v333.js','v334.js','v340.js','v341.js','v342.js','v350.js','v350fix.js','v350header.js','v351.js','v353.js'];
 
     const fragments=await Promise.all(parts.map(async p=>{
       const r=await fetch('fragments/'+p+'?v='+BUILD);
@@ -93,7 +93,6 @@
     document.documentElement.dataset.forjaBuild=BUILD;
     document.documentElement.dataset.vitafitReady='true';
 
-    // O aplicativo fica utilizável primeiro. O PWA é sincronizado em segundo plano.
     if('serviceWorker' in navigator){
       navigator.serviceWorker.addEventListener('message',e=>{
         if(e.data?.type==='VITAFIT_READY'&&e.data.build&&String(e.data.build)!==BUILD){
