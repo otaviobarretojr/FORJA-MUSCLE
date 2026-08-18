@@ -16,7 +16,7 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
   let browser;
   try{
     browser=await chromium.launch({headless:true});
-    const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block'});
+    const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block',timezoneId:'America/Manaus'});
     const page=await context.newPage();
     const errors=[];
     const bad=[];
