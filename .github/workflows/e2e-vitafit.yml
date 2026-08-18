@@ -9,7 +9,7 @@ on:
 jobs:
   browser-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -45,6 +45,32 @@ jobs:
 
       - name: Run first-load offline audit
         run: timeout 90s node tests/e2e-offline.js
+
+      - name: Verify public VITAFIT v3.5.3 navigation
+        run: |
+          set -euo pipefail
+          BASE='https://otaviobarretojr.github.io/FORJA-MUSCLE'
+          stamp="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          ok=0
+          for attempt in $(seq 1 18); do
+            echo "Production probe ${attempt}/18"
+            if curl -fLsS --connect-timeout 10 --max-time 20 -H 'Cache-Control: no-cache' "${BASE}/?audit=${stamp}-${attempt}" -o /tmp/prod-index.html \
+              && grep -Fq 'content="3.5.3"' /tmp/prod-index.html \
+              && grep -Fq 'css/v353.css?v=3.5.3' /tmp/prod-index.html \
+              && grep -Fq "'v353.js'" /tmp/prod-index.html; then
+              ok=1
+              break
+            fi
+            sleep 5
+          done
+          test "$ok" -eq 1
+          curl -fLsS --connect-timeout 10 --max-time 20 -H 'Cache-Control: no-cache' "${BASE}/service-worker.js?audit=${stamp}" -o /tmp/prod-sw.js
+          grep -Fq "const BUILD='3.5.3'" /tmp/prod-sw.js
+          grep -Fq 'forja-muscle-v3-5-3-vitafit-nav-fast' /tmp/prod-sw.js
+          curl -fLsS --connect-timeout 10 --max-time 20 -H 'Cache-Control: no-cache' "${BASE}/js/v353.js?audit=${stamp}" -o /tmp/prod-v353.js
+          grep -Fq 'fastSetAppScreen.__vitafitFast=true' /tmp/prod-v353.js
+          grep -Fq 'window.setAppScreen=fastSetAppScreen' /tmp/prod-v353.js
+          echo 'PUBLIC VITAFIT v3.5.3 NAVIGATION: OK'
 
       - name: Stop local server
         if: always()
