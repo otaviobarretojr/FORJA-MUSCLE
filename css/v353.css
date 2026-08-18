@@ -1,0 +1,15 @@
+/* VITAFIT v3.5.3 — resposta imediata ao toque e troca leve entre telas */
+html{scroll-behavior:auto}
+.app-screen{animation:none!important}
+.app-nav-btn{touch-action:manipulation;user-select:none;-webkit-user-select:none;transition:background-color .08s ease,color .08s ease,transform .08s ease}
+.app-nav-btn.is-pressed{transform:scale(.94)}
+.app-nav-btn.active .nav-icon{transform:none}
+
+#programRoadmap .program-workout,
+#programRoadmap .program-info-grid,
+#nutricao .card,
+#mais .card{content-visibility:auto;contain-intrinsic-size:auto 260px}
+
+@media(prefers-reduced-motion:reduce){
+  .app-nav-btn{transition:none}
+}
