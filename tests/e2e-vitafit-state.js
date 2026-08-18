@@ -16,7 +16,7 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
   let browser;
   try{
     browser=await chromium.launch({headless:true});
-    const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block'});
+    const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block',timezoneId:'America/Manaus'});
     const page=await context.newPage();
     const errors=[];
     const bad=[];
@@ -40,10 +40,11 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
       home:!!document.getElementById('vitaHomeDashboard'),
       cta:document.getElementById('vitaPrimaryAction')?.innerText||'',
       workout:document.getElementById('vitaWorkoutTitle')?.innerText||'',
-      nav:document.querySelectorAll('.app-nav-btn').length
-    }),s=>s.ready==='true'&&s.home&&s.nav===5&&s.build==='3.5.2');
+      nav:document.querySelectorAll('.app-nav-btn').length,
+      fastNav:window.setAppScreen?.__vitafitFast===true
+    }),s=>s.ready==='true'&&s.home&&s.nav===5&&s.build==='3.5.3'&&s.fastNav);
     console.log(home);
-    assert.match(home.title,/VITAFIT/);assert.match(home.header,/VITAFIT/);assert.match(home.header,/v3\.5\.2/);assert.match(home.workout,/(Superior|Inferior|Full Body)/);
+    assert.match(home.title,/VITAFIT/);assert.match(home.header,/VITAFIT/);assert.match(home.header,/v3\.5\.3/);assert.match(home.workout,/(Superior|Inferior|Full Body)/);
 
     console.log('[2] Instalação pelo Home');
     await page.evaluate(()=>{
@@ -87,7 +88,7 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
       window.setAppScreen('mais',{instant:true});
       return {active:document.getElementById('mais')?.classList.contains('active')||false,nav:[...document.querySelectorAll('.app-nav-btn.active')].map(x=>x.dataset.screen),brand:document.getElementById('vitaMoreBrand')?.innerText||'',settings:document.querySelectorAll('.settings-actions').length,exportFn:typeof window.exportData==='function'}
     });
-    assert.equal(more.active,true);assert.deepEqual(more.nav,['mais']);assert.match(more.brand,/VITAFIT/);assert.match(more.brand,/3\.5\.2/);assert.equal(more.settings>0,true);assert.equal(more.exportFn,true);
+    assert.equal(more.active,true);assert.deepEqual(more.nav,['mais']);assert.match(more.brand,/VITAFIT/);assert.match(more.brand,/3\.5\.3/);assert.equal(more.settings>0,true);assert.equal(more.exportFn,true);
 
     console.log('[6] Home → CTA / player guiado');
     await page.evaluate(()=>window.setAppScreen('hoje',{instant:true}));
@@ -138,9 +139,10 @@ async function eventually(page,label,reader,predicate,attempts=40,delay=100){
       brand:document.getElementById('vitaStableHeader')?.innerText||'',
       home:!!document.getElementById('vitaHomeDashboard'),
       installHidden:document.getElementById('vitaInstallCard')?.hidden===true,
-      nav:document.querySelectorAll('.app-nav-btn').length
-    }),s=>s.ready==='true'&&s.home&&s.nav===5);
-    assert.equal(JSON.parse(reopened.persist),'ok');assert.equal(reopened.installed,'true');assert.equal(reopened.installHidden,true);assert.match(reopened.brand,/VITAFIT/);assert.match(reopened.brand,/v3\.5\.2/);
+      nav:document.querySelectorAll('.app-nav-btn').length,
+      fastNav:window.setAppScreen?.__vitafitFast===true
+    }),s=>s.ready==='true'&&s.home&&s.nav===5&&s.fastNav);
+    assert.equal(JSON.parse(reopened.persist),'ok');assert.equal(reopened.installed,'true');assert.equal(reopened.installHidden,true);assert.match(reopened.brand,/VITAFIT/);assert.match(reopened.brand,/v3\.5\.3/);
     assert.deepEqual(errors,[],`Erros JS: ${errors.join(' | ')}`);assert.deepEqual(bad,[],`HTTP inválido: ${bad.join(' | ')}`);
     console.log('VITAFIT Chromium state audit: OK');
   } finally {if(browser)await browser.close()}

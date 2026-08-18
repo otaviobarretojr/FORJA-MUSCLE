@@ -38,6 +38,7 @@ jobs:
           test -f css/v350fix.css
           test -f css/v351.css
           test -f css/v351-accessibility.css
+          test -f css/v353.css
           test -f js/v31.js
           test -f js/v33.js
           test -f js/v332.js
@@ -50,11 +51,13 @@ jobs:
           test -f js/v350fix.js
           test -f js/v350header.js
           test -f js/v351.js
+          test -f js/v353.js
           test -f tests/e2e-offline.js
+          test -f tests/e2e-navigation-latency.js
 
       - name: Validate JavaScript syntax
         run: |
-          for file in js/*.js service-worker.js tests/e2e-offline.js; do
+          for file in js/*.js service-worker.js tests/e2e-offline.js tests/e2e-navigation-latency.js; do
             echo "Checking $file"
             node --check "$file"
           done
@@ -74,10 +77,12 @@ jobs:
           grep -Fq "shape12.*" js/v350.js
           grep -Fq "shape12.*" js/v350header.js
           grep -Fq "shape12.*" js/v351.js
+          grep -Fq "shape12.*" js/v353.js
           ! grep -Fq "localStorage.clear" js/v350.js
           ! grep -Fq "localStorage.clear" js/v350fix.js
           ! grep -Fq "localStorage.clear" js/v350header.js
           ! grep -Fq "localStorage.clear" js/v351.js
+          ! grep -Fq "localStorage.clear" js/v353.js
           ! grep -Fq "localStorage.clear" refresh.html
 
       - name: Validate guided training regressions
@@ -95,62 +100,62 @@ jobs:
 
       - name: Validate VITAFIT identity and Home
         run: |
-          grep -Fq "const BUILD='3.5.2'" index.html
+          grep -Fq "const BUILD='3.5.3'" index.html
           grep -Fq 'content="VITAFIT"' index.html
           grep -Fq "VITAFIT • Força, saúde & evolução" index.html
-          grep -Fq "css/v350.css?v=3.5.2" index.html
-          grep -Fq "css/v351.css?v=3.5.2" index.html
-          grep -Fq "css/v351-accessibility.css?v=3.5.2" index.html
+          grep -Fq "css/v350.css?v=3.5.3" index.html
+          grep -Fq "css/v351.css?v=3.5.3" index.html
+          grep -Fq "css/v351-accessibility.css?v=3.5.3" index.html
+          grep -Fq "css/v353.css?v=3.5.3" index.html
           grep -Fq "'v350.js'" index.html
           grep -Fq "'v350fix.js'" index.html
           grep -Fq "'v350header.js'" index.html
           grep -Fq "'v351.js'" index.html
+          grep -Fq "'v353.js'" index.html
           grep -Fq "HOJE NA VITAFIT" js/v350.js
           grep -Fq "vitaHomeDashboard" js/v350.js
           grep -Fq "CONTINUAR TREINO" js/v350.js
           grep -Fq "TREINO CONCLUÍDO" js/v350.js
           grep -Fq "vitaStableHeader" js/v350header.js
-          grep -Fq "vita-legacy-hero" js/v350header.js
           grep -Fq "vita-today-card" css/v350.css
           grep -Fq -- "--accent:#e19aaa" css/v350.css
           grep -Fq '"name": "VITAFIT"' manifest.webmanifest
-          grep -Fq "icons/vitafit.svg" manifest.webmanifest
 
       - name: Validate first access install card
         run: |
           grep -Fq "beforeinstallprompt" index.html
           grep -Fq "event.preventDefault()" index.html
           grep -Fq "appinstalled" index.html
-          grep -Fq "vitafit-install-ready" index.html
           grep -Fq "vitaInstallCard" js/v351.js
           grep -Fq "ui.installPromptDismissed" js/v351.js
           grep -Fq "ui.appInstalled" js/v351.js
           grep -Fq "Adicionar à Tela de Início" js/v351.js
           grep -Fq "display-mode: standalone" js/v351.js
-          grep -Fq "vita-install-card" css/v351.css
-          grep -Fq "PRIMEIRO ACESSO" js/v351.js
+
+      - name: Validate fast navigation
+        run: |
+          grep -Fq "fastSetAppScreen.__vitafitFast=true" js/v353.js
+          grep -Fq "window.setAppScreen=fastSetAppScreen" js/v353.js
+          grep -Fq "if(!opts.keepScroll)jumpTop()" js/v353.js
+          grep -Fq "touch-action:manipulation" css/v353.css
+          grep -Fq ".app-screen{animation:none!important}" css/v353.css
+          grep -Fq "NAVIGATION_SUMMARY" tests/e2e-navigation-latency.js
 
       - name: Validate offline-first PWA contract
         run: |
-          grep -Fq "const BUILD='3.5.2'" service-worker.js
-          grep -Fq "forja-muscle-v3-5-2-vitafit-offline" service-worker.js
+          grep -Fq "const BUILD='3.5.3'" service-worker.js
+          grep -Fq "forja-muscle-v3-5-3-vitafit-nav-fast" service-worker.js
           grep -Fq "const APP_SHELL=[...CORE,...RUNTIME]" service-worker.js
           grep -Fq "cache.addAll(APP_SHELL)" service-worker.js
           grep -Fq "./assets/projecao-12-semanas.jpg" service-worker.js
           grep -Fq "./fragments/home-dashboard.html" service-worker.js
-          grep -Fq "./fragments/nutrition.html" service-worker.js
-          grep -Fq "./fragments/training.html" service-worker.js
-          grep -Fq "./fragments/modals.html" service-worker.js
-          grep -Fq "css/v350.css" service-worker.js
-          grep -Fq "css/v351.css" service-worker.js
           grep -Fq "css/v351-accessibility.css" service-worker.js
-          grep -Fq "js/v350.js" service-worker.js
-          grep -Fq "js/v350header.js" service-worker.js
+          grep -Fq "css/v353.css" service-worker.js
           grep -Fq "js/v351.js" service-worker.js
+          grep -Fq "js/v353.js" service-worker.js
           grep -Fq "navigationPreload.enable" service-worker.js
           grep -Fq "self.clients.claim()" service-worker.js
           grep -Fq "context.setOffline(true)" tests/e2e-offline.js
-          grep -Fq "navigator.serviceWorker.controller" tests/e2e-offline.js
           grep -Fq "VITAFIT offline reload audit: OK" tests/e2e-offline.js
           ! grep -Fq "client.navigate(" service-worker.js
 

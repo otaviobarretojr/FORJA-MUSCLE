@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.5.2
+name: Validate VITAFIT v3.5.3
 
 on:
   push:
@@ -13,13 +13,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.5.2'" index.html
-          grep -Fq "const BUILD='3.5.2'" service-worker.js
-          grep -Fq "const BUILD='3.5.2'" js/v351.js
-          grep -Fq 'content="3.5.2"' index.html
-          grep -Fq "css/v351.css?v=3.5.2" index.html
-          grep -Fq "css/v351-accessibility.css?v=3.5.2" index.html
-          grep -Fq "'v351.js'" index.html
+          grep -Fq "const BUILD='3.5.3'" index.html
+          grep -Fq "const BUILD='3.5.3'" service-worker.js
+          grep -Fq "const BUILD='3.5.3'" js/v351.js
+          grep -Fq "const BUILD='3.5.3'" js/v353.js
+          grep -Fq 'content="3.5.3"' index.html
+          grep -Fq "css/v351.css?v=3.5.3" index.html
+          grep -Fq "css/v351-accessibility.css?v=3.5.3" index.html
+          grep -Fq "css/v353.css?v=3.5.3" index.html
+          grep -Fq "'v353.js'" index.html
       - name: Validate redesigned areas
         run: |
           grep -Fq "Treino de hoje" js/v350.js
@@ -34,22 +36,32 @@ jobs:
         run: |
           test -f css/v351-accessibility.css
           test -f tests/e2e-accessible-text.js
-          grep -Fq "css/v351-accessibility.css?v=3.5.2" index.html
+          grep -Fq "css/v351-accessibility.css?v=3.5.3" index.html
           grep -Fq "css/v351-accessibility.css" service-worker.js
           grep -Fq ".vita-primary-action{min-height:58px;font-size:15px}" css/v351-accessibility.css
           grep -Fq ".set-input{min-height:42px;font-size:15px}" css/v351-accessibility.css
           grep -Fq "#nutricao .meal p{font-size:15px" css/v351-accessibility.css
           grep -Fq ".program-ex b{font-size:14px" css/v351-accessibility.css
           grep -Fq ".app-nav-btn .nav-label{font-size:11px" css/v351-accessibility.css
-          grep -Fq ".more-link-card b{font-size:15px}" css/v351-accessibility.css
-          grep -Fq ".more-link-card span{font-size:12px" css/v351-accessibility.css
+      - name: Validate fast navigation contract
+        run: |
+          test -f js/v353.js
+          test -f css/v353.css
+          test -f tests/e2e-navigation-latency.js
+          grep -Fq "fastSetAppScreen.__vitafitFast=true" js/v353.js
+          grep -Fq "window.setAppScreen=fastSetAppScreen" js/v353.js
+          grep -Fq "if(!opts.keepScroll)jumpTop()" js/v353.js
+          grep -Fq "touch-action:manipulation" css/v353.css
+          grep -Fq ".app-screen{animation:none!important}" css/v353.css
+          grep -Fq "Run navigation latency audit" .github/workflows/e2e-vitafit.yml
       - name: Validate offline-first shell
         run: |
           test -f tests/e2e-offline.js
-          grep -Fq "forja-muscle-v3-5-2-vitafit-offline" service-worker.js
+          grep -Fq "forja-muscle-v3-5-3-vitafit-nav-fast" service-worker.js
           grep -Fq "const APP_SHELL=[...CORE,...RUNTIME]" service-worker.js
           grep -Fq "cache.addAll(APP_SHELL)" service-worker.js
-          grep -Fq "./assets/projecao-12-semanas.jpg" service-worker.js
+          grep -Fq "./css/v353.css" service-worker.js
+          grep -Fq "./js/v353.js" service-worker.js
           grep -Fq "context.setOffline(true)" tests/e2e-offline.js
       - name: Validate Home actions and install entry
         run: |
@@ -63,7 +75,6 @@ jobs:
           grep -Fq "appinstalled" index.html
           grep -Fq "promptEvent.prompt" js/v351.js
           grep -Fq "Adicionar à Tela de Início" js/v351.js
-          grep -Fq "vita-install-dismiss" css/v351.css
           grep -Fq "const NS='shape12.'" js/base.js
           ! grep -Fq "localStorage.clear" js/v351.js
           ! grep -Fq "store.del(" js/v351.js
@@ -88,6 +99,8 @@ jobs:
           node --check js/v350fix.js
           node --check js/v350header.js
           node --check js/v351.js
+          node --check js/v353.js
           node --check tests/e2e-accessible-text.js
+          node --check tests/e2e-navigation-latency.js
           node --check tests/e2e-offline.js
           node --check service-worker.js

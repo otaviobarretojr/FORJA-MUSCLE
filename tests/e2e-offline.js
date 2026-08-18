@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 
 const BASE='http://127.0.0.1:4173/';
-const CACHE='forja-muscle-v3-5-2-vitafit-offline';
+const CACHE='forja-muscle-v3-5-3-vitafit-nav-fast';
 
 (async()=>{
   const browser=await chromium.launch({headless:true});
@@ -33,7 +33,8 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
         controllerState:navigator.serviceWorker.controller?.state||'',
         cacheNames:await caches.keys(),
         urls:requests.map(r=>r.url),
-        build:document.documentElement.dataset.vitafitBuild||document.documentElement.dataset.forjaBuild
+        build:document.documentElement.dataset.vitafitBuild||document.documentElement.dataset.forjaBuild,
+        fastNav:window.setAppScreen?.__vitafitFast===true
       };
     },CACHE);
 
@@ -41,7 +42,8 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     assert.equal(prepared.activeState,'activated');
     assert.equal(prepared.controller,true,'primeira página não foi assumida pelo service worker após o cache');
     assert.equal(prepared.controllerState,'activated');
-    assert.equal(prepared.build,'3.5.2');
+    assert.equal(prepared.build,'3.5.3');
+    assert.equal(prepared.fastNav,true,'navegação rápida não ficou ativa');
     assert.ok(prepared.cacheNames.includes(CACHE),`cache ${CACHE} não foi criado`);
     for(const suffix of [
       '/index.html',
@@ -50,12 +52,13 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
       '/fragments/training.html',
       '/fragments/modals.html',
       '/css/v351-accessibility.css',
+      '/css/v353.css',
       '/js/v351.js',
+      '/js/v353.js',
       '/assets/projecao-12-semanas.jpg'
     ]){
       assert.ok(prepared.urls.some(url=>new URL(url).pathname.endsWith(suffix)),`arquivo não pré-cacheado: ${suffix}`);
     }
-    console.log({active:prepared.active,activeState:prepared.activeState,controller:prepared.controller,controllerState:prepared.controllerState,cached:prepared.urls.length});
 
     console.log('[OFFLINE 2] Corta a internet e faz uma recarga completa');
     await context.setOffline(true);
@@ -70,14 +73,16 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
       title:document.title,
       home:!!document.getElementById('vitaHomeDashboard'),
       nav:document.querySelectorAll('.app-nav-btn').length,
+      fastNav:window.setAppScreen?.__vitafitFast===true,
       persisted:localStorage.getItem('shape12.e2e.offlinePersist')
     }));
     assert.equal(home.online,false);
     assert.equal(home.controller,true,'recarga offline não ficou sob controle do service worker');
     assert.equal(home.ready,'true');
-    assert.equal(home.build,'3.5.2');
+    assert.equal(home.build,'3.5.3');
     assert.equal(home.home,true);
     assert.equal(home.nav,5);
+    assert.equal(home.fastNav,true);
     assert.equal(JSON.parse(home.persisted),'preservado');
     assert.match(home.title,/VITAFIT/);
 
@@ -99,12 +104,14 @@ const CACHE='forja-muscle-v3-5-2-vitafit-offline';
     console.log('[OFFLINE 4] Recursos locais disponíveis pelo cache');
     const resources=await page.evaluate(async()=>{
       const urls=[
-        'fragments/home-dashboard.html?v=3.5.2',
-        'fragments/nutrition.html?v=3.5.2',
-        'fragments/training.html?v=3.5.2',
-        'fragments/modals.html?v=3.5.2',
-        'css/v351-accessibility.css?v=3.5.2',
-        'js/v351.js?v=3.5.2',
+        'fragments/home-dashboard.html?v=3.5.3',
+        'fragments/nutrition.html?v=3.5.3',
+        'fragments/training.html?v=3.5.3',
+        'fragments/modals.html?v=3.5.3',
+        'css/v351-accessibility.css?v=3.5.3',
+        'css/v353.css?v=3.5.3',
+        'js/v351.js?v=3.5.3',
+        'js/v353.js?v=3.5.3',
         'assets/projecao-12-semanas.jpg'
       ];
       const out=[];

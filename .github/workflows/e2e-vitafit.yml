@@ -40,6 +40,9 @@ jobs:
       - name: Run mobile readability audit
         run: timeout 90s node tests/e2e-accessible-text.js
 
+      - name: Run navigation latency audit
+        run: timeout 90s node tests/e2e-navigation-latency.js
+
       - name: Run first-load offline audit
         run: timeout 90s node tests/e2e-offline.js
 
