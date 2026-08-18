@@ -5,10 +5,10 @@ html{scroll-behavior:auto}
 .app-nav-btn.is-pressed{transform:scale(.94)}
 .app-nav-btn.active .nav-icon{transform:none}
 
+/* Só posterga blocos extensos que ficam abaixo da primeira dobra.
+   Cabeçalhos, identidade e controles de topo pintam imediatamente. */
 #programRoadmap .program-workout,
-#programRoadmap .program-info-grid,
-#nutricao .card,
-#mais .card{content-visibility:auto;contain-intrinsic-size:auto 260px}
+#programRoadmap .program-info-grid{content-visibility:auto;contain-intrinsic-size:auto 260px}
 
 @media(prefers-reduced-motion:reduce){
   .app-nav-btn{transition:none}
