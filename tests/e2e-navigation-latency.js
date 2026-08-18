@@ -2,6 +2,7 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 
 const BASE='http://127.0.0.1:4173/';
+const BUDGET={handlerMs:20,handlerWallMs:100,settledWallMs:250};
 
 (async()=>{
   const browser=await chromium.launch({headless:true});
@@ -10,6 +11,8 @@ const BASE='http://127.0.0.1:4173/';
     const page=await context.newPage();
     await page.goto(`${BASE}?e2e=navigation-latency`,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
+    const fastNav=await page.evaluate(()=>window.setAppScreen?.__vitafitFast===true);
+    assert.equal(fastNav,true,'camada de navegação rápida não está ativa');
 
     const ids=['treino','nutricao','evolucao','mais','hoje'];
     const results=[];
@@ -55,7 +58,11 @@ const BASE='http://127.0.0.1:4173/';
         handlerWallMax:Math.max(...rows.map(r=>r.handlerWall)),
         settledWallMax:Math.max(...rows.map(r=>r.settledWall))
       };
+      assert.ok(summary[id].handlerMax<BUDGET.handlerMs,`${id}: handler ${summary[id].handlerMax}ms excedeu ${BUDGET.handlerMs}ms`);
+      assert.ok(summary[id].handlerWallMax<BUDGET.handlerWallMs,`${id}: resposta do handler ${summary[id].handlerWallMax}ms excedeu ${BUDGET.handlerWallMs}ms`);
+      assert.ok(summary[id].settledWallMax<BUDGET.settledWallMs,`${id}: tela levou ${summary[id].settledWallMax}ms, limite ${BUDGET.settledWallMs}ms`);
     }
+    console.log('NAVIGATION_BUDGET '+JSON.stringify(BUDGET));
     console.log('NAVIGATION_SUMMARY '+JSON.stringify(summary));
     console.log('VITAFIT navigation latency audit: OK');
   } finally {
