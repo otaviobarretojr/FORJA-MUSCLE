@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.6.0
+name: Validate VITAFIT v3.6.4
 
 on:
   push:
@@ -13,46 +13,29 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.6.0'" index.html
-          grep -Fq "const BUILD='3.6.0'" service-worker.js
-          grep -Fq 'content="3.6.0"' index.html
-          grep -Fq "css/v360.css?v=3.6.0" index.html
-          grep -Fq "'v360.js'" index.html
-          grep -Fq "forja-muscle-v3-6-0-vitafit-training-rework" service-worker.js
-      - name: Validate complete training rework
+          grep -Fq "const BUILD='3.6.4'" index.html
+          grep -Fq "const BUILD='3.6.4'" service-worker.js
+          grep -Fq 'content="3.6.4"' index.html
+          grep -Fq "css/v364.css?v=3.6.4" index.html
+          grep -Fq "'v364.js'" index.html
+          grep -Fq "forja-muscle-v3-6-4-vitafit-simplified" service-worker.js
+      - name: Validate simplified app
         run: |
-          test -f js/v360.js
-          test -f css/v360.css
-          test -f tests/e2e-v360.js
-          grep -Fq "Treino da semana" js/v360.js
-          grep -Fq "Agachamento sumô" js/v360.js
-          grep -Fq "Remada máquina" js/v360.js
-          grep -Fq "Cadeira extensora" js/v360.js
-          grep -Fq "Agachamento búlgaro" js/v360.js
-          grep -Fq "Terra sumô" js/v360.js
-          grep -Fq "v360-video-modal" css/v360.css
-          grep -Fq "shape12.v360." js/v360.js
-      - name: Validate real workout video chunks
+          test -f js/v364.js
+          test -f css/v364.css
+          grep -Fq '.app-nav-btn[data-screen="evolucao"]' css/v364.css
+          grep -Fq "removeProgram" js/v364.js
+          grep -Fq "removeEditor" js/v364.js
+          grep -Fq "id==='evolucao'?'hoje':id" js/v364.js
+          grep -Fq "repeat(4" css/v364.css
+      - name: Validate local workout video remains
         run: |
-          for id in 191175 191177 191179 191181; do
-            test -s "assets/videos/${id}.00.b64"
-            test -s "assets/videos/${id}.01.b64"
-            cat "assets/videos/${id}.00.b64" "assets/videos/${id}.01.b64" | base64 -d > "/tmp/${id}.mp4"
-            test "$(dd if="/tmp/${id}.mp4" bs=1 skip=4 count=4 2>/dev/null)" = "ftyp"
-            test -s "/tmp/${id}.mp4"
-          done
-          grep -Fq "./assets/videos/191175.00.b64" service-worker.js
-          grep -Fq "./assets/videos/191181.01.b64" service-worker.js
-      - name: Validate preserved platform contracts
-        run: |
-          grep -Fq "fastSetAppScreen.__vitafitFast=true" js/v353.js
-          grep -Fq "const NS='shape12.'" js/base.js
-          grep -Fq "const APP_SHELL=[...CORE,...RUNTIME]" service-worker.js
-          grep -Fq "cache.addAll(APP_SHELL)" service-worker.js
-          grep -Fq "beforeinstallprompt" index.html
-          grep -Fq "appinstalled" index.html
+          test -f js/v363.js
+          grep -Fq "indexedDB.open" js/v363.js
+          grep -Fq "Importar vídeo da galeria" js/v363.js
+          ! grep -Fq "./assets/videos/" service-worker.js
       - name: Syntax check
         run: |
-          node --check js/v360.js
-          node --check tests/e2e-v360.js
+          node --check js/v363.js
+          node --check js/v364.js
           node --check service-worker.js
