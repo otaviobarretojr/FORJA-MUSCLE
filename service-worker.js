@@ -1,7 +1,7 @@
-const BUILD='3.5.4';
-const CACHE='forja-muscle-v3-5-4-vitafit-workout-video';
+const BUILD='3.6.0';
+const CACHE='forja-muscle-v3-6-0-vitafit-training-rework';
 const CORE=['./','./index.html','./refresh.html','./manifest.webmanifest','./icons/vitafit.svg','./icons/icon-192.png','./icons/icon-512.png'];
-const RUNTIME=['./fragments/home-dashboard.html','./fragments/nutrition.html','./fragments/training.html','./fragments/modals.html','./css/base.css','./css/v13.css','./css/v14.css','./css/v20.css','./css/v21.css','./css/v30.css','./css/v31.css','./css/v32.css','./css/v33.css','./css/v333.css','./css/v334.css','./css/v340.css','./css/v341.css','./css/v342.css','./css/v350.css','./css/v350fix.css','./css/v351.css','./css/v351-accessibility.css','./css/v353.css','./css/v354.css','./js/base.js','./js/plan.js','./js/v13.js','./js/enhancements-a.js','./js/v21.js','./js/v30a.js','./js/v30b1.js','./js/v30c.js','./js/dom-fixes.js','./js/v30b2.js','./js/v31.js','./js/v32.js','./js/v33.js','./js/v332.js','./js/v333.js','./js/v334.js','./js/v340.js','./js/v341.js','./js/v342.js','./js/v350.js','./js/v350fix.js','./js/v350header.js','./js/v351.js','./js/v353.js','./js/v354.js','./js/v354-version.js','./assets/projecao-12-semanas.jpg','./assets/workouts/segunda.b64','./assets/workouts/superiores.b64','./assets/workouts/quarta.b64','./assets/workouts/sexta.b64'];
+const RUNTIME=['./fragments/home-dashboard.html','./fragments/nutrition.html','./fragments/training.html','./fragments/modals.html','./css/base.css','./css/v13.css','./css/v14.css','./css/v20.css','./css/v21.css','./css/v30.css','./css/v31.css','./css/v32.css','./css/v33.css','./css/v333.css','./css/v334.css','./css/v340.css','./css/v341.css','./css/v342.css','./css/v350.css','./css/v350fix.css','./css/v351.css','./css/v351-accessibility.css','./css/v353.css','./css/v354.css','./css/v360.css','./js/base.js','./js/plan.js','./js/v13.js','./js/enhancements-a.js','./js/v21.js','./js/v30a.js','./js/v30b1.js','./js/v30c.js','./js/dom-fixes.js','./js/v30b2.js','./js/v31.js','./js/v32.js','./js/v33.js','./js/v332.js','./js/v333.js','./js/v334.js','./js/v340.js','./js/v341.js','./js/v342.js','./js/v350.js','./js/v350fix.js','./js/v350header.js','./js/v351.js','./js/v353.js','./js/v354.js','./js/v354-version.js','./js/v360.js','./assets/projecao-12-semanas.jpg','./assets/videos/191175.00.b64','./assets/videos/191175.01.b64','./assets/videos/191177.00.b64','./assets/videos/191177.01.b64','./assets/videos/191179.00.b64','./assets/videos/191179.01.b64','./assets/videos/191181.00.b64','./assets/videos/191181.01.b64'];
 const APP_SHELL=[...CORE,...RUNTIME];
 
 self.addEventListener('install',event=>{
@@ -45,7 +45,6 @@ async function cacheFirst(req){
 self.addEventListener('fetch',event=>{
   const req=event.request;
   if(req.method!=='GET')return;
-
   if(req.mode==='navigate'){
     event.respondWith((async()=>{
       let preload=null;
@@ -59,6 +58,5 @@ self.addEventListener('fetch',event=>{
     })());
     return;
   }
-
   event.respondWith(cacheFirst(req));
 });
