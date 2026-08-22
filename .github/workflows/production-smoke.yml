@@ -17,11 +17,8 @@ jobs:
         run: |
           set -euo pipefail
           audit="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-
           fetch_until_match() {
-            local url="$1"
-            local pattern="$2"
-            local out="$3"
+            local url="$1" pattern="$2" out="$3"
             for attempt in $(seq 1 24); do
               echo "Audit attempt ${attempt}: ${url}"
               if curl -fLsS --connect-timeout 10 --max-time 20 -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "${url}?audit=${audit}-${attempt}" -o "$out"; then
@@ -32,30 +29,27 @@ jobs:
             echo "Expected pattern not found: $pattern"; cat "$out" || true; return 1
           }
 
-          fetch_until_match "${BASE_URL}/" "VITAFIT • Força, saúde & evolução" /tmp/index.html
-          grep -Fq -- 'content="3.5.4"' /tmp/index.html
-          grep -Fq -- 'css/v354.css?v=3.5.4' /tmp/index.html
-          grep -Fq -- "'v354.js'" /tmp/index.html
+          fetch_until_match "${BASE_URL}/" 'content="3.6.0"' /tmp/index.html
+          grep -Fq -- 'css/v360.css?v=3.6.0' /tmp/index.html
+          grep -Fq -- "'v360.js'" /tmp/index.html
 
-          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.5.4'" /tmp/service-worker.js
-          grep -Fq -- "forja-muscle-v3-5-4-vitafit-workout-video" /tmp/service-worker.js
-          grep -Fq -- "./js/v354.js" /tmp/service-worker.js
-          grep -Fq -- "./assets/workouts/segunda.b64" /tmp/service-worker.js
-          grep -Fq -- "navigationPreload.enable" /tmp/service-worker.js
-          grep -Fq -- "self.clients.claim()" /tmp/service-worker.js
+          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.6.0'" /tmp/service-worker.js
+          grep -Fq -- "forja-muscle-v3-6-0-vitafit-training-rework" /tmp/service-worker.js
+          grep -Fq -- "./js/v360.js" /tmp/service-worker.js
+          grep -Fq -- "./assets/videos/191175.00.b64" /tmp/service-worker.js
+          grep -Fq -- "./assets/videos/191181.01.b64" /tmp/service-worker.js
 
-          fetch_until_match "${BASE_URL}/js/v354.js" "Agachamento sumô" /tmp/v354.js
-          grep -Fq -- "Agachamento búlgaro" /tmp/v354.js
-          grep -Fq -- "Cadeira extensora" /tmp/v354.js
-          grep -Fq -- "Remada máquina" /tmp/v354.js
-          grep -Fq -- "exercise-demo-btn" /tmp/v354.js
-          fetch_until_match "${BASE_URL}/css/v354.css" "forja-video-modal" /tmp/v354.css
+          fetch_until_match "${BASE_URL}/js/v360.js" "Treino da semana" /tmp/v360.js
+          grep -Fq -- "Agachamento sumô" /tmp/v360.js
+          grep -Fq -- "Cadeira extensora" /tmp/v360.js
+          grep -Fq -- "Agachamento búlgaro" /tmp/v360.js
+          grep -Fq -- "videoBlob" /tmp/v360.js
+          fetch_until_match "${BASE_URL}/css/v360.css" "v360-video-modal" /tmp/v360.css
 
-          for f in segunda superiores quarta sexta; do
-            curl -fLsS --connect-timeout 10 --max-time 20 "${BASE_URL}/assets/workouts/${f}.b64?audit=${audit}" -o "/tmp/${f}.b64"
-            test -s "/tmp/${f}.b64"
-            base64 -d "/tmp/${f}.b64" > "/tmp/${f}.mp4"
-            test "$(dd if="/tmp/${f}.mp4" bs=1 skip=4 count=4 2>/dev/null)" = "ftyp"
+          for id in 191175 191177 191179 191181; do
+            curl -fLsS --connect-timeout 10 --max-time 20 "${BASE_URL}/assets/videos/${id}.00.b64?audit=${audit}" -o "/tmp/${id}.00"
+            curl -fLsS --connect-timeout 10 --max-time 20 "${BASE_URL}/assets/videos/${id}.01.b64?audit=${audit}" -o "/tmp/${id}.01"
+            cat "/tmp/${id}.00" "/tmp/${id}.01" | base64 -d > "/tmp/${id}.mp4"
+            test "$(dd if="/tmp/${id}.mp4" bs=1 skip=4 count=4 2>/dev/null)" = "ftyp"
           done
-
-          echo "Production VITAFIT v3.5.4 workout smoke: OK"
+          echo "Production VITAFIT v3.6.0 training rework smoke: OK"
