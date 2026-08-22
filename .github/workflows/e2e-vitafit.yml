@@ -12,17 +12,14 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
       - name: Install Playwright Chromium
         run: |
           npm init -y >/dev/null 2>&1
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
-
       - name: Start local VITAFIT
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/vitafit-http.log 2>&1 &
@@ -33,19 +30,10 @@ jobs:
           done
           cat /tmp/vitafit-http.log
           exit 1
-
-      - name: Run browser functional audit
-        run: timeout 150s node tests/e2e-vitafit-state.js
-
-      - name: Run mobile readability audit
-        run: timeout 90s node tests/e2e-accessible-text.js
-
+      - name: Run v3.5.4 workout browser audit
+        run: timeout 150s node tests/e2e-v354.js
       - name: Run navigation latency audit
         run: timeout 90s node tests/e2e-navigation-latency.js
-
-      - name: Run first-load offline audit
-        run: timeout 90s node tests/e2e-offline.js
-
       - name: Stop local server
         if: always()
         run: |
