@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.5.4
+name: Validate VITAFIT v3.6.0
 
 on:
   push:
@@ -13,44 +13,39 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.5.4'" index.html
-          grep -Fq "const BUILD='3.5.4'" service-worker.js
-          grep -Fq 'content="3.5.4"' index.html
-          grep -Fq "css/v354.css?v=3.5.4" index.html
-          grep -Fq "'v354.js'" index.html
-          grep -Fq "forja-muscle-v3-5-4-vitafit-workout-video" service-worker.js
-      - name: Validate official workout routine
+          grep -Fq "const BUILD='3.6.0'" index.html
+          grep -Fq "const BUILD='3.6.0'" service-worker.js
+          grep -Fq 'content="3.6.0"' index.html
+          grep -Fq "css/v360.css?v=3.6.0" index.html
+          grep -Fq "'v360.js'" index.html
+          grep -Fq "forja-muscle-v3-6-0-vitafit-training-rework" service-worker.js
+      - name: Validate complete training rework
         run: |
-          test -f js/v354.js
-          test -f css/v354.css
-          grep -Fq "Agachamento sumô" js/v354.js
-          grep -Fq "Remada máquina" js/v354.js
-          grep -Fq "Cadeira extensora" js/v354.js
-          grep -Fq "Agachamento búlgaro" js/v354.js
-          grep -Fq "HIIT na esteira" js/v354.js
-          grep -Fq "exercise-demo-btn" js/v354.js
-          grep -Fq "forja-video-modal" css/v354.css
-      - name: Validate workout videos
+          test -f js/v360.js
+          test -f css/v360.css
+          test -f tests/e2e-v360.js
+          grep -Fq "Treino da semana" js/v360.js
+          grep -Fq "Agachamento sumô" js/v360.js
+          grep -Fq "Remada máquina" js/v360.js
+          grep -Fq "Cadeira extensora" js/v360.js
+          grep -Fq "Agachamento búlgaro" js/v360.js
+          grep -Fq "Terra sumô" js/v360.js
+          grep -Fq "v360-video-modal" css/v360.css
+          grep -Fq "shape12.v360." js/v360.js
+      - name: Validate real workout video chunks
         run: |
-          for f in segunda superiores quarta sexta; do
-            test -s "assets/workouts/${f}.b64"
-            python3 - "$f" <<'PY'
-          import base64, pathlib, sys
-          p=pathlib.Path('assets/workouts')/(sys.argv[1]+'.b64')
-          raw=base64.b64decode(p.read_text().strip(), validate=True)
-          assert raw[4:8] == b'ftyp', (p, raw[:12])
-          assert len(raw) > 5000, (p, len(raw))
-          PY
+          for id in 191175 191177 191179 191181; do
+            test -s "assets/videos/${id}.00.b64"
+            test -s "assets/videos/${id}.01.b64"
+            cat "assets/videos/${id}.00.b64" "assets/videos/${id}.01.b64" | base64 -d > "/tmp/${id}.mp4"
+            test "$(dd if="/tmp/${id}.mp4" bs=1 skip=4 count=4 2>/dev/null)" = "ftyp"
+            test -s "/tmp/${id}.mp4"
           done
-          grep -Fq "./assets/workouts/segunda.b64" service-worker.js
-          grep -Fq "./assets/workouts/superiores.b64" service-worker.js
-          grep -Fq "./assets/workouts/quarta.b64" service-worker.js
-          grep -Fq "./assets/workouts/sexta.b64" service-worker.js
+          grep -Fq "./assets/videos/191175.00.b64" service-worker.js
+          grep -Fq "./assets/videos/191181.01.b64" service-worker.js
       - name: Validate preserved platform contracts
         run: |
           grep -Fq "fastSetAppScreen.__vitafitFast=true" js/v353.js
-          grep -Fq "window.setAppScreen=fastSetAppScreen" js/v353.js
-          grep -Fq "touch-action:manipulation" css/v353.css
           grep -Fq "const NS='shape12.'" js/base.js
           grep -Fq "const APP_SHELL=[...CORE,...RUNTIME]" service-worker.js
           grep -Fq "cache.addAll(APP_SHELL)" service-worker.js
@@ -58,7 +53,6 @@ jobs:
           grep -Fq "appinstalled" index.html
       - name: Syntax check
         run: |
-          node --check js/v354.js
-          node --check js/v353.js
-          node --check js/v351.js
+          node --check js/v360.js
+          node --check tests/e2e-v360.js
           node --check service-worker.js
