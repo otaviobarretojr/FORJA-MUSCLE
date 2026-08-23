@@ -1,7 +1,7 @@
 {
   "name": "VITAFIT",
   "short_name": "VITAFIT",
-  "description": "Treino progressivo, nutrição e cardio em uma rotina prática, feminina e objetiva.",
+  "description": "Treino progressivo, cardio e acompanhamento de evolução em uma rotina prática e objetiva.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b090d",
