@@ -9,7 +9,7 @@ const BUDGET={handlerMs:16,handlerWallMs:80,settledWallMs:180};
   try{
     const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
     const page=await context.newPage();
-    await page.goto(`${BASE}?e2e=navigation-latency-v365`,{waitUntil:'domcontentloaded'});
+    await page.goto(`${BASE}?e2e=navigation-latency-v366`,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true',null,{timeout:20000});
     assert.equal(await page.evaluate(()=>window.setAppScreen?.__vitafitFast===true),true,'camada de navegação rápida não está ativa');
     assert.equal(await page.locator('.app-nav-btn').count(),3,'navegação deve ter apenas 3 abas');
@@ -45,6 +45,6 @@ const BUDGET={handlerMs:16,handlerWallMs:80,settledWallMs:180};
     }
     console.log('NAVIGATION_BUDGET '+JSON.stringify(BUDGET));
     console.log('NAVIGATION_RESULTS '+JSON.stringify(results));
-    console.log('VITAFIT 3.6.5 navigation latency audit: OK');
+    console.log('VITAFIT 3.6.6 navigation latency audit: OK');
   } finally {await browser.close()}
 })().catch(err=>{console.error(err);process.exit(1)});
