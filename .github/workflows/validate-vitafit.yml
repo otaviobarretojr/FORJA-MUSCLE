@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.6.4
+name: Validate VITAFIT v3.6.5
 
 on:
   push:
@@ -13,24 +13,28 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.6.4'" index.html
-          grep -Fq "const BUILD='3.6.4'" service-worker.js
-          grep -Fq 'content="3.6.4"' index.html
-          grep -Fq "css/v364.css?v=3.6.4" index.html
-          grep -Fq "'v364.js'" index.html
-          grep -Fq "forja-muscle-v3-6-4-vitafit-simplified" service-worker.js
-      - name: Validate simplified app
+          grep -Fq "const BUILD='3.6.5'" index.html
+          grep -Fq "const BUILD='3.6.5'" service-worker.js
+          grep -Fq 'content="3.6.5"' index.html
+          grep -Fq "css/v365.css?v=3.6.5" index.html
+          grep -Fq "'v365.js'" index.html
+          grep -Fq "forja-muscle-v3-6-5-vitafit-fast-core" service-worker.js
+      - name: Validate nutrition removal
         run: |
-          test -f js/v364.js
-          test -f css/v364.css
-          grep -Fq '.app-nav-btn[data-screen="evolucao"]' css/v364.css
-          grep -Fq "removeProgram" js/v364.js
-          grep -Fq "removeEditor" js/v364.js
-          grep -Fq "id==='evolucao'?'hoje':id" js/v364.js
-          grep -Fq "repeat(4" css/v364.css
+          test -f js/v365.js
+          test -f css/v365.css
+          grep -Fq '.app-nav-btn[data-screen="nutricao"]' css/v365.css
+          grep -Fq "REMOVED=new Set(['nutricao','evolucao'])" js/v365.js
+          grep -Fq "repeat(3" css/v365.css
+      - name: Validate interaction performance audit
+        run: |
+          ! grep -Fq 'new MutationObserver' js/v363.js
+          ! grep -Fq 'new MutationObserver' js/v364.js
+          grep -Fq 'touch-action:manipulation' css/v365.css
+          grep -Fq 'content-visibility:auto' css/v365.css
+          grep -Fq 'window.setAppScreen.__vitafitFast=true' js/v365.js
       - name: Validate local workout video remains
         run: |
-          test -f js/v363.js
           grep -Fq "indexedDB.open" js/v363.js
           grep -Fq "Importar vídeo da galeria" js/v363.js
           ! grep -Fq "./assets/videos/" service-worker.js
@@ -38,4 +42,5 @@ jobs:
         run: |
           node --check js/v363.js
           node --check js/v364.js
+          node --check js/v365.js
           node --check service-worker.js
