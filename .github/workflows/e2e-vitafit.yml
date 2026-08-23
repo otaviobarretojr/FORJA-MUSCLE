@@ -30,7 +30,7 @@ jobs:
           done
           cat /tmp/vitafit-http.log
           exit 1
-      - name: Run v3.6.0 training rework browser audit
+      - name: Run v3.6.6 cleanup browser audit
         run: timeout 150s node tests/e2e-v360.js
       - name: Run navigation latency audit
         run: timeout 90s node tests/e2e-navigation-latency.js
