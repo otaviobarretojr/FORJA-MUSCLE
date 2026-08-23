@@ -27,14 +27,28 @@ jobs:
           ! test -e js/v362.js
           ! test -e js/v364.js
           ! test -e js/v365.js
+          ! test -e js/v354-version.js
           ! test -e css/v361.css
           ! test -e css/v362.css
           ! test -e css/v364.css
           ! test -e css/v365.css
+          ! test -d assets/workouts
           grep -Fq "REMOVED=new Set(['nutricao','evolucao'])" js/v366.js
           grep -Fq 'repeat(3' css/v366.css
           ! grep -Fq "'v364.js'" index.html
           ! grep -Fq "'v365.js'" index.html
+          ! grep -Fq "'v354-version.js'" index.html
+      - name: Validate lean training core
+        run: |
+          grep -Fq "const BUILD='3.6.6'" js/v360.js
+          grep -Fq "núcleo enxuto do treino" js/v360.js
+          ! grep -Fq 'assets/videos/' js/v360.js
+          ! grep -Fq 'data-video-ex' js/v360.js
+          ! grep -Fq 'v360VideoModal' js/v360.js
+          ! grep -Fq 'VIDEO_BY_DOW' js/v354.js
+          ! grep -Fq 'assets/workouts/' js/v354.js
+          grep -Fq "app.addEventListener('click'" js/v360.js
+          grep -Fq "app.addEventListener('input'" js/v360.js
       - name: Validate interaction performance layer
         run: |
           ! grep -Fq 'new MutationObserver' js/v363.js
@@ -49,6 +63,8 @@ jobs:
           ! grep -Fq "./assets/videos/" service-worker.js
       - name: Syntax check
         run: |
+          node --check js/v354.js
+          node --check js/v360.js
           node --check js/v363.js
           node --check js/v366.js
           node --check service-worker.js
