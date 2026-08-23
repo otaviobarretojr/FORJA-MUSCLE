@@ -1,0 +1,11 @@
+/* VITAFIT 3.6.6 — camada final simplificada e rápida */
+#nutricao,#evolucao,.app-nav-btn[data-screen="nutricao"],.app-nav-btn[data-screen="evolucao"],.tab-btn[data-tab="nutricao"],#v360TrainingApp .v360-video-btn,#v360VideoModal,#v362WorkoutVideoModal{display:none!important}
+#appBottomNav{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#mais .app-editor,#mais .editor-panel,#mais .edit-app,#mais .app-customizer,#mais .customizer-panel,#mais [data-editor],#mais [data-app-editor]{display:none!important}
+.app-nav-btn,button,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.app-nav-btn{user-select:none;-webkit-user-select:none;transition:background-color .06s ease,color .06s ease,transform .06s ease}
+.app-nav-btn.v366-pressed{transform:scale(.95)}
+#v360TrainingApp .v360-ex{contain:layout paint;content-visibility:auto;contain-intrinsic-size:380px}
+#v360TrainingApp .v360-day,#v360TrainingApp .v360-set-ok,#v360TrainingApp .v363-main,#v360TrainingApp .v363-actions button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#v360TrainingApp .v360-day:active,#v360TrainingApp .v360-set-ok:active,#v360TrainingApp .v363-main:active{transform:scale(.985)}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.app-nav-btn,#v360TrainingApp .v360-day,#v360TrainingApp .v360-set-ok{transition:none!important}}
