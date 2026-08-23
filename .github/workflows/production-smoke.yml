@@ -28,17 +28,20 @@ jobs:
             echo "Expected pattern not found: $pattern"; cat "$out" || true; return 1
           }
 
-          fetch_until_match "${BASE_URL}/" 'content="3.6.5"' /tmp/index.html
-          grep -Fq -- 'css/v365.css?v=3.6.5' /tmp/index.html
-          grep -Fq -- "'v365.js'" /tmp/index.html
+          fetch_until_match "${BASE_URL}/" 'content="3.6.6"' /tmp/index.html
+          grep -Fq -- 'css/v366.css?v=3.6.6' /tmp/index.html
+          grep -Fq -- "'v366.js'" /tmp/index.html
+          ! grep -Fq -- "'v365.js'" /tmp/index.html
+          ! grep -Fq -- "'v364.js'" /tmp/index.html
 
-          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.6.5'" /tmp/service-worker.js
-          grep -Fq -- "forja-muscle-v3-6-5-vitafit-fast-core" /tmp/service-worker.js
-          grep -Fq -- "./js/v365.js" /tmp/service-worker.js
+          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.6.6'" /tmp/service-worker.js
+          grep -Fq -- "forja-muscle-v3-6-6-vitafit-clean-core" /tmp/service-worker.js
+          grep -Fq -- "./js/v366.js" /tmp/service-worker.js
+          ! grep -Fq -- "./js/v365.js" /tmp/service-worker.js
           ! grep -Fq -- "./assets/videos/" /tmp/service-worker.js
 
-          fetch_until_match "${BASE_URL}/js/v365.js" "remove Nutrição" /tmp/v365.js
-          grep -Fq -- "REMOVED=new Set(['nutricao','evolucao'])" /tmp/v365.js
-          fetch_until_match "${BASE_URL}/css/v365.css" "repeat(3" /tmp/v365.css
-          grep -Fq -- "touch-action:manipulation" /tmp/v365.css
-          echo "Production VITAFIT v3.6.5 smoke: OK"
+          fetch_until_match "${BASE_URL}/js/v366.js" "consolidação de navegação" /tmp/v366.js
+          grep -Fq -- "REMOVED=new Set(['nutricao','evolucao'])" /tmp/v366.js
+          fetch_until_match "${BASE_URL}/css/v366.css" "repeat(3" /tmp/v366.css
+          grep -Fq -- "touch-action:manipulation" /tmp/v366.css
+          echo "Production VITAFIT v3.6.6 smoke: OK"
