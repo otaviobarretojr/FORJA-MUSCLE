@@ -1,4 +1,0 @@
-/* VITAFIT 3.6.4 — navegação simplificada */
-#evolucao,.app-nav-btn[data-screen="evolucao"]{display:none!important}
-#appBottomNav{grid-template-columns:repeat(4,minmax(0,1fr))!important}
-#mais .app-editor,#mais .editor-panel,#mais .edit-app,#mais .app-customizer,#mais .customizer-panel,#mais [data-editor],#mais [data-app-editor]{display:none!important}
