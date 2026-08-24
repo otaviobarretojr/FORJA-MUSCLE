@@ -1,13 +1,11 @@
 name: E2E VITAFIT Chromium
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 jobs:
-  browser-smoke:
+  browser-audit:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -24,17 +22,14 @@ jobs:
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/vitafit-http.log 2>&1 &
           echo $! >/tmp/vitafit-http.pid
-          for i in {1..20}; do
-            curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0
-            sleep 0.5
-          done
+          for i in {1..20}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0; sleep 0.5; done
           cat /tmp/vitafit-http.log
           exit 1
-      - name: Run v3.6.6 cleanup browser audit
+      - name: Run V4 functional browser audit
         run: timeout 150s node tests/e2e-v360.js
-      - name: Run navigation latency audit
+      - name: Run V4 navigation latency audit
         run: timeout 90s node tests/e2e-navigation-latency.js
-      - name: Run offline PWA audit
+      - name: Run V4 offline PWA audit
         run: timeout 120s node tests/e2e-offline.js
       - name: Stop local server
         if: always()
