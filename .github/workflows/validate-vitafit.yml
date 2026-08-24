@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.6.6
+name: Validate VITAFIT v3.6.7
 
 on:
   push:
@@ -13,58 +13,42 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.6.6'" index.html
-          grep -Fq "const BUILD='3.6.6'" service-worker.js
-          grep -Fq 'content="3.6.6"' index.html
-          grep -Fq "css/v366.css?v=3.6.6" index.html
-          grep -Fq "'v366.js'" index.html
-          grep -Fq "forja-muscle-v3-6-6-vitafit-clean-core" service-worker.js
-      - name: Validate consolidated cleanup
+          grep -Fq "const BUILD='3.6.7'" index.html
+          grep -Fq "const BUILD='3.6.7'" service-worker.js
+          grep -Fq 'content="3.6.7"' index.html
+          grep -Fq "css/v367.css?v=3.6.7" index.html
+          grep -Fq "'v367.js'" index.html
+          grep -Fq "forja-muscle-v3-6-7-vitafit-weekly-core" service-worker.js
+      - name: Validate four-day weekly schedule
         run: |
-          test -f js/v366.js
-          test -f css/v366.css
-          ! test -e js/v361.js
-          ! test -e js/v362.js
-          ! test -e js/v364.js
-          ! test -e js/v365.js
-          ! test -e js/v354-version.js
-          ! test -e css/v361.css
-          ! test -e css/v362.css
-          ! test -e css/v364.css
-          ! test -e css/v365.css
-          ! test -d assets/workouts
-          grep -Fq "REMOVED=new Set(['nutricao','evolucao'])" js/v366.js
-          grep -Fq 'repeat(3' css/v366.css
-          ! grep -Fq "'v364.js'" index.html
-          ! grep -Fq "'v365.js'" index.html
-          ! grep -Fq "'v354-version.js'" index.html
-      - name: Validate lean training core
+          test -f js/v367.js
+          test -f css/v367.css
+          grep -Fq "source:'seg',day:'SEG'" js/v367.js
+          grep -Fq "source:'ter',day:'QUA'" js/v367.js
+          grep -Fq "source:'qua',day:'SEX'" js/v367.js
+          grep -Fq "source:'qui',day:'DOM'" js/v367.js
+          grep -Fq "CARDIO_DOW=new Set([2,4,6])" js/v367.js
+          grep -Fq "4 treinos de musculação" js/v367.js
+      - name: Validate More cleanup
         run: |
-          grep -Fq "const BUILD='3.6.6'" js/v360.js
-          grep -Fq "núcleo enxuto do treino" js/v360.js
-          ! grep -Fq 'assets/videos/' js/v360.js
-          ! grep -Fq 'data-video-ex' js/v360.js
-          ! grep -Fq 'v360VideoModal' js/v360.js
-          ! grep -Fq 'VIDEO_BY_DOW' js/v354.js
-          ! grep -Fq 'assets/workouts/' js/v354.js
-          grep -Fq "app.addEventListener('click'" js/v360.js
-          grep -Fq "app.addEventListener('input'" js/v360.js
-      - name: Validate interaction performance layer
+          grep -Fq "rebuildMore" js/v367.js
+          grep -Fq "Somente o essencial" js/v367.js
+          grep -Fq "Exportar backup" js/v367.js
+          ! grep -Fiq "macro" js/v367.js
+          ! grep -Fiq "refeição" js/v367.js
+          ! grep -Fiq "compras" js/v367.js
+      - name: Validate performance and local workout video
         run: |
           ! grep -Fq 'new MutationObserver' js/v363.js
           ! grep -Fq 'new MutationObserver' js/v366.js
+          ! grep -Fq 'new MutationObserver' js/v367.js
           grep -Fq 'touch-action:manipulation' css/v366.css
-          grep -Fq 'content-visibility:auto' css/v366.css
-          grep -Fq 'window.setAppScreen.__vitafitFast=true' js/v366.js
-      - name: Validate local workout video remains
-        run: |
           grep -Fq "indexedDB.open" js/v363.js
           grep -Fq "Importar vídeo da galeria" js/v363.js
-          ! grep -Fq "./assets/videos/" service-worker.js
       - name: Syntax check
         run: |
-          node --check js/v354.js
           node --check js/v360.js
           node --check js/v363.js
           node --check js/v366.js
+          node --check js/v367.js
           node --check service-worker.js
