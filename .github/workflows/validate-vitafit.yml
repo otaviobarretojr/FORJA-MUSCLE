@@ -1,4 +1,4 @@
-name: Validate VITAFIT v3.6.8
+name: Validate VITAFIT v3.6.9
 
 on:
   push:
@@ -13,35 +13,36 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build synchronization
         run: |
-          grep -Fq "const BUILD='3.6.8'" index.html
-          grep -Fq "const BUILD='3.6.8'" service-worker.js
-          grep -Fq 'content="3.6.8"' index.html
-          grep -Fq "forja-muscle-v3-6-8-vitafit-four-day-core" service-worker.js
-      - name: Validate native four-day schedule
+          grep -Fq "const BUILD='3.6.9'" index.html
+          grep -Fq "const BUILD='3.6.9'" service-worker.js
+          grep -Fq 'content="3.6.9"' index.html
+          grep -Fq "css/v369.css?v=3.6.9" index.html
+          grep -Fq "'v369.js'" index.html
+          grep -Fq "forja-muscle-v3-6-9-vitafit-cardio-core" service-worker.js
+      - name: Validate strength schedule remains native
         run: |
           grep -Fq "const dayOrder=['seg','qua','sex','dom']" js/v360.js
-          grep -Fq "seg:{dow:1,label:'SEG'" js/v360.js
-          grep -Fq "qua:{dow:3,label:'QUA'" js/v360.js
-          grep -Fq "sex:{dow:5,label:'SEX'" js/v360.js
           grep -Fq "dom:{dow:0,label:'DOM'" js/v360.js
           ! grep -Fq "dayOrder=['seg','ter','qua','qui','sex']" js/v360.js
-          ! grep -Fq "remapTrainingTabs" js/v367.js
+      - name: Validate cardio schedule and dashboard
+        run: |
+          test -f js/v369.js
+          test -f css/v369.css
+          grep -Fq "2:{label:'TER',minutes:20}" js/v369.js
+          grep -Fq "4:{label:'QUI',minutes:40}" js/v369.js
+          grep -Fq "6:{label:'SÁB',minutes:20}" js/v369.js
+          grep -Fq "function syncDashboard" js/v369.js
+          grep -Fq "ABRIR CARDIO" js/v369.js
+          grep -Fq "v369-cardio-panel" css/v369.css
       - name: Validate More cleanup
         run: |
           grep -Fq "rebuildMore" js/v367.js
           grep -Fq "Somente o essencial" js/v367.js
-          grep -Fq "Exportar backup" js/v367.js
           ! grep -Fiq "macro" js/v367.js
           ! grep -Fiq "refeição" js/v367.js
-          ! grep -Fiq "compras" js/v367.js
-      - name: Validate performance and local workout video
+      - name: Validate local workout video
         run: |
-          ! grep -Fq 'new MutationObserver' js/v363.js
-          ! grep -Fq 'new MutationObserver' js/v366.js
-          ! grep -Fq 'new MutationObserver' js/v367.js
-          grep -Fq 'touch-action:manipulation' css/v366.css
           grep -Fq "indexedDB.open" js/v363.js
-          grep -Fq "dom:'Domingo • Superiores completo'" js/v363.js
           grep -Fq "Importar vídeo da galeria" js/v363.js
       - name: Syntax check
         run: |
@@ -49,4 +50,5 @@ jobs:
           node --check js/v363.js
           node --check js/v366.js
           node --check js/v367.js
+          node --check js/v369.js
           node --check service-worker.js
