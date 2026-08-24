@@ -9,7 +9,6 @@
     sex:{dow:5,label:'SEX',title:'Inferiores completo',subtitle:'Inferiores • musculação'},
     dom:{dow:0,label:'DOM',title:'Superiores completo',subtitle:'Superiores • musculação'}
   };
-  // Mantém as chaves originais dos exercícios para preservar histórico já salvo.
   const plan={
     seg:[
       {k:'seg-sumo',n:'Agachamento sumô',note:'Pirâmide • progressão de carga',sets:5,reps:'20 / 15 / 12 / 10',rest:'90–120 s'},
@@ -87,10 +86,7 @@
   }
   function bindApp(app){
     if(app.dataset.bound==='1')return;app.dataset.bound='1';
-    app.addEventListener('click',e=>{
-      const day=e.target.closest('[data-day]');if(day){const d=day.dataset.day;if(plan[d]&&d!==activeDay){activeDay=d;put('ui.day',d);render()}return}
-      const done=e.target.closest('[data-done]');if(done){toggleSet(done);return}
-    });
+    app.addEventListener('click',e=>{const day=e.target.closest('[data-day]');if(day){const d=day.dataset.day;if(plan[d]&&d!==activeDay){activeDay=d;put('ui.day',d);render()}return}const done=e.target.closest('[data-done]');if(done)toggleSet(done)});
     app.addEventListener('input',e=>{const inp=e.target.closest('.v360-input');if(!inp)return;put(key(inp.dataset.ex,Number(inp.dataset.set),inp.dataset.field),inp.value);saveHistory(inp.dataset.ex);updateProgressOnly()});
   }
   function toggleSet(btn){
@@ -99,7 +95,7 @@
   }
   function updateProgressOnly(){const p=progress(),ring=document.querySelector('#v360TrainingApp .v360-progress');if(ring){ring.style.setProperty('--p',p.pct+'%');const b=ring.querySelector('b');if(b)b.textContent=p.pct+'%'}}
   function showToast(t){const el=document.getElementById('v360Toast');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1100)}
-  function syncBuild(){window.__FORJA_BUILD__=BUILD;window.__VITAFIT_BUILD__=BUILD;document.documentElement.dataset.forjaBuild=BUILD;document.documentElement.dataset.vitafitBuild=BUILD;document.querySelectorAll('.version').forEach(el=>el.textContent='v'+BUILD);const more=document.querySelector('#vitaMoreBrand small');if(more)m.textContent='versão '+BUILD}
+  function syncBuild(){window.__FORJA_BUILD__=BUILD;window.__VITAFIT_BUILD__=BUILD;document.documentElement.dataset.forjaBuild=BUILD;document.documentElement.dataset.vitafitBuild=BUILD;document.querySelectorAll('.version').forEach(el=>el.textContent='v'+BUILD);const more=document.querySelector('#vitaMoreBrand small');if(more)more.textContent='versão '+BUILD}
 
   window.currentWorkoutDetails=function(){
     const dow=selectedDow();
