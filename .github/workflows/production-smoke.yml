@@ -37,4 +37,6 @@ jobs:
           grep -Fq -- "minutes:40" /tmp/v4.js
           grep -Fq -- "indexedDB.open" /tmp/v4.js
           fetch_until_match "${BASE_URL}/css/v4.css" ".bottom-nav" /tmp/v4.css
+          if curl -fLsS "${BASE_URL}/js/v369.js?audit=${audit}" >/dev/null 2>&1; then echo 'Legacy JS still public'; exit 1; fi
+          if curl -fLsS "${BASE_URL}/fragments/nutrition.html?audit=${audit}" >/dev/null 2>&1; then echo 'Retired nutrition fragment still public'; exit 1; fi
           echo "Production VITAFIT V4 smoke: OK"
