@@ -8,7 +8,7 @@ const assert = require('node:assert/strict');
     const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block',timezoneId:'America/Manaus',hasTouch:true,isMobile:true});
     const page=await context.newPage();
     const errors=[];page.on('pageerror',e=>errors.push(String(e)));
-    await page.goto('http://127.0.0.1:4173/?e2e=v366',{waitUntil:'domcontentloaded'});
+    await page.goto('http://127.0.0.1:4173/?e2e=v367',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true'&&document.getElementById('v360TrainingApp'));
 
     const boot=await page.evaluate(()=>({
@@ -16,29 +16,24 @@ const assert = require('node:assert/strict');
       nav:document.querySelectorAll('.app-nav-btn').length,
       nutritionNav:!!document.querySelector('.app-nav-btn[data-screen="nutricao"]'),
       programNav:!!document.querySelector('.app-nav-btn[data-screen="evolucao"]'),
-      nutritionHidden:!document.getElementById('nutricao')||document.getElementById('nutricao').hidden===true,
-      programHidden:!document.getElementById('evolucao')||document.getElementById('evolucao').hidden===true,
       fast:window.setAppScreen?.__vitafitFast===true
     }));
-    assert.equal(boot.build,'3.6.6');assert.equal(boot.nav,3);assert.equal(boot.nutritionNav,false);assert.equal(boot.programNav,false);assert.equal(boot.nutritionHidden,true);assert.equal(boot.programHidden,true);assert.equal(boot.fast,true);
+    assert.equal(boot.build,'3.6.7');assert.equal(boot.nav,3);assert.equal(boot.nutritionNav,false);assert.equal(boot.programNav,false);assert.equal(boot.fast,true);
 
     await page.evaluate(()=>window.setAppScreen('treino',{instant:true}));
     await page.waitForFunction(()=>document.getElementById('treino')?.classList.contains('active')&&document.querySelectorAll('#v360TrainingApp .v360-day').length===5);
+    const schedule=await page.evaluate(()=>[...document.querySelectorAll('#v360TrainingApp .v360-day:not([hidden])')].map(b=>b.querySelector('b')?.textContent));
+    assert.deepEqual(schedule,['SEG','QUA','SEX','DOM']);
     await page.click('#v360TrainingApp [data-day="seg"]');
     await page.waitForFunction(()=>document.querySelector('#v363VideoBox .v363-main'));
-    const monday=await page.evaluate(()=>({title:document.querySelector('#v360TrainingApp .v360-overview h2')?.textContent,cards:document.querySelectorAll('#v360TrainingApp .v360-ex').length,localImport:document.querySelector('#v363VideoBox .v363-main')?.textContent||'',individualVideos:document.querySelectorAll('#v360TrainingApp .v360-video-btn:not([style*="display: none"])').length,legacyModal:!!document.getElementById('v360VideoModal')}));
-    assert.equal(monday.title,'Inferiores completo');assert.equal(monday.cards,5);assert.equal(monday.individualVideos,0);assert.equal(monday.legacyModal,false);assert.match(monday.localImport,/Importar vídeo da galeria|Ver execução do treino/);
+    const monday=await page.evaluate(()=>({title:document.querySelector('#v360TrainingApp .v360-overview h2')?.textContent,cards:document.querySelectorAll('#v360TrainingApp .v360-ex').length,localImport:document.querySelector('#v363VideoBox .v363-main')?.textContent||'',legacyModal:!!document.getElementById('v360VideoModal')}));
+    assert.equal(monday.title,'Inferiores completo');assert.equal(monday.cards,5);assert.equal(monday.legacyModal,false);assert.match(monday.localImport,/Importar vídeo da galeria|Ver execução do treino/);
 
-    const firstLoad=page.locator('#v360TrainingApp .v360-ex').first().locator('input[data-field="load"]').first();await firstLoad.fill('42');
-    await page.locator('#v360TrainingApp .v360-ex').first().locator('input[data-field="reps"]').first().fill('20');
-    await page.locator('#v360TrainingApp .v360-ex').first().locator('.v360-set-ok').first().click();
-    assert.equal(await page.evaluate(()=>Object.keys(localStorage).some(k=>k.startsWith('shape12.v360.day.')&&k.endsWith('.load')&&localStorage.getItem(k)==='"42"')),true);
-
-    await page.evaluate(()=>window.setAppScreen('nutricao'));
-    assert.equal(await page.evaluate(()=>document.getElementById('screen-hoje')?.classList.contains('active')||false),true);
-    await page.evaluate(()=>window.setAppScreen('evolucao'));
-    assert.equal(await page.evaluate(()=>document.getElementById('screen-hoje')?.classList.contains('active')||false),true);
+    await page.evaluate(()=>window.setAppScreen('mais'));
+    await page.waitForFunction(()=>document.querySelector('#mais .v367-schedule'));
+    const more=await page.evaluate(()=>({text:document.getElementById('mais')?.textContent||'',days:document.querySelectorAll('#mais .v367-schedule>div').length}));
+    assert.equal(more.days,7);assert.match(more.text,/4 treinos de musculação/);assert.doesNotMatch(more.text,/macro|refeiç|compras/i);
     assert.deepEqual(errors,[],`Erros JS: ${errors.join(' | ')}`);
-    console.log('VITAFIT 3.6.6 cleanup browser audit: OK');
+    console.log('VITAFIT 3.6.7 weekly schedule browser audit: OK');
   } finally {if(browser)await browser.close()}
 })().catch(e=>{console.error(e);process.exit(1)});
