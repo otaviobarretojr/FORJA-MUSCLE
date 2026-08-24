@@ -8,10 +8,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="VITAFIT">
-  <meta name="forja-build" content="3.6.8">
-  <meta name="vitafit-build" content="3.6.8">
-  <link rel="manifest" href="manifest.webmanifest?v=3.6.8">
-  <link rel="icon" type="image/svg+xml" href="icons/vitafit.svg?v=3.6.8">
+  <meta name="forja-build" content="3.6.9">
+  <meta name="vitafit-build" content="3.6.9">
+  <link rel="manifest" href="manifest.webmanifest?v=3.6.9">
+  <link rel="icon" type="image/svg+xml" href="icons/vitafit.svg?v=3.6.9">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>VITAFIT • Força, saúde & evolução</title>
@@ -20,16 +20,16 @@
     window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();window.__VITAFIT_INSTALL__.deferred=event;window.dispatchEvent(new CustomEvent('vitafit-install-ready'));});
     window.addEventListener('appinstalled',()=>{window.__VITAFIT_INSTALL__.installed=true;window.__VITAFIT_INSTALL__.deferred=null;window.dispatchEvent(new CustomEvent('vitafit-app-installed'));});
   </script>
-  <link rel="stylesheet" href="css/base.css?v=3.6.8"><link rel="stylesheet" href="css/v13.css?v=3.6.8"><link rel="stylesheet" href="css/v14.css?v=3.6.8"><link rel="stylesheet" href="css/v20.css?v=3.6.8"><link rel="stylesheet" href="css/v21.css?v=3.6.8"><link rel="stylesheet" href="css/v30.css?v=3.6.8"><link rel="stylesheet" href="css/v31.css?v=3.6.8"><link rel="stylesheet" href="css/v32.css?v=3.6.8"><link rel="stylesheet" href="css/v33.css?v=3.6.8"><link rel="stylesheet" href="css/v333.css?v=3.6.8"><link rel="stylesheet" href="css/v334.css?v=3.6.8"><link rel="stylesheet" href="css/v340.css?v=3.6.8"><link rel="stylesheet" href="css/v341.css?v=3.6.8"><link rel="stylesheet" href="css/v342.css?v=3.6.8"><link rel="stylesheet" href="css/v350.css?v=3.6.8"><link rel="stylesheet" href="css/v350fix.css?v=3.6.8"><link rel="stylesheet" href="css/v351.css?v=3.6.8"><link rel="stylesheet" href="css/v351-accessibility.css?v=3.6.8"><link rel="stylesheet" href="css/v353.css?v=3.6.8"><link rel="stylesheet" href="css/v354.css?v=3.6.8"><link rel="stylesheet" href="css/v360.css?v=3.6.8"><link rel="stylesheet" href="css/v363.css?v=3.6.8"><link rel="stylesheet" href="css/v366.css?v=3.6.8"><link rel="stylesheet" href="css/v367.css?v=3.6.8">
+  <link rel="stylesheet" href="css/base.css?v=3.6.9"><link rel="stylesheet" href="css/v13.css?v=3.6.9"><link rel="stylesheet" href="css/v14.css?v=3.6.9"><link rel="stylesheet" href="css/v20.css?v=3.6.9"><link rel="stylesheet" href="css/v21.css?v=3.6.9"><link rel="stylesheet" href="css/v30.css?v=3.6.9"><link rel="stylesheet" href="css/v31.css?v=3.6.9"><link rel="stylesheet" href="css/v32.css?v=3.6.9"><link rel="stylesheet" href="css/v33.css?v=3.6.9"><link rel="stylesheet" href="css/v333.css?v=3.6.9"><link rel="stylesheet" href="css/v334.css?v=3.6.9"><link rel="stylesheet" href="css/v340.css?v=3.6.9"><link rel="stylesheet" href="css/v341.css?v=3.6.9"><link rel="stylesheet" href="css/v342.css?v=3.6.9"><link rel="stylesheet" href="css/v350.css?v=3.6.9"><link rel="stylesheet" href="css/v350fix.css?v=3.6.9"><link rel="stylesheet" href="css/v351.css?v=3.6.9"><link rel="stylesheet" href="css/v351-accessibility.css?v=3.6.9"><link rel="stylesheet" href="css/v353.css?v=3.6.9"><link rel="stylesheet" href="css/v354.css?v=3.6.9"><link rel="stylesheet" href="css/v360.css?v=3.6.9"><link rel="stylesheet" href="css/v363.css?v=3.6.9"><link rel="stylesheet" href="css/v366.css?v=3.6.9"><link rel="stylesheet" href="css/v367.css?v=3.6.9"><link rel="stylesheet" href="css/v369.css?v=3.6.9">
 </head>
 <body>
   <div id="forja-root"><div style="min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#21151e,#0b090d 62%);color:#fff9fc;font-family:system-ui,sans-serif;text-align:center;padding:24px"><div><strong style="font-family:Georgia,serif;font-size:30px;font-weight:500;letter-spacing:.08em;color:#e8a2b1">VITAFIT</strong><div style="margin-top:8px;opacity:.56;font-size:11px;letter-spacing:.08em">FORÇA • SAÚDE • EVOLUÇÃO</div><div style="margin-top:16px;opacity:.64;font-size:12px">Preparando seu dia…</div></div></div></div>
   <script>
   (async()=>{
-    const BUILD='3.6.8';window.__FORJA_BUILD__=BUILD;window.__VITAFIT_BUILD__=BUILD;document.documentElement.dataset.forjaBuild=BUILD;document.documentElement.dataset.brand='vitafit';
+    const BUILD='3.6.9';window.__FORJA_BUILD__=BUILD;window.__VITAFIT_BUILD__=BUILD;document.documentElement.dataset.forjaBuild=BUILD;document.documentElement.dataset.brand='vitafit';
     const root=document.getElementById('forja-root');
     const parts=['home-dashboard.html','nutrition.html','training.html','modals.html'];
-    const scripts=['base.js','plan.js','v13.js','enhancements-a.js','v21.js','v30a.js','v30b1.js','v30c.js','dom-fixes.js','v30b2.js','v31.js','v32.js','v33.js','v332.js','v333.js','v334.js','v340.js','v341.js','v342.js','v350.js','v350fix.js','v350header.js','v351.js','v353.js','v354.js','v360.js','v363.js','v366.js','v367.js'];
+    const scripts=['base.js','plan.js','v13.js','enhancements-a.js','v21.js','v30a.js','v30b1.js','v30c.js','dom-fixes.js','v30b2.js','v31.js','v32.js','v33.js','v332.js','v333.js','v334.js','v340.js','v341.js','v342.js','v350.js','v350fix.js','v350header.js','v351.js','v353.js','v354.js','v360.js','v363.js','v366.js','v367.js','v369.js'];
     const fragments=await Promise.all(parts.map(async p=>{const r=await fetch('fragments/'+p+'?v='+BUILD);if(!r.ok)throw new Error('Falha ao carregar '+p);return r.text();}));root.innerHTML=fragments.join('');
     const loads=scripts.map(s=>new Promise((ok,fail)=>{const el=document.createElement('script');el.src='js/'+s+'?v='+BUILD;el.async=false;el.onload=ok;el.onerror=fail;document.body.appendChild(el);}));await Promise.all(loads);
     const version=document.querySelector('.hero .version');if(version)version.textContent='v'+BUILD;document.documentElement.dataset.forjaBuild=BUILD;document.documentElement.dataset.vitafitBuild=BUILD;document.documentElement.dataset.vitafitReady='true';
