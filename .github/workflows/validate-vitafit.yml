@@ -1,54 +1,57 @@
-name: Validate VITAFIT v3.6.10
-
+name: Validate VITAFIT V4
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 jobs:
-  vitafit-ui:
+  vitafit-static:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate build synchronization
+      - name: Validate V4 single-runtime architecture
         run: |
-          grep -Fq "const BUILD='3.6.10'" index.html
-          grep -Fq "const BUILD='3.6.10'" service-worker.js
-          grep -Fq 'content="3.6.10"' index.html
-          grep -Fq "css/v369.css?v=3.6.10" index.html
-          grep -Fq "'v369.js'" index.html
-          grep -Fq "forja-muscle-v3-6-10-vitafit-polish-core" service-worker.js
+          set -euo pipefail
+          grep -Fq 'content="4.0.0"' index.html
+          grep -Fq 'css/v4.css?v=4.0.0' index.html
+          grep -Fq 'js/v4.js?v=4.0.0' index.html
+          test "$(grep -o '<script[^>]*src=' index.html | wc -l)" -eq 1
+          test "$(grep -o '<link[^>]*stylesheet' index.html | wc -l)" -eq 1
+          ! grep -Fiq 'nutrition.html' index.html
+          ! grep -Fiq 'fragments/' index.html
+          ! grep -Fq 'v369.js' index.html
       - name: Validate fixed weekly standard
         run: |
-          grep -Fq "const dayOrder=['seg','qua','sex','dom']" js/v360.js
-          grep -Fq "2:{label:'TER',minutes:20}" js/v369.js
-          grep -Fq "4:{label:'QUI',minutes:40}" js/v369.js
-          grep -Fq "6:{label:'SÁB',minutes:20}" js/v369.js
-          grep -Fq "span>${s?'Treino':'Cardio'}" js/v369.js
-          grep -Fq "grid-template-columns:repeat(7" css/v369.css
-          ! grep -Fq "overflow-x:auto" css/v369.css
-      - name: Validate simplified cardio panel and correct date state
+          grep -Fq "2:{label:'TER',type:'cardio',minutes:20" js/v4.js
+          grep -Fq "4:{label:'QUI',type:'cardio',minutes:40" js/v4.js
+          grep -Fq "6:{label:'SÁB',type:'cardio',minutes:20" js/v4.js
+          grep -Fq "0:{label:'DOM',type:'strength'" js/v4.js
+          grep -Fq "1:{label:'SEG',type:'strength'" js/v4.js
+          grep -Fq "3:{label:'QUA',type:'strength'" js/v4.js
+          grep -Fq "5:{label:'SEX',type:'strength'" js/v4.js
+      - name: Validate persistence and local video
         run: |
-          grep -Fq "targetDateForDow" js/v369.js
-          grep -Fq "cardioKey" js/v369.js
-          grep -Fq "grid-template-columns:repeat(2,1fr)" css/v369.css
-          ! grep -Fq "<span>sessão</span>" js/v369.js
-      - name: Validate More remains essential
+          grep -Fq "const NS='shape12.v360.'" js/v4.js
+          grep -Fq "const CARDIO_NS='shape12.v369.'" js/v4.js
+          grep -Fq "indexedDB.open" js/v4.js
+          grep -Fq "URL.revokeObjectURL" js/v4.js
+          grep -Fq "dbPromise" js/v4.js
+          ! grep -Fq 'MutationObserver' js/v4.js
+      - name: Validate minimal PWA shell
         run: |
-          grep -Fq "rebuildMore" js/v367.js
-          grep -Fq "Somente o essencial" js/v367.js
-          ! grep -Fiq "macro" js/v367.js
-          ! grep -Fiq "refeição" js/v367.js
-      - name: Validate local workout video
+          grep -Fq "const BUILD='4.0.0'" service-worker.js
+          grep -Fq "const CACHE='vitafit-v4-core'" service-worker.js
+          grep -Fq "'./css/v4.css'" service-worker.js
+          grep -Fq "'./js/v4.js'" service-worker.js
+          ! grep -Fiq 'nutrition' service-worker.js
+          ! grep -Fiq 'fragments/' service-worker.js
+          ! grep -Fq './js/v369.js' service-worker.js
+      - name: Validate code size budget
         run: |
-          grep -Fq "indexedDB.open" js/v363.js
-          grep -Fq "Importar vídeo da galeria" js/v363.js
+          test $(wc -c < js/v4.js) -lt 60000
+          test $(wc -c < css/v4.css) -lt 40000
+          test $(wc -c < service-worker.js) -lt 5000
       - name: Syntax check
         run: |
-          node --check js/v360.js
-          node --check js/v363.js
-          node --check js/v366.js
-          node --check js/v367.js
-          node --check js/v369.js
+          node --check js/v4.js
           node --check service-worker.js
