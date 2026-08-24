@@ -1,7 +1,7 @@
-// VITAFIT 3.6.3 — vídeo local por programação, IndexedDB, sem observer global
+// VITAFIT 3.6.8 — vídeo local por programação, IndexedDB, sem observer global
 (function(){
-  const BUILD='3.6.3',DB_NAME='vitafit-local-media',STORE='workout-videos';
-  const LABELS={seg:'Segunda • Inferiores completo',ter:'Terça • Superiores completo',qua:'Quarta • Inferiores completo',qui:'Quinta • Superiores completo',sex:'Sexta • Inferiores completo'};
+  const BUILD='3.6.8',DB_NAME='vitafit-local-media',STORE='workout-videos';
+  const LABELS={seg:'Segunda • Inferiores completo',qua:'Quarta • Superiores completo',sex:'Sexta • Inferiores completo',dom:'Domingo • Superiores completo'};
   let objectUrl=null,applyToken=0;
   function activeDay(){return document.querySelector('#v360TrainingApp .v360-day.active')?.dataset?.day||'seg'}
   function db(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE)};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
