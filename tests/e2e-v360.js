@@ -1,42 +1,7 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
-
-(async()=>{
-  let browser;
-  try{
-    browser=await chromium.launch({headless:true});
-    const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block',timezoneId:'America/Manaus',hasTouch:true,isMobile:true});
-    const page=await context.newPage();
-    const errors=[];page.on('pageerror',e=>errors.push(String(e)));
-    await page.goto('http://127.0.0.1:4173/?e2e=v3610',{waitUntil:'domcontentloaded'});
-    await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true'&&document.getElementById('v360TrainingApp'));
-
-    const boot=await page.evaluate(()=>({build:document.documentElement.dataset.vitafitBuild,nav:document.querySelectorAll('.app-nav-btn').length,fast:window.setAppScreen?.__vitafitFast===true}));
-    assert.equal(boot.build,'3.6.10');assert.equal(boot.nav,3);assert.equal(boot.fast,true);
-
-    await page.evaluate(()=>window.setAppScreen('treino',{instant:true}));
-    await page.waitForFunction(()=>document.querySelectorAll('#v369Week .v369-day').length===7);
-    const week=await page.evaluate(()=>[...document.querySelectorAll('#v369Week .v369-day')].map(b=>({dow:+b.dataset.v369Dow,label:b.querySelector('b')?.textContent,type:b.querySelector('span')?.textContent,detail:b.querySelector('small')?.textContent})));
-    assert.deepEqual(week.map(x=>x.dow),[1,2,3,4,5,6,0]);
-    assert.deepEqual(week.filter(x=>x.type==='Cardio').map(x=>x.detail),['20 min','40 min','20 min']);
-    assert.equal(await page.locator('#v360TrainingApp .v360-day').count(),4,'núcleo deve manter apenas quatro fichas de musculação');
-
-    for(const dow of [1,3,5,0]){
-      await page.click(`#v369Week [data-v369-dow="${dow}"]`);
-      assert.equal(await page.locator('#v360TrainingApp .v360-day').count(),4,'troca de treino não pode recriar grade legada');
-    }
-
-    await page.click('#v369Week [data-v369-dow="2"]');
-    assert.match(await page.locator('#v369CardioPanel h2').innerText(),/20 min de cardio/);
-    await page.click('#v369Week [data-v369-dow="4"]');
-    assert.match(await page.locator('#v369CardioPanel h2').innerText(),/40 min de cardio/);
-    await page.click('#v369Week [data-v369-dow="6"]');
-    assert.match(await page.locator('#v369CardioPanel h2').innerText(),/20 min de cardio/);
-
-    await page.click('#v369Week [data-v369-dow="1"]');
-    await page.waitForFunction(()=>document.querySelector('#v363VideoBox .v363-main'));
-    assert.match(await page.locator('#v363VideoBox .v363-main').innerText(),/Importar vídeo da galeria|Ver execução do treino/);
-    assert.deepEqual(errors,[],`Erros JS: ${errors.join(' | ')}`);
-    console.log('VITAFIT 3.6.10 simple standard browser audit: OK');
-  } finally {if(browser)await browser.close()}
-})().catch(e=>{console.error(e);process.exit(1)});
+(async()=>{let browser;try{browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:412,height:915},serviceWorkers:'block',timezoneId:'America/Manaus',hasTouch:true,isMobile:true});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(String(e)));await page.goto('http://127.0.0.1:4173/?e2e=v4',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.documentElement.dataset.vitafitReady==='true');const boot=await page.evaluate(()=>({build:document.documentElement.dataset.vitafitBuild,nav:document.querySelectorAll('.nav-btn').length,fast:window.setAppScreen?.__vitafitFast===true,scripts:[...document.scripts].map(x=>x.src).filter(Boolean),styles:[...document.styleSheets].map(x=>x.href).filter(Boolean)}));assert.equal(boot.build,'4.0.0');assert.equal(boot.nav,3);assert.equal(boot.fast,true);assert.equal(boot.scripts.length,1);assert.equal(boot.styles.length,1);
+await page.evaluate(()=>window.setAppScreen('treino'));await page.waitForSelector('#treino.active');const week=await page.evaluate(()=>[...document.querySelectorAll('.week-day')].map(b=>({dow:+b.dataset.dow,label:b.querySelector('b').textContent,type:b.querySelector('span').textContent,detail:b.querySelector('small').textContent})));assert.equal(week.length,7);assert.deepEqual(week.map(x=>x.label),['SEG','TER','QUA','QUI','SEX','SÁB','DOM']);assert.deepEqual(week.filter(x=>x.type==='Cardio').map(x=>x.detail),['20 min','40 min','20 min']);
+for(const [dow,title,count] of [[1,'Inferiores completo',5],[3,'Superiores completo',5],[5,'Inferiores completo',6],[0,'Superiores completo',5]]){await page.click(`.week-day[data-dow="${dow}"]`);const state=await page.evaluate(()=>({title:document.querySelector('.overview h2')?.textContent,cards:document.querySelectorAll('.exercise').length,week:document.querySelectorAll('.week-day').length}));assert.equal(state.title,title);assert.equal(state.cards,count);assert.equal(state.week,7)}
+for(const [dow,min] of [[2,20],[4,40],[6,20]]){await page.click(`.week-day[data-dow="${dow}"]`);assert.match(await page.locator('.cardio-card h2').innerText(),new RegExp(`^${min} min`));assert.equal(await page.locator('.exercise').count(),0)}
+await page.click('.week-day[data-dow="1"]');await page.waitForSelector('#videoBox .video-main');assert.match(await page.locator('#videoBox .video-main').innerText(),/Importar vídeo da galeria|Ver execução do treino/);await page.fill('.exercise:first-of-type .set-input[data-field="load"]','42');await page.fill('.exercise:first-of-type .set-input[data-field="reps"]','10');await page.click('.exercise:first-of-type .set-ok');assert.equal(await page.locator('.exercise:first-of-type .set-ok').first().evaluate(el=>el.classList.contains('done')),true);assert.deepEqual(errors,[],`Erros JS: ${errors.join(' | ')}`);console.log('VITAFIT V4 browser audit: OK')}finally{if(browser)await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
