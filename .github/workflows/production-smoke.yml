@@ -28,17 +28,17 @@ jobs:
             echo "Expected pattern not found: $pattern"; cat "$out" || true; return 1
           }
 
-          fetch_until_match "${BASE_URL}/" 'content="3.6.8"' /tmp/index.html
-          grep -Fq -- 'css/v367.css?v=3.6.8' /tmp/index.html
-          grep -Fq -- "'v367.js'" /tmp/index.html
+          fetch_until_match "${BASE_URL}/" 'content="3.6.9"' /tmp/index.html
+          grep -Fq -- 'css/v369.css?v=3.6.9' /tmp/index.html
+          grep -Fq -- "'v369.js'" /tmp/index.html
 
-          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.6.8'" /tmp/service-worker.js
-          grep -Fq -- "forja-muscle-v3-6-8-vitafit-four-day-core" /tmp/service-worker.js
-          grep -Fq -- "./js/v360.js" /tmp/service-worker.js
-          ! grep -Fq -- "./assets/videos/" /tmp/service-worker.js
+          fetch_until_match "${BASE_URL}/service-worker.js" "const BUILD='3.6.9'" /tmp/service-worker.js
+          grep -Fq -- "forja-muscle-v3-6-9-vitafit-cardio-core" /tmp/service-worker.js
+          grep -Fq -- "./js/v369.js" /tmp/service-worker.js
 
-          fetch_until_match "${BASE_URL}/js/v360.js" "const dayOrder=['seg','qua','sex','dom']" /tmp/v360.js
-          ! grep -Fq -- "dayOrder=['seg','ter','qua','qui','sex']" /tmp/v360.js
-          fetch_until_match "${BASE_URL}/js/v367.js" "Mais essencial" /tmp/v367.js
-          ! grep -Fq -- "remapTrainingTabs" /tmp/v367.js
-          echo "Production VITAFIT v3.6.8 smoke: OK"
+          fetch_until_match "${BASE_URL}/js/v369.js" "semana completa com cardio" /tmp/v369.js
+          grep -Fq -- "2:{label:'TER',minutes:20}" /tmp/v369.js
+          grep -Fq -- "4:{label:'QUI',minutes:40}" /tmp/v369.js
+          grep -Fq -- "6:{label:'SÁB',minutes:20}" /tmp/v369.js
+          grep -Fq -- "function syncDashboard" /tmp/v369.js
+          echo "Production VITAFIT v3.6.9 smoke: OK"
