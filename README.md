@@ -1,23 +1,35 @@
-# FORJA MUSCLE
+# VITAFIT
 
-Aplicativo de acompanhamento de hipertrofia, musculação, cardio, nutrição e evolução corporal.
+Aplicativo simples e funcional para acompanhamento de musculação, cardio e progressão de carga.
 
 ## Versão atual
 
-**v3.0**
+**v4.0.0**
 
-## Estrutura
+## Padrão semanal
 
-- `index.html` — aplicação principal
+- Segunda: treino de inferiores
+- Terça: cardio 20 min
+- Quarta: treino de superiores
+- Quinta: cardio 40 min
+- Sexta: treino de inferiores
+- Sábado: cardio 20 min
+- Domingo: treino de superiores
+
+## Estrutura ativa
+
+- `index.html` — shell principal
+- `css/v4.css` — estilo consolidado
+- `js/v4.js` — runtime consolidado
 - `manifest.webmanifest` — configuração PWA
-- `service-worker.js` — cache/offline
+- `service-worker.js` — cache/offline mínimo
 - `icons/` — ícones do aplicativo
-- `docs/CHANGELOG.md` — histórico de versões
+- `tests/` — auditorias de navegação, funcionalidade e offline
 
-## Objetivo do projeto
+## Persistência
 
-Centralizar rotina diária de alimentação, hidratação, musculação, cardio, progressão de carga, medidas corporais, fotos de evolução e relatórios em um único app.
+Cargas, repetições, séries concluídas, histórico e cardio permanecem em armazenamento local. Os vídeos de treino importados pelo usuário são guardados localmente no IndexedDB, sem recompressão pelo aplicativo.
 
-## Observação
+## Diretriz do produto
 
-O app registra treino e alimentação, mas não orienta ajuste de medicamentos ou hormônios. Questões clínicas devem ser acompanhadas por profissional habilitado.
+A prioridade é manter o VITAFIT pequeno, rápido e previsível. Melhorias futuras devem focar em estabilidade, visualização, ergonomia e desempenho, sem aumentar a complexidade do produto sem necessidade.
